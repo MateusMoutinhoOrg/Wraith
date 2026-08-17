@@ -1,21 +1,41 @@
 
 ### Brain Workflow:
 
-## Process:
 
-### Show Error 
+
+## Watch:
+
+###  command:
+~~~bash
+./brain watch --time 1s
+~~~
+### Description
+runs the tick every <time> seconds
+
+
+
+## Tick:
+###  command:
+~~~bash
+./brain tick
+~~~
+### Description
+Perform a tick in the State machine, perfors the actions, and render the visualization elements
+
+### Workflow:
+
+#### Process:
+
+##### Show Error 
 - creates a Error.md containing informations about the error.
 
-
-### Stop Execution
+##### Stop Execution
 - verify if <Project>/Task.yaml exists:
   - if not exists: creates it with default values.
   - edit the <Project>/Task.yaml.aplly  to false.
 
 
-## Glossary:
-
-## Tick Worflow:
+##### Tick Workflow:
 - User runs: 
 ~~~bash
 ./brain tick
