@@ -1,0 +1,7 @@
+Name: AddTag
+tag: Poker 
+positive: true 
+negative: true 
+aply: false 
+result:  Error 
+error-msg: Tag Poker already exists 
