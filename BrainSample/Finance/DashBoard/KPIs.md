@@ -134,4 +134,4 @@ Savings Rate 2026 (target 30% = ─────)
 ---
 
 ## 🔗 Related
-[`Month-Report.md`](Month-Report.md) · [`Year-Report.md`](Year-Report.md) · [`Net-Worth.md`](Net-Worth.md) · [`Business-MEI.md`](Business-MEI.md)
+[`Month/DashBoard.md`](Month/DashBoard.md) · [`Year-Report.md`](Year-Report.md) · [`Net-Worth.md`](Net-Worth.md) · [`Business-MEI.md`](Business-MEI.md)

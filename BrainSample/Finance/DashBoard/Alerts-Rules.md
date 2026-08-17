@@ -1,28 +1,31 @@
 # 🚨 Alerts and Rules
 
-> **Last scan:** 16-aug-2026 · **Open:** 3 🔴 · 3 🟡 · 1 ⚪ · 1 ℹ️
+> **Last scan:** 16-aug-2026 · **Open:** 4 🔴 · 5 🟡 · 1 ⚪ · 1 ℹ️
 
 ---
 
 ## 1. 🔔 Open Alerts
 
-| Sev. | ID     | Alert                                                           | Fired on     | Rule  | Action                                        | Deadline |
-| ---- | ------ | --------------------------------------------------------------- | ------------ | ----- | --------------------------------------------- | -------- |
-| 🔴   | `A-01` | `Vices` blew its cap by 80% (R$ 90 / R$ 50)                     | 14-aug-2026  | R-03  | Freeze category until 01-sep                  | 18-aug   |
-| 🔴   | `A-02` | 100% of income concentrated in 1 client                         | 01-aug-2026  | R-11  | Send 3 proposals                              | 31-aug   |
-| 🔴   | `A-03` | Projected cash trough: R$ 289 on 24-aug                         | 16-aug-2026  | R-06  | Pull invoice forward or defer subscription    | 20-aug   |
-| 🟡   | `A-04` | Spending pace 18 pp ahead of the calendar                       | 12-aug-2026  | R-02  | Reallocate envelopes (see `Budget.md` §3)     | 18-aug   |
-| 🟡   | `A-05` | Runway stuck at 3.2 months for 3 months                         | 01-aug-2026  | R-05  | Execute the R$ 500 contribution               | 30-aug   |
-| 🟡   | `A-06` | Expensive debt open: R$ 380 at 14%/mo                           | 01-aug-2026  | R-08  | Pay the bill in full                          | 21-aug   |
-| ⚪   | `A-07` | Category `Study` with no movement for 2 months                  | 01-aug-2026  | R-04  | Reallocate R$ 50 or make a commitment         | 31-aug   |
-| ℹ️   | `A-08` | `AddCategory Poker` returned an error — category already exists | 09-aug-2026  | R-13  | Use the existing category; no action needed   | —        |
+| Sev. | ID     | Alert                                                           | Account      | Fired on     | Rule  | Action                                        | Deadline |
+| ---- | ------ | --------------------------------------------------------------- | ------------ | ------------ | ----- | --------------------------------------------- | -------- |
+| 🔴   | `A-01` | `Vices` blew its cap by 80% (R$ 90 / R$ 50)                     | 💵 Cash       | 14-aug-2026  | R-03  | Freeze category until 01-sep                  | 18-aug   |
+| 🔴   | `A-02` | 100% of income concentrated in 1 client                         | 🏦 Bank       | 01-aug-2026  | R-11  | Send 3 proposals                              | 31-aug   |
+| 🔴   | `A-03` | Projected cash trough: R$ 289 on 24-aug                         | 🏦 Bank       | 16-aug-2026  | R-06  | Pull invoice forward or defer subscription    | 20-aug   |
+| 🔴   | `A-09` | R$ 380 bill due 05-sep unfunded if the day-25 invoice slips     | 💳 Credit-Card| 16-aug-2026  | R-22  | Ring-fence R$ 380 in the bank                 | 25-aug   |
+| 🟡   | `A-04` | Spending pace 18 pp ahead of the calendar                       | —            | 12-aug-2026  | R-02  | Reallocate envelopes (see `Budget.md` §3)     | 18-aug   |
+| 🟡   | `A-05` | Runway stuck at 3.2 months for 3 months                         | 🛡️ Reserve    | 01-aug-2026  | R-05  | Execute the R$ 500 contribution               | 30-aug   |
+| 🟡   | `A-06` | Expensive debt open: R$ 380 at 14%/mo                           | 💳 Credit-Card| 01-aug-2026  | R-08  | Pay the bill in full                          | 21-aug   |
+| 🟡   | `A-10` | Deferred expense ratio at 52.1% (target ≤ 40%)                  | 💳 Credit-Card| 16-aug-2026  | R-24  | Move `Food` off the card back to the bank     | 31-aug   |
+| 🟡   | `A-11` | Wallet projected at R$ 17 on 31-aug                             | 💵 Cash       | 16-aug-2026  | R-25  | No refill — let the constraint bind           | 31-aug   |
+| ⚪   | `A-07` | Category `Study` with no movement for 2 months                  | —            | 01-aug-2026  | R-04  | Reallocate R$ 50 or make a commitment         | 31-aug   |
+| ℹ️   | `A-08` | `AddCategory Poker` returned an error — category already exists | —            | 09-aug-2026  | R-13  | Use the existing category; no action needed   | —        |
 
 ```
 Alerts by severity
-🔴 Critical  ███████████████  3
-🟡 Attention ███████████████  3
-⚪ Info      █████            1
-ℹ️ System    █████            1
+🔴 Critical  ████████████     4
+🟡 Attention ███████████████  5
+⚪ Info      ███              1
+ℹ️ System    ███              1
 ```
 
 ---
@@ -70,9 +73,20 @@ Alerts by severity
 | ID   | Rule                                                         | Trigger                               | Sev. | Automatic action                   |
 | ---- | ------------------------------------------------------------ | ------------------------------------- | ---- | ---------------------------------- |
 | R-13 | Duplicate category                                           | `AddCategory` on an existing category | ℹ️   | `Error: Category X already exists` |
-| R-18 | Transaction without a category                               | uncategorized line in the statement   | 🟡   | Block the month close              |
+| R-18 | Transaction without a category **or account**                | unclassified line in the statement    | 🟡   | Block the month close              |
 | R-19 | Statement out of date                                        | no entry for 3 days                   | 🟡   | Reminder                           |
-| R-20 | Statement balance ≠ bank balance                             | divergence > R$ 1                     | 🔴   | Reconcile before closing           |
+| R-20 | Account balance ≠ source balance                             | divergence > R$ 1 on any account      | 🔴   | Reconcile before closing           |
+
+### 🏦 Accounts
+
+| ID   | Rule                                                         | Trigger                                  | Sev. | Automatic action                    |
+| ---- | ------------------------------------------------------------ | ---------------------------------------- | ---- | ----------------------------------- |
+| R-21 | **Unbalanced transfer**                                      | the two legs of a `Transfer` don't net to 0 | 🔴 | Block the month close               |
+| R-22 | **Card bill unfunded**                                       | bank projected < bill on the due date    | 🔴   | Ring-fence the amount in the bank   |
+| R-23 | Credit utilization high                                      | bill > 30% of the card limit             | 🟡   | Stop new card purchases             |
+| R-24 | Deferred expense ratio high                                  | card spend > 40% of total expense        | 🟡   | Move variable spend back to the bank|
+| R-25 | Wallet running dry                                           | cash projected < R$ 50 at month end      | 🟡   | Notify — do **not** auto-refill     |
+| R-26 | Card revolved                                                | interest > R$ 0 charged on the bill      | 🔴   | Emergency payoff (14%/mo)           |
 
 ---
 
@@ -106,17 +120,20 @@ Alerts by severity
 
 Run on the 1st of every month, in order:
 
-- [ ] Reconcile `Month-Balance.md` against the bank statement (rule R-20)
-- [ ] Verify that every transaction has a category (rule R-18)
-- [ ] Consolidate totals in `Month-Results.md`
-- [ ] Update `Month-Report.md` with the closed numbers
+- [ ] Reconcile each account against its source: `Month/Bank-Balance.md` vs. the bank statement,
+      `Month/Credit-Card-Balance.md` vs. the card invoice, `Month/Cash-Balance.md` vs. the wallet (rule R-20)
+- [ ] Verify that every transaction has a category **and an account** (rule R-18)
+- [ ] Check that every `Transfer` nets to zero across the two accounts it touches
+- [ ] Consolidate totals in `Month/All-Balance.md`
+- [ ] Update `Month/DashBoard.md` with the closed numbers
 - [ ] Record the month in `Year-Report.md` and `KPIs.md`
 - [ ] Update balances in `Net-Worth.md`
 - [ ] Review caps and reallocations in `Budget.md`
 - [ ] Release frozen categories whose freeze has expired
 - [ ] Run every rule in this file and log new alerts
 - [ ] Mark progress in `Goals.md`
-- [ ] Archive the statement and reset `Month-Balance.md`
+- [ ] Archive the statements and reset the four `Month/` files, carrying each account's closing
+      balance forward as next month's opening balance
 
 ---
 
@@ -132,4 +149,4 @@ Run on the 1st of every month, in order:
 ---
 
 ## 🔗 Related
-[`Budget.md`](Budget.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Categories.md`](Categories.md) · [`Month-Report.md`](Month-Report.md)
+[`Budget.md`](Budget.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Categories.md`](Categories.md) · [`Month/DashBoard.md`](Month/DashBoard.md)

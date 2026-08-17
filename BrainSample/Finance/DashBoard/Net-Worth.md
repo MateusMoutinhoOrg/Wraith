@@ -15,8 +15,12 @@
 | 🖥️ Equipment (business)      | Personal use  | Low       |  R$ 4,500 |   18.8% | ❌ depreciates |
 | 🛡️ Emergency reserve         | Fixed income  | Immediate |  R$ 3,200 |   13.3% | ✅ 100% CDI |
 | 📈 Investment portfolio      | Equity/FI     | Medium    |  R$ 3,200 |   13.3% | ✅      |
-| 💵 Checking account          | Cash          | Immediate |  R$ 1,100 |    4.6% | ❌      |
+| 🏦 Bank — checking account   | Cash          | Immediate |    R$ 963 |    4.0% | ❌      |
+| 💵 Cash — wallet             | Cash          | Immediate |    R$ 137 |    0.6% | ❌      |
 | **Total**                    | —             | —         |**R$ 24,000**| **100%** | —    |
+
+> 💧 **Liquid total R$ 1,100** across the two asset accounts — detail in
+> [`Month/All-Balance.md`](Month/All-Balance.md). The credit card sits below, in liabilities.
 
 ```
 Asset composition
@@ -24,7 +28,7 @@ Vehicle        ████████████████████  50.
 Equipment      ███████▌░░░░░░░░░░░░  18.8%  ⚠️ depreciates
 Reserve        █████▎░░░░░░░░░░░░░░  13.3%  ✅ yields
 Investments    █████▎░░░░░░░░░░░░░░  13.3%  ✅ yields
-Cash           █▊░░░░░░░░░░░░░░░░░░   4.6%
+Bank + Cash    █▊░░░░░░░░░░░░░░░░░░   4.6%
 ```
 
 > 🔴 **Structural alert:** 68.8% of net worth sits in **depreciating** goods. Productive assets = only **R$ 6,400 (26.7%)**.
@@ -35,6 +39,7 @@ Cash           █▊░░░░░░░░░░░░░░░░░░   4.
 | ------------------------- | ------: | -------: | ------: | -----: | -------------------: |
 | 🚗 Vehicle financing      | R$ 4,800| 1.2%/mo  |  R$ 400 | 12x    |            R$ 5,190  |
 | 💳 Credit card bill       |  R$ 380 | 14%/mo 🔴| in full | 1x     |              R$ 380  |
+|  *↳ statement*            |     —   |    —     |    —    | due 05-sep | [`Month/Credit-Card-Balance.md`](Month/Credit-Card-Balance.md) |
 | **Total**                 |**R$ 5,180**| —     |**R$ 400**| —    |         **R$ 5,570** |
 
 > 🔴 The credit card bill is the **most expensive debt** in the portfolio (14%/mo ≈ 380%/yr). Paying it off is an absolute priority over any investment.

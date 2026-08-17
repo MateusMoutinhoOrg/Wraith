@@ -118,4 +118,4 @@ Actual spend █████████████░░░░░░░  R$  7
 ---
 
 ## 🔗 Related
-[`Month-Report.md`](Month-Report.md) · [`Categories.md`](Categories.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Alerts-Rules.md`](Alerts-Rules.md)
+[`Month/DashBoard.md`](Month/DashBoard.md) · [`Categories.md`](Categories.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Alerts-Rules.md`](Alerts-Rules.md)

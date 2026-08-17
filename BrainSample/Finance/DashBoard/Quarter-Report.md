@@ -120,4 +120,4 @@ Q3  ████████████████████▋     R$ 310  
 ---
 
 ## 🔗 Related
-[`Year-Report.md`](Year-Report.md) · [`Month-Report.md`](Month-Report.md) · [`Business-MEI.md`](Business-MEI.md) · [`Goals.md`](Goals.md)
+[`Year-Report.md`](Year-Report.md) · [`Month/DashBoard.md`](Month/DashBoard.md) · [`Business-MEI.md`](Business-MEI.md) · [`Goals.md`](Goals.md)

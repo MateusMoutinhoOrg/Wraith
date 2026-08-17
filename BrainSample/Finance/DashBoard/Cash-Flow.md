@@ -1,7 +1,9 @@
 # 💧 Cash Flow
 
 > **Question this file answers:** *will I run out of money? When?*
-> **Cash today (16-aug-2026):** R$ 1,100 · **Burn rate:** R$ 43.75/day · **Breathing room:** 25 days
+> **Liquid today (16-aug-2026):** R$ 1,100 — 💵 Cash R$ 137 + 🏦 Bank R$ 963
+> **Burn rate:** R$ 43.75/day · **Breathing room:** 25 days
+> 💳 The card bill (R$ 380) is **not** liquid — it is a claim on the bank, due 05-sep. See [`Month/Credit-Card-Balance.md`](Month/Credit-Card-Balance.md).
 
 ---
 
@@ -9,7 +11,10 @@
 
 | Metric                          | Value      | Limit       | Status |
 | ------------------------------- | ---------: | ----------: | ------ |
-| Cash available today            | R$ 1,100   | ≥ R$ 1,000  | 🟡     |
+| Liquid available today          | R$ 1,100   | ≥ R$ 1,000  | 🟡     |
+| — of which 🏦 Bank (spendable)   | R$ 963     | ≥ R$ 800    | 🟡     |
+| — of which 💵 Cash (wallet)      | R$ 137     | ≥ R$ 100    | 🔴     |
+| 💳 Card bill committed (05-sep)  | R$ 380     | —           | 🟡     |
 | **Lowest projected balance (month)** | **-R$ 380**| ≥ R$ 300 | 🔴     |
 | Trough date                     | 20-aug     | —           | 🔴     |
 | Cash projected on 31-aug        | R$ 1,600   | ≥ R$ 1,000  | 🟢     |
@@ -23,25 +28,29 @@
 
 ## 2. 📆 Daily Projection — 2nd Half of August
 
-| Date        | Description                  | Category   | Type    |    Value | Balance     | Level |
-| ----------- | ---------------------------- | ---------- | ------- | -------: | ----------: | ----- |
-| 16-aug-2026 | *Opening balance*            | —          | —       |        — |  R$ 1,100   | 🟡    |
-| 17-aug-2026 | Cigarettes                   | `Vices`    | Expense |   -R$ 10 |  R$ 1,090   | 🟡    |
-| 18-aug-2026 | Groceries (biweekly)         | `Food`     | Expense |  -R$ 120 |    R$ 970   | 🟡    |
-| 19-aug-2026 | Fuel                         | `Transport`| Expense |   -R$ 40 |    R$ 930   | 🟡    |
-| 20-aug-2026 | Cloud/VPS + domains          | `Business` | Expense |   -R$ 85 |    R$ 845   | 🟡    |
-| 20-aug-2026 | DAS-MEI                      | `Business` | Expense |   -R$ 76 |    R$ 769   | 🟡    |
-| 21-aug-2026 | Credit card bill             | `Debt`     | Expense |  -R$ 380 |    R$ 389   | 🔴    |
-| 22-aug-2026 | Lunches for the week         | `Food`     | Expense |   -R$ 60 |    R$ 329   | 🔴    |
-| 23-aug-2026 | Streaming                    | `Poker`    | Expense |   -R$ 30 |    R$ 299   | 🔴    |
-| 24-aug-2026 | Cigarettes                   | `Vices`    | Expense |   -R$ 10 |    R$ 289   | 🔴    |
-| 25-aug-2026 | **Client A invoice — project**| `Freelance`| Income |+R$ 1,500 |  R$ 1,789   | 🟢    |
-| 27-aug-2026 | Groceries                    | `Food`     | Expense |   -R$ 90 |  R$ 1,699   | 🟢    |
-| 28-aug-2026 | Fuel                         | `Transport`| Expense |   -R$ 30 |  R$ 1,669   | 🟢    |
-| 30-aug-2026 | **Reserve contribution**     | `Reserve`  | Transfer|  -R$ 500 |  R$ 1,169   | 🟢    |
-| 30-aug-2026 | **Investment contribution**  | `Invest`   | Transfer|  -R$ 200 |    R$ 969   | 🟡    |
-| 31-aug-2026 | Misc / slack                 | —          | Expense |   -R$ 50 |    R$ 919   | 🟡    |
-|             | **Closing balance**          |            |         |          | **R$ 919**  | 🟡    |
+| Date        | Description                  | Category        | Account       | Type     |    Value | Liquid bal. | Level |
+| ----------- | ---------------------------- | --------------- | ------------- | -------- | -------: | ----------: | ----- |
+| 16-aug-2026 | *Opening balance*            | —               | —             | —        |        — |  R$ 1,100   | 🟡    |
+| 17-aug-2026 | Cigarettes                   | `Vices`         | 💵 Cash        | Expense  |   -R$ 10 |  R$ 1,090   | 🟡    |
+| 18-aug-2026 | Groceries (biweekly)         | `Food`          | 🏦 Bank        | Expense  |  -R$ 120 |    R$ 970   | 🟡    |
+| 19-aug-2026 | Fuel                         | `Transport`     | 🏦 Bank        | Expense  |   -R$ 40 |    R$ 930   | 🟡    |
+| 20-aug-2026 | Cloud/VPS + domains          | `Business`      | 💳 Credit-Card | Expense  |   -R$ 85 |    R$ 845   | 🟡    |
+| 20-aug-2026 | DAS-MEI                      | `Business`      | 🏦 Bank        | Expense  |   -R$ 76 |    R$ 769   | 🟡    |
+| 21-aug-2026 | **Credit card bill**         | `Card-Payment`  | 🏦 Bank → 💳   | Transfer |  -R$ 380 |    R$ 389   | 🔴    |
+| 22-aug-2026 | Lunches for the week         | `Food`          | 🏦 Bank        | Expense  |   -R$ 60 |    R$ 329   | 🔴    |
+| 23-aug-2026 | Streaming                    | `Poker`         | 💳 Credit-Card | Expense  |   -R$ 30 |    R$ 299   | 🔴    |
+| 24-aug-2026 | Cigarettes                   | `Vices`         | 💵 Cash        | Expense  |   -R$ 10 |    R$ 289   | 🔴    |
+| 25-aug-2026 | **Client A invoice — project**| `Freelance`    | 🏦 Bank        | Income   |+R$ 1,500 |  R$ 1,789   | 🟢    |
+| 27-aug-2026 | Groceries                    | `Food`          | 🏦 Bank        | Expense  |   -R$ 90 |  R$ 1,699   | 🟢    |
+| 28-aug-2026 | Fuel                         | `Transport`     | 🏦 Bank        | Expense  |   -R$ 30 |  R$ 1,669   | 🟢    |
+| 30-aug-2026 | **Reserve contribution**     | `Reserve`       | 🏦 Bank → 🛡️   | Transfer |  -R$ 500 |  R$ 1,169   | 🟢    |
+| 30-aug-2026 | **Investment contribution**  | `Invest`        | 🏦 Bank → 📈   | Transfer |  -R$ 200 |    R$ 969   | 🟡    |
+| 31-aug-2026 | Misc / slack                 | —               | 💵 Cash        | Expense  |   -R$ 50 |    R$ 919   | 🟡    |
+|             | **Closing liquid balance**   |                 |               |          |          | **R$ 919**  | 🟡    |
+
+> 💳 The 20-aug and 23-aug card charges (R$ 115) **do not move the liquid balance** — they land on
+> the September bill. The R$ 380 leaving on 21-aug is the *August* bill: a transfer, not an expense.
+> Balances above follow the original single-line projection so the trough and the closing figure stay comparable month over month.
 
 ```
 Cash curve — 2nd half
@@ -79,7 +88,7 @@ R$    0 ┼───────────────▁▁▁▁▁───
 | ----------- | -------------------- | ---------- | -----: | ---- | ---------- |
 | 20-aug-2026 | Cloud / VPS          | `Business` |  R$ 60 | ✅   | 🟡 Scheduled|
 | 20-aug-2026 | DAS-MEI              | `Business` |  R$ 76 | ✅   | 🟡 Scheduled|
-| 21-aug-2026 | Credit card bill     | `Debt`     | R$ 380 | ❌   | 🔴 Manual  |
+| 21-aug-2026 | Credit card bill     | `Card-Payment` | R$ 380 | ❌ | 🔴 Manual  |
 | 23-aug-2026 | Streaming            | `Poker`    |  R$ 30 | ✅   | 🟡 Scheduled|
 | 05-sep-2026 | Rent                 | `Home`     | R$ 300 | ✅   | ⚪ Future  |
 | 10-sep-2026 | Internet             | `Home`     |  R$ 90 | ✅   | ⚪ Future  |
@@ -130,4 +139,4 @@ may ██████▊   jun ████████▊  jul ▍🔴       a
 ---
 
 ## 🔗 Related
-[`Month-Report.md`](Month-Report.md) · [`Budget.md`](Budget.md) · [`Net-Worth.md`](Net-Worth.md) · [`Business-MEI.md`](Business-MEI.md)
+[`Month/DashBoard.md`](Month/DashBoard.md) · [`Budget.md`](Budget.md) · [`Net-Worth.md`](Net-Worth.md) · [`Business-MEI.md`](Business-MEI.md)
