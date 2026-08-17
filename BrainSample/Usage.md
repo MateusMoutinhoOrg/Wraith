@@ -22,9 +22,8 @@ Performs a single tick of the state machine: executes the pending actions and re
 
 ## Tick Workflow
 
-For each project, the tick performs the following steps:
 
-1. Attempt to read `<Project>/Task.yaml`.
+1. Attempt to read `Task.yaml`.
    - If the file does not exist → [Stop Execution](#stop-execution).
 2. Validate `Task.yaml.name`.
    - If it does not contain a valid action → [Show Error](#show-error) and [Stop Execution](#stop-execution).
@@ -33,7 +32,7 @@ For each project, the tick performs the following steps:
      No error is shown, since this is not an error condition.
 4. Execute the action defined in `Task.yaml.name`.
    - If the action fails → [Show Error](#show-error) and [Stop Execution](#stop-execution).
-5. Render all Markdown files in `<Project>/Dashboard`.
+5. Render all Markdown files in `Dashboard`.
 
 ## Procedures
 
@@ -43,6 +42,6 @@ Creates an `Error.md` file containing information about the error.
 
 ### Stop Execution
 
-1. Verify that `<Project>/Task.yaml` exists.
+1. Verify that `Task.yaml` exists.
    - If it does not exist, create it with default values.
-2. Set `apply` to `false` in `<Project>/Task.yaml`.
+2. Set `apply` to `false` in `Task.yaml`.
