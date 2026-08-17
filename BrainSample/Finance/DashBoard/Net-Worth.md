@@ -1,147 +1,106 @@
-# 🏦 Net Worth
+# 🏦 What I own and what I owe
 
-> **Base date:** 16-aug-2026
-> **Net Worth: R$ 18,820** · Assets R$ 24,000 − Liabilities R$ 5,180
-
----
-
-## 1. ⚖️ Balance Sheet
-
-### 📗 Assets — R$ 24,000
-
-| Asset                        | Class         | Liquidity | Value     | % Total | Yields? |
-| ---------------------------- | ------------- | --------- | --------: | ------: | ------- |
-| 🚗 Vehicle                   | Personal use  | Low       | R$ 12,000 |   50.0% | ❌ depreciates |
-| 🖥️ Equipment (business)      | Personal use  | Low       |  R$ 4,500 |   18.8% | ❌ depreciates |
-| 🛡️ Emergency reserve         | Fixed income  | Immediate |  R$ 3,200 |   13.3% | ✅ 100% CDI |
-| 📈 Investment portfolio      | Equity/FI     | Medium    |  R$ 3,200 |   13.3% | ✅      |
-| 🏦 Bank — checking account   | Cash          | Immediate |    R$ 963 |    4.0% | ❌      |
-| 💵 Cash — wallet             | Cash          | Immediate |    R$ 137 |    0.6% | ❌      |
-| **Total**                    | —             | —         |**R$ 24,000**| **100%** | —    |
-
-> 💧 **Liquid total R$ 1,100** across the two asset accounts — detail in
-> [`Month/All-Balance.md`](Month/All-Balance.md). The credit card sits below, in liabilities.
-
-```
-Asset composition
-Vehicle        ████████████████████  50.0%  ⚠️ depreciates
-Equipment      ███████▌░░░░░░░░░░░░  18.8%  ⚠️ depreciates
-Reserve        █████▎░░░░░░░░░░░░░░  13.3%  ✅ yields
-Investments    █████▎░░░░░░░░░░░░░░  13.3%  ✅ yields
-Bank + Cash    █▊░░░░░░░░░░░░░░░░░░   4.6%
-```
-
-> 🔴 **Structural alert:** 68.8% of net worth sits in **depreciating** goods. Productive assets = only **R$ 6,400 (26.7%)**.
-
-### 📕 Liabilities — R$ 5,180
-
-| Debt                      | Balance | Interest | Payment | Left   | Total remaining cost |
-| ------------------------- | ------: | -------: | ------: | -----: | -------------------: |
-| 🚗 Vehicle financing      | R$ 4,800| 1.2%/mo  |  R$ 400 | 12x    |            R$ 5,190  |
-| 💳 Credit card bill       |  R$ 380 | 14%/mo 🔴| in full | 1x     |              R$ 380  |
-|  *↳ statement*            |     —   |    —     |    —    | due 05-sep | [`Month/Credit-Card-Balance.md`](Month/Credit-Card-Balance.md) |
-| **Total**                 |**R$ 5,180**| —     |**R$ 400**| —    |         **R$ 5,570** |
-
-> 🔴 The credit card bill is the **most expensive debt** in the portfolio (14%/mo ≈ 380%/yr). Paying it off is an absolute priority over any investment.
-
-### 🧮 Result
-
-| Line                     | Value         |
-| ------------------------ | ------------: |
-| Assets                   |    R$ 24,000  |
-| (−) Liabilities          |   -R$ 5,180   |
-| **= Net Worth**          | **R$ 18,820** |
-| **Productive net worth** |  **R$ 7,500** |
+> **16-aug-2026** · Everything I own **R$ 24,000** − everything I owe **R$ 5,180** = **R$ 18,820 is mine**
 
 ---
 
-## 2. 📈 Net Worth Evolution
+## 1. 📗 What I own — R$ 24,000
 
-| Month     | Assets    | Liabilities | NW       | Δ month  | Δ %    |
-| --------- | --------: | ----------: | -------: | -------: | -----: |
-| dec-2025  | R$ 22,400 |    R$ 9,100 | R$ 13,300|       —  |      — |
-| jan-2026  | R$ 22,900 |    R$ 8,600 | R$ 14,300| +R$ 1,000| +7.5%  |
-| feb-2026  | R$ 23,500 |    R$ 8,150 | R$ 15,350| +R$ 1,050| +7.3%  |
-| mar-2026  | R$ 23,900 |    R$ 7,700 | R$ 16,200|   +R$ 850| +5.5%  |
-| apr-2026  | R$ 24,100 |    R$ 7,200 | R$ 16,900|   +R$ 700| +4.3%  |
-| may-2026  | R$ 24,500 |    R$ 6,750 | R$ 17,750|   +R$ 850| +5.0%  |
-| jun-2026  | R$ 25,100 |    R$ 6,300 | R$ 18,800| +R$ 1,050| +5.9%  |
-| jul-2026  | R$ 24,700 |    R$ 5,500 | R$ 19,200|   +R$ 400| +2.1%  |
-| **aug-2026** (16) | R$ 24,000 | R$ 5,180 | **R$ 18,820** | **-R$ 380** | **-2.0%** 🔴 |
-| aug-2026* (proj)  | R$ 25,200 | R$ 4,800 | R$ 20,400 | +R$ 1,200| +6.3% 🟢 |
+| Thing                    | Can I use it fast? | Value     | Share | Does it grow? |
+| ------------------------ | ------------------ | --------: | ----: | ------------- |
+| 🚗 Car                    | No                 | R$ 12,000 | 50.0% | ❌ loses value |
+| 🖥️ Work equipment         | No                 |  R$ 4,500 | 18.8% | ❌ loses value |
+| 🛡️ Emergency savings      | Right away         |  R$ 3,200 | 13.3% | ✅ yes         |
+| 📈 Investments            | A few days         |  R$ 3,200 | 13.3% | ✅ yes         |
+| 🏦 Bank account           | Right away         |    R$ 963 |  4.0% | ❌             |
+| 💵 Wallet                 | Right away         |    R$ 137 |  0.6% | ❌             |
 
 ```
-Net Worth 2026 (R$ thousand)
-21 ┤                                          ▁▁
-20 ┤                                       ▁▁ ██  ← proj
-19 ┤                                 ▁▁ ▄▄ ██ ██
-18 ┤                           ▁▁ ▄▄ ██ ██ ██ ██
-17 ┤                     ▁▁ ▄▄ ██ ██ ██ ██ ██ ██
-16 ┤               ▁▁ ▄▄ ██ ██ ██ ██ ██ ██ ██ ██
-15 ┤         ▁▁ ▄▄ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██
-14 ┤   ▁▁ ▄▄ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██
-13 ┼▄▄ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██
+Car + equipment   ███████████████████████████▌  68.8%  ⚠️ lose value over time
+Savings + invest  ██████████▋                   26.7%  ✅ grow over time
+Bank + wallet     █▊                             4.6%
+```
+
+> 🔴 **The problem:** almost 70% of what I own is a car and a computer — things that get cheaper every year.
+> Only **R$ 6,400** actually works for me.
+
+---
+
+## 2. 📕 What I owe — R$ 5,180
+
+| Debt              | Balance  | Interest        | I pay   | Left    |
+| ----------------- | -------: | --------------- | ------: | ------- |
+| 🚗 Car loan        | R$ 4,800 | 1.2% per month  | R$ 400  | 12 more |
+| 💳 Credit card     |   R$ 380 | 14% per month 🔴 | in full | due 05-sep |
+
+> 🔴 **The card is by far the most expensive debt** — 14% a month is roughly 380% a year.
+> Never carry a card balance. Paying it beats any investment, every time.
+
+**Pay them off in this order:**
+
+| Order | Debt      | What to do                          | Gone by  |
+| ----: | --------- | ----------------------------------- | -------- |
+|   1st | Card      | Pay it in full on 21-aug            | aug-2026 |
+|   2nd | Car loan  | Put an extra R$ 500 in during october | apr-2027 |
+
+Paying that extra R$ 500 saves **R$ 125 in interest** and clears the loan 3 months earlier.
+
+---
+
+## 3. 📈 How it's grown this year
+
+| Month     | I own     | I owe     | Mine      | Change     |
+| --------- | --------: | --------: | --------: | ---------: |
+| dec-2025  | R$ 22,400 | R$ 9,100  | R$ 13,300 |         —  |
+| mar-2026  | R$ 23,900 | R$ 7,700  | R$ 16,200 |   +R$ 850  |
+| jun-2026  | R$ 25,100 | R$ 6,300  | R$ 18,800 | +R$ 1,050  |
+| jul-2026  | R$ 24,700 | R$ 5,500  | R$ 19,200 |   +R$ 400  |
+| **aug-2026** (day 16) | R$ 24,000 | R$ 5,180 | **R$ 18,820** | **-R$ 380** 🔴 |
+| aug-2026\* (expected) | R$ 25,200 | R$ 4,800 | R$ 20,400 | +R$ 1,200 🟢 |
+
+```
+What's mine, in R$ thousands
+21 ┤                              ▁▁
+20 ┤                           ▁▁ ██  ← expected
+19 ┤                     ▄▄ ██ ██ ██
+18 ┤               ▄▄ ██ ██ ██ ██ ██
+17 ┤         ▄▄ ██ ██ ██ ██ ██ ██ ██
+16 ┤   ▄▄ ██ ██ ██ ██ ██ ██ ██ ██ ██
+15 ┼▄▄ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██
    └ dec jan feb mar apr may jun jul aug
 ```
 
-**CAGR since dec-2025:** +6.0%/mo (≈ +101%/yr) — driven by debt amortization, not by investment returns.
+> 📌 Most of the growth comes from **paying off debt**, not from investments earning money.
 
 ---
 
-## 3. 📊 Investment Portfolio — R$ 3,200
+## 4. 💰 The R$ 3,200 invested
 
-| Asset                   | Class         | Invested | Current | Return | % Portfolio | Target | Δ    |
-| ----------------------- | ------------- | -------: | ------: | -----: | ----------: | -----: | ---- |
-| Tesouro Selic 2029      | Fixed income  |  R$ 1,200| R$ 1,268| +5.7%  |       39.6% |    30% | -9.6 |
-| CDB 110% CDI            | Fixed income  |    R$ 800|   R$ 842| +5.3%  |       26.3% |    20% | -6.3 |
-| REITs (paper + brick)   | Real estate   |    R$ 600|   R$ 573| -4.5%  |       17.9% |    20% | +2.1 |
-| Brazilian equities      | Equity        |    R$ 400|   R$ 437| +9.3%  |       13.7% |    20% | +6.3 |
-| Crypto (BTC)            | Alternative   |    R$ 100|    R$ 80| -20.0% |        2.5% |    10% | +7.5 |
-| **Total**               | —             |**R$ 3,100**|**R$ 3,200**| **+3.2%** | **100%** | 100% | — |
+| Where                  | Risk        | Value    | Return  |
+| ---------------------- | ----------- | -------: | ------: |
+| Tesouro Selic 2029     | Very safe   | R$ 1,268 |  +5.7%  |
+| CDB 110% CDI           | Very safe   |   R$ 842 |  +5.3%  |
+| Real-estate funds      | Medium      |   R$ 573 |  -4.5%  |
+| Brazilian stocks       | Higher      |   R$ 437 |  +9.3%  |
+| Bitcoin                | Very high   |    R$ 80 | -20.0%  |
 
-```
-Current vs. target allocation
-Fixed income  current ██████████████████████████▌  65.9%   target ████████████████████  50%
-Real estate   current ███████▏                     17.9%   target ████████             20%
-Equity        current █████▌                       13.7%   target ████████             20%
-Alternative   current █                             2.5%   target ████                 10%
-```
-
-> 🟡 **Portfolio too conservative for the horizon** (FIRE in 2031+). Rebalance on the next contribution: direct 100% of the R$ 200 to equity/alternative.
-> 🟢 But: with the reserve below 6 months, the excess fixed income is **defensible** for now.
+> 🟡 Two thirds of it sits in the safest, slowest options. That's fine **for now** — the emergency fund
+> isn't full yet. Once it is, new money should go into stocks instead.
 
 ---
 
-## 4. 💳 Debt Payoff Plan
+## 5. 🎯 Goals
 
-**Method:** Avalanche (highest interest first).
+| Goal                          | Target    | Now       | Missing   | By       | Progress         |
+| ----------------------------- | --------: | --------: | --------: | -------- | ---------------- |
+| 6 months of expenses saved    | R$ 6,000  | R$ 3,200  | R$ 2,800  | feb-2027 | `█████▎░░░░` 53% |
+| Zero credit card debt         |     R$ 0  |   R$ 380  |   R$ 380  | aug-2026 | `████████░░` 81% |
+| R$ 10,000 invested            | R$ 10,000 | R$ 3,200  | R$ 6,800  | dec-2027 | `███▏░░░░░░` 32% |
+| R$ 30,000 to my name          | R$ 30,000 | R$ 18,820 | R$ 11,180 | jun-2027 | `██████▎░░░` 63% |
+| Own more useful things than depreciating ones | 50% | 26.7% | 23 pp | dec-2027 | `█████▎░░░░` 53% |
 
-| Order | Debt               | Interest  | Balance  | Action                          | Deadline |
-| ----: | ------------------ | --------: | -------: | ------------------------------- | -------- |
-|   1st | Credit card bill   | 14%/mo 🔴 | R$ 380   | Pay in full on 21-aug           | aug-2026 |
-|   2nd | Vehicle financing  | 1.2%/mo   | R$ 4,800 | Pay R$ 500 extra in oct         | jul-2027 |
+**Where this is heading:** if I keep saving ~R$ 1,000/month, I'm debt-free in 2027 and around
+**R$ 120,000** by 2031. Living off investments would need about R$ 900,000 — that's a long way off,
+so the priority now is simply: **clear the debt, fill the emergency fund, then invest.**
 
-| Scenario                       | Debt-free by  | Interest paid | Savings    |
-| ------------------------------ | ------------- | ------------: | ---------: |
-| Minimum payments only          | jul-2027      |      R$ 390   |        —   |
-| **With R$ 500 amortization**   | **apr-2027**  |    **R$ 265** | **R$ 125** |
-| R$ 1,500 amortization (oct)    | dec-2026      |      R$ 150   |   R$ 240   |
-
-> 💡 Amortizing the financing yields **1.2%/mo guaranteed and tax-free** — more than any fixed income available today. Priority over new contributions, **after** the reserve reaches 6 months.
-
----
-
-## 5. 🎯 Net Worth Goals
-
-| Goal                            | Target    | Current  | Missing  | Deadline | Progress         |
-| ------------------------------- | --------: | -------: | -------: | -------- | ---------------- |
-| 6-month reserve                 |  R$ 6,000| R$ 3,200 | R$ 2,800 | feb-2027 | `█████▎░░░░` 53% |
-| Clear expensive debt (card)     |     R$ 0 |   R$ 380 |   R$ 380 | aug-2026 | `████████░░` 81% |
-| R$ 10,000 portfolio             | R$ 10,000| R$ 3,200 | R$ 6,800 | dec-2027 | `███▏░░░░░░` 32% |
-| Net worth of R$ 30,000          | R$ 30,000| R$ 18,820| R$ 11,180| jun-2027 | `██████▎░░░` 63% |
-| Productive net worth > 50%      |      50% |    26.7% |  23.3 pp | dec-2027 | `█████▎░░░░` 53% |
-
----
-
-## 🔗 Related
-[`Long-Term.md`](Long-Term.md) · [`KPIs.md`](KPIs.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Goals.md`](Goals.md)
+> 📌 *Fictional document, used as a model for personal + small-business financial management.*

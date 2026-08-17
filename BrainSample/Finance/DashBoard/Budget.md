@@ -1,121 +1,95 @@
-# 💼 Budget
+# 💼 Budget — how much I can spend
 
-> **Effective:** aug/2026 · **Method:** Envelopes + adapted 50/30/20
-> **Global monthly cap:** R$ 1,000 · **Consumed:** R$ 700 (70%) · **Free:** R$ 300
+> **August 2026** · **Limit for the month: R$ 1,000** · spent R$ 700 · **R$ 300 left**
 
----
-
-## 1. 🧮 Allocation Rule
-
-Over the **projected income of R$ 2,000/month**:
-
-| Block                | % Target | Value    | Actual    | Δ        | Status |
-| -------------------- | -------: | -------: | --------: | -------: | ------ |
-| 🔒 Needs             |      35% |   R$ 700 |    R$ 565 | -R$ 135  | 🟢     |
-| 🎈 Wants             |      15% |   R$ 300 |    R$ 135 | -R$ 165  | 🟢     |
-| 📈 Save/Invest       |      50% | R$ 1,000 |     R$ 0* | -R$ 1,000| 🔴     |
-| **Total**            | **100%** | **R$ 2,000** | **R$ 700** | — | 🟡 |
-
-`*` R$ 500 contribution scheduled for 30-aug; the rest depends on the close.
-
-> **Golden rule:** *Saving is a fixed expense.* The contribution leaves on the day income arrives, not from what's left over.
+The idea is simple: each kind of spending gets its own envelope with money in it.
+When an envelope is empty, that kind of spending stops until next month.
 
 ---
 
-## 2. 📦 Envelopes of the Month (aug/2026)
+## 1. 📦 The envelopes
 
-| # | Envelope            | Category     | Type     | Cap      | Spent  | Balance | % Used | Bar            | Status |
-| - | ------------------- | ------------ | -------- | -------: | -----: | ------: | -----: | -------------- | ------ |
-| 1 | 🏠 Housing          | `Home`       | Fixed    |   R$ 300 | R$ 300 |   R$ 0  |   100% | `██████████`   | 🟡     |
-| 2 | 🍽️ Food             | `Food`       | Variable |   R$ 250 | R$ 180 |  R$ 70  |    72% | `███████░░░`   | 🟡     |
-| 3 | 💻 Infra / Software | `Business`   | Fixed    |   R$ 150 |  R$ 40 | R$ 110  |    27% | `███░░░░░░░`   | 🟢     |
-| 4 | 🚗 Transport        | `Transport`  | Variable |   R$ 120 |  R$ 45 |  R$ 75  |    38% | `████░░░░░░`   | 🟢     |
-| 5 | 🃏 Leisure / Betting| `Poker`      | Free     |    R$ 80 |  R$ 45 |  R$ 35  |    56% | `██████░░░░`   | 🟢     |
-| 6 | 🚬 Vices            | `Vices`      | Free     |    R$ 50 |  R$ 90 | -R$ 40  |   180% | `██████████`⨯1.8| 🔴    |
-| 7 | 📚 Education        | `Study`      | Free     |    R$ 50 |   R$ 0 |  R$ 50  |     0% | `░░░░░░░░░░`   | ⚪     |
-|   | **TOTAL**           | —            | —        | **R$ 1,000** | **R$ 700** | **R$ 300** | **70%** | `███████░░░` | 🟡 |
+| Envelope             | Category    | Kind        | Limit    | Spent  | Left    | Bar             | 🚦 |
+| -------------------- | ----------- | ----------- | -------: | -----: | ------: | --------------- | -- |
+| 🏠 Home (rent, bills) | `Home`      | Must pay    |  R$ 300  | R$ 300 |   R$ 0  | `██████████`    | 🟡 |
+| 🍽️ Food              | `Food`      | Must pay    |  R$ 250  | R$ 180 |  R$ 70  | `███████░░░`    | 🟡 |
+| 💻 Business tools     | `Business`  | Must pay    |  R$ 150  | R$ 40  | R$ 110  | `███░░░░░░░`    | 🟢 |
+| 🚗 Transport          | `Transport` | Must pay    |  R$ 120  | R$ 45  |  R$ 75  | `████░░░░░░`    | 🟢 |
+| 🃏 Poker / fun        | `Poker`     | Nice to have|   R$ 80  | R$ 45  |  R$ 35  | `██████░░░░`    | 🟢 |
+| 🚬 Cigarettes         | `Vices`     | Nice to have|   R$ 50  | R$ 90  | -R$ 40  | `██████████`⨯1.8| 🔴 |
+| 📚 Courses            | `Study`     | Nice to have|   R$ 50  |  R$ 0  |  R$ 50  | `░░░░░░░░░░`    | ⚪ |
+| **Total**            | —           | —           | **R$ 1,000** | **R$ 700** | **R$ 300** | `███████░░░` | 🟡 |
 
-**Expected pace on day 16:** 52% · **Actual pace:** 70% → **18 pp ahead** ⚠️
+**Halfway through the month I should have used ~52%. I've used 70%.** That's too fast.
 
----
+### Fix it today
 
-## 3. ⚖️ Suggested Reallocation (apply today)
-
-| From        | To         | Value  | Reason                                | Applied  |
-| ----------- | ---------- | -----: | ------------------------------------- | -------- |
-| `Study`     | `Vices`    |  R$ 40 | Cover the envelope overrun            | ☐        |
-| `Transport` | `Food`     |  R$ 30 | Food hits its cap around day 26       | ☐        |
-| `Business`  | *(held)*   |  R$ 80 | Leftover goes to the day-30 contribution | ☐     |
-
-**After reallocation:** global cap stays at R$ 1,000, 0 envelopes over, `Food` has slack through day 31.
+| Move R$ | From        | To      | Why                                   | Done |
+| ------: | ----------- | ------- | ------------------------------------- | ---- |
+|   R$ 40 | `Study`     | `Vices` | Cover the overspend                   | ☐    |
+|   R$ 30 | `Transport` | `Food`  | Food runs out around the 26th         | ☐    |
 
 ---
 
-## 4. 🔁 Recurring Fixed Costs
+## 2. 🎯 Where each R$ 100 of income should go
 
-| Description            | Category   | Day | Value  | Frequency  | Auto-debit  | Last review    |
-| ---------------------- | ---------- | --: | -----: | ---------- | ----------- | -------------- |
-| Rent / housing         | `Home`     |   5 | R$ 300 | Monthly    | ✅          | jan-2026       |
-| Cloud / VPS            | `Business` |  20 |  R$ 60 | Monthly    | ✅          | jun-2026       |
-| Domains + e-mail       | `Business` |  12 |  R$ 25 | Monthly    | ✅          | mar-2026       |
-| Internet               | `Home`     |  10 |  R$ 90 | Monthly    | ✅          | ⚠️ 2024        |
-| Streaming              | `Poker`    |  15 |  R$ 30 | Monthly    | ✅          | ⚠️ never       |
-| DAS-MEI                | `Business` |  20 |  R$ 76 | Monthly    | ✅          | —              |
-| **Total monthly fixed**| —          |   — | **R$ 581** | —      | —           | —              |
+Based on the R$ 2,000 I expect to earn each month:
 
-**Fixed / projected income = 29.1%** 🟢 (target ≤ 50%)
-**Fixed / worst-month income (R$ 1,000) = 58.1%** 🔴 — that's the model's real risk.
+| Goes to                       | Should be | That is  | Actually |
+| ----------------------------- | --------: | -------: | -------: |
+| 🔒 Things I must pay          |       35% |   R$ 700 |   R$ 565 |
+| 🎈 Things I want              |       15% |   R$ 300 |   R$ 135 |
+| 📈 Savings and investments    |       50% | R$ 1,000 |   R$ 0\* |
 
-> 🔎 **To review:** Internet (2 years without renegotiating) and Streaming (never reviewed) — potential savings R$ 50/month = **R$ 600/year**.
+`*` R$ 500 goes out automatically on 30-aug.
+
+> **The one rule that matters:** treat saving like a bill. It leaves the account the day the money
+> arrives — not with whatever happens to be left at the end of the month.
 
 ---
 
-## 5. 📅 Annual Budget 2026
+## 3. 🔁 Bills that repeat every month — R$ 581
 
-| Envelope     | Cap/month | Cap/year  | Spent jan–aug | % Year | Year forecast | Δ vs. cap  |
-| ------------ | --------: | --------: | ------------: | -----: | ------------: | ---------: |
-| `Home`       |    R$ 300 |  R$ 3,600 |      R$ 2,400 |    67% |      R$ 3,600 |     R$ 0   |
-| `Food`       |    R$ 250 |  R$ 3,000 |      R$ 1,980 |    66% |      R$ 3,100 |   +R$ 100  |
-| `Business`   |    R$ 150 |  R$ 1,800 |      R$ 1,120 |    62% |      R$ 1,700 |   -R$ 100  |
-| `Transport`  |    R$ 120 |  R$ 1,440 |        R$ 820 |    57% |      R$ 1,300 |   -R$ 140  |
-| `Poker`      |     R$ 80 |    R$ 960 |        R$ 610 |    64% |        R$ 950 |    -R$ 10  |
-| `Vices`      |     R$ 50 |    R$ 600 |        R$ 620 |   103% |        R$ 950 |   +R$ 350 🔴|
-| `Study`      |     R$ 50 |    R$ 600 |        R$ 250 |    42% |        R$ 500 |   -R$ 100  |
-| **TOTAL**    | **R$ 1,000** | **R$ 12,000** | **R$ 7,800** | **65%** | **R$ 12,100** | **+R$ 100** 🟡 |
+| Bill              | Category   | Day | Value  | Auto | Note                          |
+| ----------------- | ---------- | --: | -----: | ---- | ----------------------------- |
+| Rent              | `Home`     |   5 | R$ 300 | ✅   |                               |
+| Internet          | `Home`     |  10 |  R$ 90 | ✅   | ⚠️ same price since 2024      |
+| Business tax (DAS)| `Business` |  20 |  R$ 76 | ✅   |                               |
+| Cloud / server    | `Business` |  20 |  R$ 60 | ✅   |                               |
+| Streaming         | `Poker`    |  15 |  R$ 30 | ✅   | ⚠️ never reviewed             |
+| Domains + e-mail  | `Business` |  12 |  R$ 25 | ✅   |                               |
 
-```
-Annual cap   ████████████████████  R$ 12,000
-Forecast     ████████████████████▏ R$ 12,100  (+0.8%) 🟡
-Actual spend █████████████░░░░░░░  R$  7,800  (65%)
-```
+> 💡 Renegotiating the internet and dropping the streaming would save about **R$ 50/month = R$ 600/year**.
+> ⚠️ In a bad month (R$ 1,000 earned) these fixed bills eat **58% of the income**. That's the real fragility.
 
 ---
 
-## 6. 🎯 Special Budgets (outside the monthly cap)
+## 4. 🏷️ The categories I use
 
-| Budget                    | Target    | Set aside | Missing   | Deadline | Progress         |
-| ------------------------- | --------: | --------: | --------: | -------- | ---------------- |
-| 🖥️ Laptop replacement     | R$ 4,000  |   R$ 900  | R$ 3,100  | mar-2027 | `██░░░░░░░░` 23% |
-| 🦷 Health / dentist       | R$ 1,200  |   R$ 400  |   R$ 800  | dec-2026 | `███░░░░░░░` 33% |
-| 🎄 December (bonus/holidays)| R$ 1,500 |   R$ 250  | R$ 1,250  | dec-2026 | `█▋░░░░░░░░` 17% |
-| 🚗 Vehicle maintenance    |   R$ 800  |   R$ 300  |   R$ 500  | oct-2026 | `███▊░░░░░░` 38% |
-| **Total committed**       | **R$ 7,500** | **R$ 1,850** | **R$ 5,650** | — | `██▍░░░░░░░` 25% |
-
-> ⚠️ These budgets **don't compete** with the monthly envelopes — they're funded by the month's positive result, before the investment contribution.
-
----
-
-## 7. 📏 Budget Rules
-
-1. **An overrun freezes the category** until day 1 of the following month — unless there's a formal reallocation (section 3).
-2. **An envelope idle for 2 months** becomes a candidate for cutting or permanent reallocation.
-3. **The global cap only rises** if the average income of the last 3 months rises ≥ 15%.
-4. **Every expense > R$ 200** requires a 24h wait before purchase.
-5. **No installment purchases** while the reserve is below 6 months.
-6. **Extra income** (unplanned freelance work) → 70% investment, 30% special budgets.
-7. **Fixed-cost review** mandatory every 12 months per contract.
+| Category    | Emoji | Kind          | Monthly limit |
+| ----------- | ----- | ------------- | ------------: |
+| `Freelance` | 💼    | Money coming in |            — |
+| `Extra`     | 🎁    | Money coming in |            — |
+| `Yield`     | 🪙    | Money coming in |            — |
+| `Home`      | 🏠    | Must pay        |       R$ 300 |
+| `Food`      | 🍽️    | Must pay        |       R$ 250 |
+| `Business`  | 💻    | Must pay        |       R$ 150 |
+| `Transport` | 🚗    | Must pay        |       R$ 120 |
+| `Poker`     | 🃏    | Nice to have (can also win money) | R$ 80 |
+| `Vices`     | 🚬    | Nice to have    |        R$ 50 |
+| `Study`     | 📚    | Nice to have    |        R$ 50 |
+| `Debt`      | 💳    | Debt            |       R$ 120 |
+| `Reserve` `Invest` `Card-Payment` | 🛡️ 📈 🔄 | Moving my own money | — |
 
 ---
 
-## 🔗 Related
-[`Month/DashBoard.md`](Month/DashBoard.md) · [`Categories.md`](Categories.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Alerts-Rules.md`](Alerts-Rules.md)
+## 5. 📏 The rules
+
+1. Every transaction gets **exactly one category and one account**.
+2. An envelope that goes over its limit is **frozen** until next month, or it borrows from another envelope.
+3. The envelope doesn't care *how* I paid — cash, bank or card all come out of the same limit.
+4. Moving money between my own accounts (`Reserve`, `Invest`, `Card-Payment`) is **never spending**.
+5. A card purchase counts on the day I buy it, not on the day the bill is paid.
+6. Limits are reviewed on the 1st of each month; new categories start with a limit of R$ 0.
+
+> 📌 *Fictional document. Current spending comes from [`Month/Statement.md`](Month/Statement.md).*
