@@ -1,0 +1,8 @@
+name: Poker 
+Description: Money Lost or win in Poker
+positive:true 
+negative:true 
+aply:false
+
+
+
