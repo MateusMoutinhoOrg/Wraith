@@ -1,62 +1,48 @@
+# Brain Workflow
 
-### Brain Workflow:
+This document describes the available `brain` commands and the execution workflow.
 
+## Commands
 
+### Watch
 
-## Watch:
-
-###  command:
-~~~bash
+```bash
 ./brain watch --time 1s
-~~~
-### Description
-runs the tick every <time> seconds
+```
 
+Runs a [tick](#tick) every `<time>` interval (e.g. `1s`).
 
+### Tick
 
-## Tick:
-###  command:
-~~~bash
+```bash
 ./brain tick
-~~~
-### Description
-Perform a tick in the State machine, perfors the actions, and render the visualization elements
+```
 
-### Workflow:
+Performs a single tick of the state machine: executes the pending actions and renders the visualization elements.
 
-#### Process:
+## Tick Workflow
 
-##### Show Error 
-- creates a Error.md containing informations about the error.
+For each project, the tick performs the following steps:
 
-##### Stop Execution
-- verify if <Project>/Task.yaml exists:
-  - if not exists: creates it with default values.
-  - edit the <Project>/Task.yaml.aplly  to false.
+1. Attempt to read `<Project>/Task.yaml`.
+   - If the file does not exist → [Stop Execution](#stop-execution).
+2. Validate `Task.yaml.name`.
+   - If it does not contain a valid action → [Show Error](#show-error) and [Stop Execution](#stop-execution).
+3. Check `Task.yaml.apply`.
+   - If `apply == false` → [Stop Execution](#stop-execution).
+     No error is shown, since this is not an error condition.
+4. Execute the action defined in `Task.yaml.name`.
+   - If the action fails → [Show Error](#show-error) and [Stop Execution](#stop-execution).
+5. Render all Markdown files in `<Project>/Dashboard`.
 
+## Procedures
 
-##### Tick Workflow:
-- User runs: 
-~~~bash
-./brain tick
-~~~
-- For each project:
-  - brain trys to read: <Project>/Task.yaml
-  - if the file does not exist:
-      - [Stop Execution](#stop-execution)
-  - if   <Project>/Task.yaml.name not contains a valida action:
-      - [Show a error](#show-error) 
-      - [Stop Execution](#stop-execution)
+### Show Error
 
-  - if <Project>/Task.yaml.aplly == false:
-    - comment: it not shows a error because its not a error 
-    - [Stop Execution](#stop-execution) 
- 
-  - executes  <Project>/Task.yaml.name action.
-  - if <Project>/Task.yaml.name action fails:
-    - [Show a error](#show-error) 
-    - [Stop Execution](#stop-execution) 
+Creates an `Error.md` file containing information about the error.
 
-'  - renders all markdowns of <Project>/Dasboard
+### Stop Execution
 
-
+1. Verify that `<Project>/Task.yaml` exists.
+   - If it does not exist, create it with default values.
+2. Set `apply` to `false` in `<Project>/Task.yaml`.
