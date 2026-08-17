@@ -1,6 +1,6 @@
-# Brain Workflow
+# Brain
 
-This document describes the available `brain` commands and the execution workflow.
+Brain is a data-visualization system that allows to make actions into the database, and visualize the current state of the database by using severeal dashboards of visualization.
 
 ## Commands
 
