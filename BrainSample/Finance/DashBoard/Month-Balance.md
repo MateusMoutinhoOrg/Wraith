@@ -25,35 +25,35 @@
 
 ## 2. 📒 Statement — Realized (01-aug → 16-aug)
 
-| Date        | Transaction                    | Tag         |      Value |    Balance |
-| ----------- | ------------------------------ | ----------- | ---------: | ---------: |
-| 01-aug-2026 | Rent + utilities               | `Home`      |  -R$ 300   |  R$ 1,000  |
-| 02-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |    R$ 990  |
-| 02-aug-2026 | Supermarket — weekly shop      | `Food`      |   -R$ 45   |    R$ 945  |
-| 03-aug-2026 | Fuel                           | `Transport` |   -R$ 15   |    R$ 930  |
-| 04-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |    R$ 920  |
-| 04-aug-2026 | Bakery                         | `Food`      |   -R$ 18   |    R$ 902  |
-| 05-aug-2026 | Cloud hosting — Wraith         | `Business`  |   -R$ 20   |    R$ 882  |
-| 06-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |    R$ 872  |
-| 06-aug-2026 | Poker night — buy-in           | `Poker`     |   -R$ 50   |    R$ 822  |
-| 07-aug-2026 | Supermarket                    | `Food`      |   -R$ 32   |    R$ 790  |
-| 08-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |    R$ 780  |
-| 08-aug-2026 | Ride app                       | `Transport` |   -R$ 12   |    R$ 768  |
-| 09-aug-2026 | Poker night — cash out         | `Poker`     |   +R$ 30   |    R$ 798  |
-| 10-aug-2026 | Buy Cigarettes                 | `Vices`     |   -R$ 10   |    R$ 788  |
-| 10-aug-2026 | Lunch out                      | `Food`      |   -R$ 25   |    R$ 763  |
-| 11-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |    R$ 753  |
-| 11-aug-2026 | **Client invoice — MEI**       | `Freelance` |  **+R$ 500** | R$ 1,253 |
-| 12-aug-2026 | Supermarket                    | `Food`      |   -R$ 28   |  R$ 1,225  |
-| 12-aug-2026 | Ride app                       | `Transport` |   -R$ 10   |  R$ 1,215  |
-| 13-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |  R$ 1,205  |
-| 13-aug-2026 | Domain renewal                 | `Business`  |   -R$ 20   |  R$ 1,185  |
-| 14-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |  R$ 1,175  |
-| 14-aug-2026 | Poker night — buy-in           | `Poker`     |   -R$ 25   |  R$ 1,150  |
-| 15-aug-2026 | Supermarket                    | `Food`      |   -R$ 22   |  R$ 1,128  |
-| 15-aug-2026 | Fuel                           | `Transport` |    -R$ 8   |  R$ 1,120  |
-| 16-aug-2026 | Cigarettes                     | `Vices`     |   -R$ 10   |  R$ 1,110  |
-| 16-aug-2026 | Snack                          | `Food`      |   -R$ 10   |  R$ 1,100  |
+| Date        | Transaction               | Tag         |       Value |  Balance |
+| ----------- | ------------------------- | ----------- | ----------: | -------: |
+| 01-aug-2026 | Rent + utilities          | `Home`      |     -R$ 300 | R$ 1,000 |
+| 02-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 |   R$ 990 |
+| 02-aug-2026 | Supermarket — weekly shop | `Food`      |      -R$ 45 |   R$ 945 |
+| 03-aug-2026 | Fuel                      | `Transport` |      -R$ 15 |   R$ 930 |
+| 04-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 |   R$ 920 |
+| 04-aug-2026 | Bakery                    | `Food`      |      -R$ 18 |   R$ 902 |
+| 05-aug-2026 | Cloud hosting — Wraith    | `Business`  |      -R$ 20 |   R$ 882 |
+| 06-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 |   R$ 872 |
+| 06-aug-2026 | Poker night — buy-in      | `Poker`     |      -R$ 50 |   R$ 822 |
+| 07-aug-2026 | Supermarket               | `Food`      |      -R$ 32 |   R$ 790 |
+| 08-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 |   R$ 780 |
+| 08-aug-2026 | Ride app                  | `Transport` |      -R$ 12 |   R$ 768 |
+| 09-aug-2026 | Poker night — cash out    | `Poker`     |      +R$ 30 |   R$ 798 |
+| 10-aug-2026 | Buy Cigarettes            | `Vices`     |      -R$ 10 |   R$ 788 |
+| 10-aug-2026 | Lunch out                 | `Food`      |      -R$ 25 |   R$ 763 |
+| 11-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 |   R$ 753 |
+| 11-aug-2026 | **Client invoice — MEI**  | `Freelance` | **+R$ 500** | R$ 1,253 |
+| 12-aug-2026 | Supermarket               | `Food`      |      -R$ 28 | R$ 1,225 |
+| 12-aug-2026 | Ride app                  | `Transport` |      -R$ 10 | R$ 1,215 |
+| 13-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 | R$ 1,205 |
+| 13-aug-2026 | Domain renewal            | `Business`  |      -R$ 20 | R$ 1,185 |
+| 14-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 | R$ 1,175 |
+| 14-aug-2026 | Poker night — buy-in      | `Poker`     |      -R$ 25 | R$ 1,150 |
+| 15-aug-2026 | Supermarket               | `Food`      |      -R$ 22 | R$ 1,128 |
+| 15-aug-2026 | Fuel                      | `Transport` |       -R$ 8 | R$ 1,120 |
+| 16-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 | R$ 1,110 |
+| 16-aug-2026 | Snack                     | `Food`      |      -R$ 10 | R$ 1,100 |
 
 ---
 
