@@ -1,7 +1,0 @@
-name: AddTransaction
-date: 2026-08-16
-description: Supermarket
-category: Food
-account: BANK         # BANK | CASH | CARD (see DashBoard/Accounts.md)
-value: -45            # negative = expense, positive = income
-apply: true

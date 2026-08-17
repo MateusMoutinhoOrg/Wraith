@@ -1,5 +1,0 @@
-name: SetBudget
-category: Vices
-limit: 100
-period: month         # month | year
-apply: true

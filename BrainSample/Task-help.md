@@ -7,7 +7,8 @@ the state machine pick it up. This page lists every available task and how to ru
 
 ## 1. How to run a task
 
-1. Pick a task from the tables below and open its **Sample**.
+1. Pick a task from the tables below and open its **Guide** — every guide ends with a
+   **Sample** section.
 2. Copy the sample into [`Task.yaml`](Task.yaml) at the project root and fill in your values.
 3. Make sure `apply: true` is set — with `apply: false` the task is ignored (no error).
 4. Trigger a tick:
@@ -37,51 +38,51 @@ apply: true            # true = execute on the next tick
 
 | Task              | Description                                            | Links |
 | ----------------- | ------------------------------------------------------ | ----- |
-| AddTransaction    | Record an income or expense in the ledger              | [Sample](Tasks/AddTransaction/sample.yaml) · [Guide](Tasks/AddTransaction/guide.md) |
-| RemoveTransaction | Remove a wrong or duplicated transaction               | [Sample](Tasks/RemoveTransaction/sample.yaml) · [Guide](Tasks/RemoveTransaction/guide.md) |
-| AddTransfer       | Move money between own accounts (card bill, reserve)   | [Sample](Tasks/AddTransfer/sample.yaml) · [Guide](Tasks/AddTransfer/guide.md) |
-| RemoveTransfer    | Remove a wrong transfer                                | [Sample](Tasks/RemoveTransfer/sample.yaml) · [Guide](Tasks/RemoveTransfer/guide.md) |
+| AddTransaction    | Record an income or expense in the ledger              | [Guide](Tasks/AddTransaction.md) |
+| RemoveTransaction | Remove a wrong or duplicated transaction               | [Guide](Tasks/RemoveTransaction.md) |
+| AddTransfer       | Move money between own accounts (card bill, reserve)   | [Guide](Tasks/AddTransfer.md) |
+| RemoveTransfer    | Remove a wrong transfer                                | [Guide](Tasks/RemoveTransfer.md) |
 
 ### Categories & budget
 
 | Task            | Description                                              | Links |
 | --------------- | -------------------------------------------------------- | ----- |
-| AddCategory     | Add a category to classify transactions                  | [Sample](Tasks/AddCategory/sample.yaml) · [Guide](Tasks/AddCategory/guide.md) |
-| RemoveCategory  | Remove a category, migrating its transactions            | [Sample](Tasks/RemoveCategory/sample.yaml) · [Guide](Tasks/RemoveCategory/guide.md) |
-| SetBudget       | Set or update a category's spending limit                | [Sample](Tasks/SetBudget/sample.yaml) · [Guide](Tasks/SetBudget/guide.md) |
-| AddReallocation | Move budget between categories inside the current month  | [Sample](Tasks/AddReallocation/sample.yaml) · [Guide](Tasks/AddReallocation/guide.md) |
+| AddCategory     | Add a category to classify transactions                  | [Guide](Tasks/AddCategory.md) |
+| RemoveCategory  | Remove a category, migrating its transactions            | [Guide](Tasks/RemoveCategory.md) |
+| SetBudget       | Set or update a category's spending limit                | [Guide](Tasks/SetBudget.md) |
+| AddReallocation | Move budget between categories inside the current month  | [Guide](Tasks/AddReallocation.md) |
 
 ### Accounts
 
 | Task          | Description                                          | Links |
 | ------------- | ---------------------------------------------------- | ----- |
-| AddAccount    | Add an account (bank, cash, card, savings)           | [Sample](Tasks/AddAccount/sample.yaml) · [Guide](Tasks/AddAccount/guide.md) |
-| RemoveAccount | Remove an empty account and its statement            | [Sample](Tasks/RemoveAccount/sample.yaml) · [Guide](Tasks/RemoveAccount/guide.md) |
+| AddAccount    | Add an account (bank, cash, card, savings)           | [Guide](Tasks/AddAccount.md) |
+| RemoveAccount | Remove an empty account and its statement            | [Guide](Tasks/RemoveAccount.md) |
 
 ### Recurring bills
 
 | Task                | Description                                       | Links |
 | ------------------- | ------------------------------------------------- | ----- |
-| AddRecurringBill    | Register a monthly bill (rent, subscriptions…)    | [Sample](Tasks/AddRecurringBill/sample.yaml) · [Guide](Tasks/AddRecurringBill/guide.md) |
-| RemoveRecurringBill | Remove a cancelled bill                           | [Sample](Tasks/RemoveRecurringBill/sample.yaml) · [Guide](Tasks/RemoveRecurringBill/guide.md) |
+| AddRecurringBill    | Register a monthly bill (rent, subscriptions…)    | [Guide](Tasks/AddRecurringBill.md) |
+| RemoveRecurringBill | Remove a cancelled bill                           | [Guide](Tasks/RemoveRecurringBill.md) |
 
 ### Net worth & goals
 
 | Task            | Description                                          | Links |
 | --------------- | ---------------------------------------------------- | ----- |
-| AddAsset        | Add a non-account asset (car, equipment…)            | [Sample](Tasks/AddAsset/sample.yaml) · [Guide](Tasks/AddAsset/guide.md) |
-| RemoveAsset     | Remove a sold or written-off asset                   | [Sample](Tasks/RemoveAsset/sample.yaml) · [Guide](Tasks/RemoveAsset/guide.md) |
-| AddLiability    | Add a debt (loans, financing)                        | [Sample](Tasks/AddLiability/sample.yaml) · [Guide](Tasks/AddLiability/guide.md) |
-| RemoveLiability | Remove a paid-off debt                               | [Sample](Tasks/RemoveLiability/sample.yaml) · [Guide](Tasks/RemoveLiability/guide.md) |
-| AddGoal         | Add a financial goal with target and deadline        | [Sample](Tasks/AddGoal/sample.yaml) · [Guide](Tasks/AddGoal/guide.md) |
-| RemoveGoal      | Remove an achieved or abandoned goal                 | [Sample](Tasks/RemoveGoal/sample.yaml) · [Guide](Tasks/RemoveGoal/guide.md) |
+| AddAsset        | Add a non-account asset (car, equipment…)            | [Guide](Tasks/AddAsset.md) |
+| RemoveAsset     | Remove a sold or written-off asset                   | [Guide](Tasks/RemoveAsset.md) |
+| AddLiability    | Add a debt (loans, financing)                        | [Guide](Tasks/AddLiability.md) |
+| RemoveLiability | Remove a paid-off debt                               | [Guide](Tasks/RemoveLiability.md) |
+| AddGoal         | Add a financial goal with target and deadline        | [Guide](Tasks/AddGoal.md) |
+| RemoveGoal      | Remove an achieved or abandoned goal                 | [Guide](Tasks/RemoveGoal.md) |
 
 ### Maintenance
 
 | Task       | Description                                                       | Links |
 | ---------- | ----------------------------------------------------------------- | ----- |
-| CloseMonth | Close the month: totals → Year-Report, reset statements           | [Sample](Tasks/CloseMonth/sample.yaml) · [Guide](Tasks/CloseMonth/guide.md) |
-| Render     | Re-render all dashboards without executing any action             | [Sample](Tasks/Render/sample.yaml) · [Guide](Tasks/Render/guide.md) |
+| CloseMonth | Close the month: totals → Year-Report, reset statements           | [Guide](Tasks/CloseMonth.md) |
+| Render     | Re-render all dashboards without executing any action             | [Guide](Tasks/Render.md) |
 
 ---
 

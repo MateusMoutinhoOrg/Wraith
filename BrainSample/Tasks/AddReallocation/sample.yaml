@@ -1,6 +1,0 @@
-name: AddReallocation
-amount: 80
-from: Study
-to: Vices
-reason: Cover the overspend
-apply: true

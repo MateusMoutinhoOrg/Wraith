@@ -1,4 +1,0 @@
-name: RemoveCategory
-category: Study
-migrate_to: Home      # optional: category that receives the existing transactions
-apply: true

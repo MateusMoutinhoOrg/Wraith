@@ -1,6 +1,0 @@
-name: AddAsset
-asset: Work equipment
-liquidity: Low        # Immediate | Days | Low
-value: 3000
-appreciates: false
-apply: true

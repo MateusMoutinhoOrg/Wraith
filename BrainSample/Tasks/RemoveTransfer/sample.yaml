@@ -1,6 +1,0 @@
-name: RemoveTransfer
-date: 2026-08-30
-from: BANK
-to: SAVE
-value: 1500
-apply: true
