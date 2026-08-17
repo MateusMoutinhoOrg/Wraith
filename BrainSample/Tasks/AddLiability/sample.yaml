@@ -1,0 +1,7 @@
+name: AddLiability
+debt: Car loan
+balance: 6400
+interest: 1.2%/month
+payment: 550          # monthly payment in R$
+remaining: 12         # installments left
+apply: true

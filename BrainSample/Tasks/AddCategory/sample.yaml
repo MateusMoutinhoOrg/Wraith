@@ -1,0 +1,7 @@
+name: AddCategory
+category: Poker
+kind: Discretionary   # Fixed | Essential | Discretionary | Debt service | Income | Transfer
+positive: true        # may register income (e.g. poker winnings)
+negative: true        # may register expenses
+limit: 200            # monthly limit in R$ (0 = no limit yet, reviewed on the 1st)
+apply: true

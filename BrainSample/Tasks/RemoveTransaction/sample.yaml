@@ -1,0 +1,5 @@
+name: RemoveTransaction
+date: 2026-08-16
+description: Supermarket
+value: -45
+apply: true

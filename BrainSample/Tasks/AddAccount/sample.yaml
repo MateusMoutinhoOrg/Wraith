@@ -1,0 +1,7 @@
+name: AddAccount
+id: SAVE2
+account: Vacation savings
+type: Savings         # Checking | Cash | Credit card | Savings
+opening: 0            # opening balance in R$ (credit cards: amount already owed, negative)
+statement: true       # create an isolated monthly statement under Month/Accounts/
+apply: true

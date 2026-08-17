@@ -1,0 +1,8 @@
+name: AddRecurringBill
+bill: Internet
+category: Home
+day: 10               # day of the month the bill is charged
+value: 120
+auto: true            # charged automatically
+note: Same price since 2024
+apply: true

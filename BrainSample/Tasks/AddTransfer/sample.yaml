@@ -1,0 +1,7 @@
+name: AddTransfer
+date: 2026-08-30
+from: BANK
+to: SAVE
+value: 1500
+note: Monthly reserve
+apply: true
