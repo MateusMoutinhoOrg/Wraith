@@ -1,13 +1,9 @@
 
-### Brain Workflow:
+### Avaliable Tasks:
 
-- User runs: 
-~~~bash
-./brain tick
-~~~
-- Brain Reads [Task.yaml](Task.yaml)
-- brain trys to Ex
-
+| Name | Description | Guide | Sample |
+| ---- | ----------- | ----- | ------ |
+|      |             |       |        |
 
 
 
