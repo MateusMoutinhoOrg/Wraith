@@ -6,17 +6,17 @@
 
 ## 1. Position
 
-| Indicator                       |        Value | Status |
-| ------------------------------- | -----------: | :----: |
-| Available balance (cash + bank) | **R$ 1,100** |   🟡   |
-| Credit card outstanding         |       R$ 380 |   🟡   |
-| **Net available**               |   **R$ 720** |   🔴   |
-| Month result (day 16)           |      -R$ 200 |   🔴   |
-| Month result — projected        |   +R$ 1,000* |   🟢   |
-| Budget used                     | 70% of R$ 1,000 | 🟡  |
-| Net worth                       |    R$ 18,820 |   🟡   |
-| Total debt                      |     R$ 5,180 |   🟡   |
-| Saved year-to-date              |    +R$ 5,700 |   🟢   |
+| Indicator                       |           Value | Status |
+| ------------------------------- | --------------: | :----: |
+| Available balance (cash + bank) |    **R$ 1,100** |   🟡   |
+| Credit card outstanding         |          R$ 380 |   🟡   |
+| **Net available**               |      **R$ 720** |   🔴   |
+| Month result (day 16)           |         -R$ 200 |   🔴   |
+| Month result — projected        |      +R$ 1,000* |   🟢   |
+| Budget used                     | 70% of R$ 1,000 |   🟡   |
+| Net worth                       |       R$ 18,820 |   🟡   |
+| Total debt                      |        R$ 5,180 |   🟡   |
+| Saved year-to-date              |       +R$ 5,700 |   🟢   |
 
 ```
 Year to date
@@ -25,18 +25,14 @@ Expenses      ██████████████▍░░░░░  64% 
 Year elapsed  ████████████▍░░░░░░░  62%
 ```
 
-**Summary:** the month is negative so far because only one payment has arrived; a R$ 1,500 invoice
-expected on 25-aug turns it positive. Lowest cash point of the month: **20-aug**.
-
 ---
 
 ## 2. Active alerts
 
-| Status | Alert                                                  | Action                                  |
-| :----: | ------------------------------------------------------ | --------------------------------------- |
-|   🔴   | `Vices` over budget — R$ 90 spent, limit R$ 50         | Freeze category until 01-sep            |
-|   🔴   | 100% of income depends on a single client              | Send proposals this month               |
-|   🟡   | Projected cash dip around 20-aug                       | Keep R$ 380 reserved for the card bill  |
+| Status | Alert                                          |
+| :----: | ---------------------------------------------- |
+|   🔴   | `Vices` over budget — R$ 90 spent, limit R$ 50 |
+|   🟡   | Projected cash dip around 20-aug               |
 
 Full list in [`Month/DashBoard.md`](Month/DashBoard.md).
 
