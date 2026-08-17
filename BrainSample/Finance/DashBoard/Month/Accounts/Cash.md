@@ -1,7 +1,7 @@
 # Cash — August 2026
 
 > **Account:** `CASH` · generated on day 16
-> Opening **R$ 300** · Current **R$ 137** · Projected 31-aug **R$ 17*** · Status 🔴
+> Opening **R$ 600** · Current **R$ 255** · Projected 31-aug **R$ 50*** · Status 🔴
 
 Registry: [`../../Accounts.md`](../../Accounts.md) · Consolidated: [`../Statement.md`](../Statement.md)
 
@@ -9,23 +9,23 @@ Registry: [`../../Accounts.md`](../../Accounts.md) · Consolidated: [`../Stateme
 
 ## 1. Statement (01-aug → 16-aug)
 
-| Date   | Description      | Category | Value   | Balance    |
-| ------ | ---------------- | -------- | ------: | ---------: |
-| 01-aug | Opening balance  | —        |       — |     R$ 300 |
-| 02-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 290 |
-| 04-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 280 |
-| 04-aug | Bakery           | `Food`   | -R$ 18  |     R$ 262 |
-| 06-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 252 |
-| 06-aug | Poker — buy-in   | `Poker`  | -R$ 50  |     R$ 202 |
-| 08-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 192 |
-| 09-aug | Poker — cash out | `Poker`  | +R$ 30  |     R$ 222 |
-| 10-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 212 |
-| 11-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 202 |
-| 13-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 192 |
-| 14-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 182 |
-| 14-aug | Poker — buy-in   | `Poker`  | -R$ 25  |     R$ 157 |
-| 16-aug | Cigarettes       | `Vices`  | -R$ 10  |     R$ 147 |
-| 16-aug | Snack            | `Food`   | -R$ 10  | **R$ 137** |
+| Date   | Description      | Category | Value    | Balance    |
+| ------ | ---------------- | -------- | -------: | ---------: |
+| 01-aug | Opening balance  | —        |        — |     R$ 600 |
+| 02-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 580 |
+| 04-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 560 |
+| 04-aug | Bakery           | `Food`   |  -R$ 40  |     R$ 520 |
+| 06-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 500 |
+| 06-aug | Poker — buy-in   | `Poker`  | -R$ 100  |     R$ 400 |
+| 08-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 380 |
+| 09-aug | Poker — cash out | `Poker`  |  +R$ 50  |     R$ 430 |
+| 10-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 410 |
+| 11-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 390 |
+| 13-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 370 |
+| 14-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 350 |
+| 14-aug | Poker — buy-in   | `Poker`  |  -R$ 50  |     R$ 300 |
+| 16-aug | Cigarettes       | `Vices`  |  -R$ 20  |     R$ 280 |
+| 16-aug | Snack            | `Food`   |  -R$ 25  | **R$ 255** |
 
 ---
 
@@ -33,15 +33,15 @@ Registry: [`../../Accounts.md`](../../Accounts.md) · Consolidated: [`../Stateme
 
 | Line           |       Value |
 | -------------- | ----------: |
-| Income         |      +R$ 30 |
-| Expenses       |     -R$ 193 |
-| **Net change** | **-R$ 163** |
+| Income         |      +R$ 50 |
+| Expenses       |     -R$ 395 |
+| **Net change** | **-R$ 345** |
 
-| Category | Total   | Count |
-| -------- | ------: | ----: |
-| `Vices`  |  -R$ 90 |     9 |
-| `Poker`  |  -R$ 45 |     3 |
-| `Food`   |  -R$ 28 |     2 |
+| Category | Total    | Count |
+| -------- | -------: | ----: |
+| `Vices`  | -R$ 180  |     9 |
+| `Poker`  | -R$ 100  |     3 |
+| `Food`   |  -R$ 65  |     2 |
 
 ---
 
@@ -51,6 +51,6 @@ Registry: [`../../Accounts.md`](../../Accounts.md) · Consolidated: [`../Stateme
 | :----: | ------------------------------------------------------------------ |
 |   🔴   | `Vices` purchases on 9 of 16 days — the account's dominant outflow |
 |   🟢   | Cash is discretionary-only and is not refilled mid-month           |
-|   —    | Pace-based projection to 31-aug: -R$ 120* (cigarettes + snacks)    |
+|   —    | Pace-based projection to 31-aug: -R$ 205* (cigarettes + snacks)    |
 
 > *Fictional document. Derived from [`../Statement.md`](../Statement.md).*

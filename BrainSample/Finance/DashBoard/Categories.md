@@ -11,9 +11,9 @@ exactly one category.
 
 | Category    | Description                     | This month | Year to date |
 | ----------- | ------------------------------- | ---------: | -----------: |
-| `Freelance` | Client work (Wraith Software)   |    +R$ 500 |    R$ 13,100 |
-| `Extra`     | One-off income                  |       R$ 0 |       R$ 280 |
-| `Yield`     | Investment income               |       R$ 0 |       R$ 120 |
+| `Freelance` | Client work (Wraith Software)   |  +R$ 1,200 |    R$ 29,300 |
+| `Extra`     | One-off income                  |       R$ 0 |       R$ 500 |
+| `Yield`     | Investment income               |       R$ 0 |       R$ 200 |
 
 ---
 
@@ -21,14 +21,14 @@ exactly one category.
 
 | Category    | Kind          | Monthly limit | Spent (aug) | Remaining | Status |
 | ----------- | ------------- | ------------: | ----------: | --------: | :----: |
-| `Home`      | Fixed         |        R$ 300 |      R$ 300 |      R$ 0 |   🟡   |
-| `Food`      | Essential     |        R$ 250 |      R$ 180 |     R$ 70 |   🟡   |
-| `Business`  | Fixed         |        R$ 150 |       R$ 40 |    R$ 110 |   🟢   |
-| `Transport` | Essential     |        R$ 120 |       R$ 45 |     R$ 75 |   🟢   |
-| `Poker`     | Discretionary |         R$ 80 |       R$ 45 |     R$ 35 |   🟢   |
-| `Vices`     | Discretionary |         R$ 50 |       R$ 90 |    -R$ 40 |   🔴   |
-| `Study`     | Discretionary |         R$ 50 |        R$ 0 |     R$ 50 |   ⚪   |
-| `Debt`      | Debt service  |        R$ 120 |        R$ 0 |    R$ 120 |   ⚪   |
+| `Home`      | Fixed         |      R$ 1,200 |    R$ 1,200 |      R$ 0 |   🟡   |
+| `Food`      | Essential     |        R$ 700 |      R$ 450 |    R$ 250 |   🟡   |
+| `Business`  | Fixed         |        R$ 350 |       R$ 50 |    R$ 300 |   🟢   |
+| `Transport` | Essential     |        R$ 350 |      R$ 120 |    R$ 230 |   🟢   |
+| `Poker`     | Discretionary |        R$ 200 |      R$ 100 |    R$ 100 |   🟢   |
+| `Vices`     | Discretionary |        R$ 100 |      R$ 180 |    -R$ 80 |   🔴   |
+| `Study`     | Discretionary |        R$ 100 |        R$ 0 |    R$ 100 |   ⚪   |
+| `Debt`      | Debt service  |        R$ 550 |        R$ 0 |    R$ 550 |   ⚪   |
 
 ---
 

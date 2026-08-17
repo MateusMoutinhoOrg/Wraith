@@ -8,20 +8,20 @@
 
 | Indicator                       |           Value | Status |
 | ------------------------------- | --------------: | :----: |
-| Available balance (cash + bank) |    **R$ 1,100** |   🟡   |
-| Credit card outstanding         |          R$ 380 |   🟡   |
-| **Net available**               |      **R$ 720** |   🔴   |
-| Month result (day 16)           |         -R$ 200 |   🔴   |
-| Month result — projected        |      +R$ 1,000* |   🟢   |
-| Budget used                     | 70% of R$ 1,000 |   🟡   |
-| Net worth                       |       R$ 18,820 |   🟡   |
-| Total debt                      |        R$ 5,180 |   🟡   |
-| Saved year-to-date              |       +R$ 5,700 |   🟢   |
+| Available balance (cash + bank) |    **R$ 2,250** |   🟡   |
+| Credit card outstanding         |        R$ 1,350 |   🟡   |
+| **Net available**               |      **R$ 900** |   🔴   |
+| Month result (day 16)           |         -R$ 900 |   🔴   |
+| Month result — projected        |      +R$ 2,000* |   🟢   |
+| Budget used                     | 70% of R$ 3,000 |   🟡   |
+| Net worth                       |       R$ 10,000 |   🟡   |
+| Total debt                      |        R$ 7,750 |   🟡   |
+| Saved year-to-date              |       +R$ 7,550 |   🟢   |
 
 ```
 Year to date
-Income        █████████████▌░░░░░░  56%   R$ 13,500 of R$ 24,000 planned
-Expenses      ██████████████▍░░░░░  64%   R$  7,800 of R$ 12,100 planned
+Income        ███████████▏░░░░░░░░  56%   R$ 30,000 of R$ 54,000 planned
+Expenses      ████████████▍░░░░░░░  62%   R$ 22,450 of R$ 36,050 planned
 Year elapsed  ████████████▍░░░░░░░  62%
 ```
 
@@ -29,10 +29,10 @@ Year elapsed  ████████████▍░░░░░░░  62%
 
 ## 2. Active alerts
 
-| Status | Alert                                          |
-| :----: | ---------------------------------------------- |
-|   🔴   | `Vices` over budget — R$ 90 spent, limit R$ 50 |
-|   🟡   | Projected cash dip around 20-aug               |
+| Status | Alert                                            |
+| :----: | ------------------------------------------------ |
+|   🔴   | `Vices` over budget — R$ 180 spent, limit R$ 100 |
+|   🟡   | Net available dips to ~R$ 400 around 20-aug      |
 
 Full list in [`Month/DashBoard.md`](Month/DashBoard.md).
 
