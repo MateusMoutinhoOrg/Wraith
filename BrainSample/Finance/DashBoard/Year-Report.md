@@ -93,8 +93,8 @@ dec ████████████████████ 2,900 *
 | 💸 Highest monthly expense  | jun-2026                                   |  R$ 1,100  | jun      |
 | 🎯 Best savings rate        | jun-2026                                   |       50%  | jun      |
 | 🧾 Largest single transaction| Rent (monthly)                            |    R$ 300  | recurring|
-| 🔁 Most frequent tag        | `Vices`                                    |  72 mov.   | year     |
-| 💤 Most idle tag            | `Study`                                    |   9 mov.   | year     |
+| 🔁 Most frequent category   | `Vices`                                    |  72 mov.   | year     |
+| 💤 Most idle category       | `Study`                                    |   9 mov.   | year     |
 | 📊 Longest streak in the black| jan → jun                                |  6 months  | H1       |
 
 ---
@@ -105,7 +105,7 @@ dec ████████████████████ 2,900 *
 | ---------------------------------------- | ----: | ----------: | --------- | -------------------------------- |
 | 🔴 Loss of the single client             |   35% |  -R$ 9,000  | 🔴 Critical| Close 2 clients by oct          |
 | 🔴 Q4 fails to deliver the R$ 7,500 planned|  40% |  -R$ 3,000  | 🔴 High   | R$ 3,500 pipeline already mapped |
-| 🟡 `Vices` overruns by another R$ 200    |   70% |    -R$ 200  | 🟡 Medium | Freeze the tag                   |
+| 🟡 `Vices` overruns by another R$ 200    |   70% |    -R$ 200  | 🟡 Medium | Freeze the category              |
 | 🟡 Health/equipment emergency            |   25% |  -R$ 4,000  | 🟡 Medium | Reserve + laptop budget          |
 | 🟢 Inflation on fixed costs              |   90% |    -R$ 350  | 🟢 Low    | Renegotiate contracts            |
 

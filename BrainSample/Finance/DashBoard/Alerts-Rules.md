@@ -6,16 +6,16 @@
 
 ## 1. 🔔 Open Alerts
 
-| Sev. | ID     | Alert                                                   | Fired on     | Rule  | Action                                        | Deadline |
-| ---- | ------ | ------------------------------------------------------- | ------------ | ----- | --------------------------------------------- | -------- |
-| 🔴   | `A-01` | `Vices` blew its cap by 80% (R$ 90 / R$ 50)             | 14-aug-2026  | R-03  | Freeze tag until 01-sep                       | 18-aug   |
-| 🔴   | `A-02` | 100% of income concentrated in 1 client                 | 01-aug-2026  | R-11  | Send 3 proposals                              | 31-aug   |
-| 🔴   | `A-03` | Projected cash trough: R$ 289 on 24-aug                 | 16-aug-2026  | R-06  | Pull invoice forward or defer subscription    | 20-aug   |
-| 🟡   | `A-04` | Spending pace 18 pp ahead of the calendar               | 12-aug-2026  | R-02  | Reallocate envelopes (see `Budget.md` §3)     | 18-aug   |
-| 🟡   | `A-05` | Runway stuck at 3.2 months for 3 months                 | 01-aug-2026  | R-05  | Execute the R$ 500 contribution               | 30-aug   |
-| 🟡   | `A-06` | Expensive debt open: R$ 380 at 14%/mo                   | 01-aug-2026  | R-08  | Pay the bill in full                          | 21-aug   |
-| ⚪   | `A-07` | Tag `Study` with no movement for 2 months               | 01-aug-2026  | R-04  | Reallocate R$ 50 or make a commitment         | 31-aug   |
-| ℹ️   | `A-08` | `AddTag Poker` returned an error — tag already exists   | 09-aug-2026  | R-13  | Use the existing tag; no action needed        | —        |
+| Sev. | ID     | Alert                                                           | Fired on     | Rule  | Action                                        | Deadline |
+| ---- | ------ | --------------------------------------------------------------- | ------------ | ----- | --------------------------------------------- | -------- |
+| 🔴   | `A-01` | `Vices` blew its cap by 80% (R$ 90 / R$ 50)                     | 14-aug-2026  | R-03  | Freeze category until 01-sep                  | 18-aug   |
+| 🔴   | `A-02` | 100% of income concentrated in 1 client                         | 01-aug-2026  | R-11  | Send 3 proposals                              | 31-aug   |
+| 🔴   | `A-03` | Projected cash trough: R$ 289 on 24-aug                         | 16-aug-2026  | R-06  | Pull invoice forward or defer subscription    | 20-aug   |
+| 🟡   | `A-04` | Spending pace 18 pp ahead of the calendar                       | 12-aug-2026  | R-02  | Reallocate envelopes (see `Budget.md` §3)     | 18-aug   |
+| 🟡   | `A-05` | Runway stuck at 3.2 months for 3 months                         | 01-aug-2026  | R-05  | Execute the R$ 500 contribution               | 30-aug   |
+| 🟡   | `A-06` | Expensive debt open: R$ 380 at 14%/mo                           | 01-aug-2026  | R-08  | Pay the bill in full                          | 21-aug   |
+| ⚪   | `A-07` | Category `Study` with no movement for 2 months                  | 01-aug-2026  | R-04  | Reallocate R$ 50 or make a commitment         | 31-aug   |
+| ℹ️   | `A-08` | `AddCategory Poker` returned an error — category already exists | 09-aug-2026  | R-13  | Use the existing category; no action needed   | —        |
 
 ```
 Alerts by severity
@@ -35,7 +35,7 @@ Alerts by severity
 | ---- | ------------------------------------------------------------ | -------------------------------- | ---- | ---------------------------- |
 | R-01 | Envelope above 80% of the cap                                | usage ≥ 80%                      | 🟡   | Notify                       |
 | R-02 | Spending pace ahead of the calendar                          | %used − %month ≥ 10 pp           | 🟡   | Suggest reallocation         |
-| R-03 | **Envelope over cap**                                        | usage > 100%                     | 🔴   | **Freeze the tag**           |
+| R-03 | **Envelope over cap**                                        | usage > 100%                     | 🔴   | **Freeze the category**      |
 | R-04 | Idle envelope                                                | 0 movements for 2 months         | ⚪   | Suggest reallocation         |
 | R-14 | Global monthly cap exceeded                                  | expense > R$ 1,000               | 🔴   | Block discretionary spending |
 
@@ -67,22 +67,22 @@ Alerts by severity
 
 ### 🧾 Data Integrity
 
-| ID   | Rule                                                         | Trigger                          | Sev. | Automatic action             |
-| ---- | ------------------------------------------------------------ | -------------------------------- | ---- | ---------------------------- |
-| R-13 | Duplicate tag                                                | `AddTag` on an existing tag      | ℹ️   | `Error: Tag X already exists`|
-| R-18 | Transaction without a tag                                    | untagged line in the statement   | 🟡   | Block the month close        |
-| R-19 | Statement out of date                                        | no entry for 3 days              | 🟡   | Reminder                     |
-| R-20 | Statement balance ≠ bank balance                             | divergence > R$ 1                | 🔴   | Reconcile before closing     |
+| ID   | Rule                                                         | Trigger                               | Sev. | Automatic action                   |
+| ---- | ------------------------------------------------------------ | ------------------------------------- | ---- | ---------------------------------- |
+| R-13 | Duplicate category                                           | `AddCategory` on an existing category | ℹ️   | `Error: Category X already exists` |
+| R-18 | Transaction without a category                               | uncategorized line in the statement   | 🟡   | Block the month close              |
+| R-19 | Statement out of date                                        | no entry for 3 days                   | 🟡   | Reminder                           |
+| R-20 | Statement balance ≠ bank balance                             | divergence > R$ 1                     | 🔴   | Reconcile before closing           |
 
 ---
 
 ## 3. 🧊 Active Freezes
 
-| Tag       | Frozen on    | Releases on | Reason                          | Rule  |
+| Category  | Frozen on    | Releases on | Reason                          | Rule  |
 | --------- | ------------ | ----------- | ------------------------------- | ----- |
 | `Vices`   | 18-aug-2026  | 01-sep-2026 | 80% overrun on the cap          | R-03  |
 
-> A frozen tag **accepts no new entries** until the release date. The only exception is a formal reallocation recorded in [`Budget.md`](Budget.md) §3.
+> A frozen category **accepts no new entries** until the release date. The only exception is a formal reallocation recorded in [`Budget.md`](Budget.md) §3.
 
 ---
 
@@ -90,7 +90,7 @@ Alerts by severity
 
 | Situation                                   | Level | Who decides  | Action                                            |
 | ------------------------------------------- | ----- | ------------ | ------------------------------------------------- |
-| 1 envelope over cap                         | 🟡    | Automatic    | Freeze tag, reallocate from an idle envelope      |
+| 1 envelope over cap                         | 🟡    | Automatic    | Freeze category, reallocate from an idle envelope |
 | 2+ envelopes over cap                       | 🔴    | Review       | Freeze all discretionary ones until day 1         |
 | Projected cash < R$ 300                     | 🔴    | Review       | Defer non-essential expenses, pull receivable forward |
 | Projected cash < R$ 0                       | 🔴    | Emergency    | Withdraw from the reserve (return within ≤ 30 days) |
@@ -107,13 +107,13 @@ Alerts by severity
 Run on the 1st of every month, in order:
 
 - [ ] Reconcile `Month-Balance.md` against the bank statement (rule R-20)
-- [ ] Verify that every transaction has a tag (rule R-18)
+- [ ] Verify that every transaction has a category (rule R-18)
 - [ ] Consolidate totals in `Month-Results.md`
 - [ ] Update `Month-Report.md` with the closed numbers
 - [ ] Record the month in `Year-Report.md` and `KPIs.md`
 - [ ] Update balances in `Net-Worth.md`
 - [ ] Review caps and reallocations in `Budget.md`
-- [ ] Release frozen tags whose freeze has expired
+- [ ] Release frozen categories whose freeze has expired
 - [ ] Run every rule in this file and log new alerts
 - [ ] Mark progress in `Goals.md`
 - [ ] Archive the statement and reset `Month-Balance.md`
@@ -127,9 +127,9 @@ Run on the 1st of every month, in order:
 | `A-00` | Overdraft in use                          | 05-jan-2026 | 18-feb-2026 | Paid off with February's result  |
 | `J-04` | July closed in the red                    | 01-aug-2026 | —           | 🔴 Still under review            |
 | `J-02` | `Food` blew its cap in July               | 28-jul-2026 | 01-aug-2026 | Cap renewed in the new month     |
-| `M-07` | Untagged transaction in May               | 31-may-2026 | 01-jun-2026 | Classified as `Transport`        |
+| `M-07` | Uncategorized transaction in May          | 31-may-2026 | 01-jun-2026 | Classified as `Transport`        |
 
 ---
 
 ## 🔗 Related
-[`Budget.md`](Budget.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Categories-Tags.md`](Categories-Tags.md) · [`Month-Report.md`](Month-Report.md)
+[`Budget.md`](Budget.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Categories.md`](Categories.md) · [`Month-Report.md`](Month-Report.md)

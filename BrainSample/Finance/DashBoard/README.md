@@ -43,7 +43,7 @@ Year 2026  Income   █████████████▌░░░░░░
 | File                                       | What it answers                                     | Frequency  |
 | ------------------------------------------ | --------------------------------------------------- | ---------- |
 | [`Budget.md`](Budget.md)                   | **Envelope budget** — caps per category             | Monthly    |
-| [`Categories-Tags.md`](Categories-Tags.md) | Chart of accounts + tag catalog and rules           | Quarterly  |
+| [`Categories.md`](Categories.md)           | Chart of accounts + category catalog and rules      | Quarterly  |
 | [`Alerts-Rules.md`](Alerts-Rules.md)       | Rules that fire an automatic alert                  | Quarterly  |
 
 ### 🟡 Medium term — quarter and year
@@ -82,7 +82,7 @@ Year 2026  Income   █████████████▌░░░░░░
 | ----------- | ------------------------------------------------- |
 | Date        | `DD-mmm-YYYY` (e.g., `16-aug-2026`)               |
 | Value       | `R$ 1,234.56` · outflows always signed negative   |
-| Tag         | `Capitalized-single-word` per `Categories-Tags.md`|
+| Category    | `Capitalized-single-word` per `Categories.md`     |
 | Projection  | `*` suffix on the number                          |
 | Status      | 🟢 ok · 🟡 attention · 🔴 immediate action · ⚪ inactive |
 | Trend       | ↗ rising · ↘ falling · → stable                   |

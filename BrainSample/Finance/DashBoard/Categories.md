@@ -1,6 +1,6 @@
-# 🏷️ Categories and Tags
+# 🏷️ Categories
 
-> Chart of accounts for the dashboard. Every transaction in `Month-Balance.md` **must** have exactly 1 tag.
+> Chart of accounts for the dashboard. Every transaction in `Month-Balance.md` **must** have exactly 1 category.
 
 ---
 
@@ -35,9 +35,9 @@ FINANCES
 
 ---
 
-## 2. 📇 Tag Catalog
+## 2. 📇 Category Catalog
 
-| Tag          | Emoji | Group          | `positive` | `negative` | Cap/month | Active | Created on  |
+| Category     | Emoji | Group          | `positive` | `negative` | Cap/month | Active | Created on  |
 | ------------ | ----- | -------------- | ---------- | ---------- | --------: | ------ | ----------- |
 | `Freelance`  | 💼    | Income         | ✅ true    | ❌ false   |         — | ✅     | 03-jan-2026 |
 | `Yield`      | 🪙    | Income         | ✅ true    | ❌ false   |         — | ✅     | 03-jan-2026 |
@@ -54,14 +54,14 @@ FINANCES
 | `Invest`     | 📈    | Transfer       | ✅ true    | ✅ true    |         — | ✅     | 03-jan-2026 |
 | `Salary`     | 🧾    | Income         | ✅ true    | ❌ false   |         — | ⚪ no  | 03-jan-2026 |
 
-**Bidirectional tags** (`positive` **and** `negative` = true): `Poker`, `Reserve`, `Invest`.
+**Bidirectional categories** (`positive` **and** `negative` = true): `Poker`, `Reserve`, `Invest`.
 They are the only ones that accept both inflows and outflows in the same grouping.
 
 ---
 
-## 3. 📊 Performance by Tag (aug/2026, day 16)
+## 3. 📊 Performance by Category (aug/2026, day 16)
 
-| Tag          | Mov. | Inflows  | Outflows | Net      | % of expense | vs. jul  |
+| Category     | Mov. | Inflows  | Outflows | Net      | % of expense | vs. jul  |
 | ------------ | ---: | -------: | -------: | -------: | -----------: | -------- |
 | `Freelance`  |    1 |   R$ 500 |     R$ 0 | +R$ 500  |            — | ↘ -50%   |
 | `Home`       |    1 |     R$ 0 |   R$ 300 | -R$ 300  |        42.9% | → 0%     |
@@ -87,7 +87,7 @@ Business    ██▉░░░░░░░░░░░░░░░░░░░  
 
 ## 4. 🔥 Frequency Ranking (no. of transactions)
 
-| Pos | Tag         | Mov. | Avg. ticket | Read                                        |
+| Pos | Category    | Mov. | Avg. ticket | Read                                        |
 | --: | ----------- | ---: | ----------: | ------------------------------------------- |
 |  1st| `Vices`     |    9 |     R$ 10.0 | 🔴 Daily micro-spending — biggest leak      |
 |  2nd| `Food`      |    7 |     R$ 25.7 | 🟡 Fragmented purchases, no shopping list   |
@@ -102,25 +102,25 @@ Business    ██▉░░░░░░░░░░░░░░░░░░░  
 
 ## 5. 📐 Categorization Rules
 
-1. **One tag per transaction.** If two fit, the more specific one wins (`Business` > `Home`).
-2. **A duplicate tag is an error.** Creating an existing tag returns `Error: Tag <X> already exists`.
+1. **One category per transaction.** If two fit, the more specific one wins (`Business` > `Home`).
+2. **A duplicate category is an error.** Creating an existing category returns `Error: Category <X> already exists`.
 3. **Transfers don't affect the result** — `Reserve` and `Invest` move money, they don't consume it.
-4. **Every new tag** requires a cap defined before the first entry.
-5. **A tag with no movement for 3 months** is deactivated (`Active: ⚪ no`), not deleted — this preserves history.
-6. **Renaming a tag is forbidden.** Deactivate the old one and create a new one, so closed months aren't corrupted.
-7. **Reimbursements** are entered as a positive value on the **same tag** as the original expense, never as income.
+4. **Every new category** requires a cap defined before the first entry.
+5. **A category with no movement for 3 months** is deactivated (`Active: ⚪ no`), not deleted — this preserves history.
+6. **Renaming a category is forbidden.** Deactivate the old one and create a new one, so closed months aren't corrupted.
+7. **Reimbursements** are entered as a positive value on the **same category** as the original expense, never as income.
 
 ---
 
 ## 6. 🧾 Change Log
 
-| Date        | Operation  | Tag        | Result                             |
-| ----------- | ---------- | ---------- | ---------------------------------- |
-| 14-mar-2026 | AddTag     | `Debt`     | ✅ OK                              |
-| 02-feb-2026 | AddTag     | `Study`    | ✅ OK                              |
-| 11-feb-2026 | AddTag     | `Extra`    | ✅ OK                              |
-| 09-aug-2026 | AddTag     | `Poker`    | ❌ `Error: Tag Poker already exists` |
-| 12-aug-2026 | RemoveTag  | `Salary`   | ⚪ Deactivated (unused since jan)  |
+| Date        | Operation      | Category   | Result                                    |
+| ----------- | -------------- | ---------- | ----------------------------------------- |
+| 14-mar-2026 | AddCategory    | `Debt`     | ✅ OK                                     |
+| 02-feb-2026 | AddCategory    | `Study`    | ✅ OK                                     |
+| 11-feb-2026 | AddCategory    | `Extra`    | ✅ OK                                     |
+| 09-aug-2026 | AddCategory    | `Poker`    | ❌ `Error: Category Poker already exists` |
+| 12-aug-2026 | RemoveCategory | `Salary`   | ⚪ Deactivated (unused since jan)         |
 
 ---
 

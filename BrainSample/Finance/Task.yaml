@@ -1,7 +1,7 @@
-Name: AddTag
-tag: Poker 
+Name: AddCategory
+category: Poker 
 positive: true 
 negative: true 
 aply: false 
 result:  Error 
-error-msg: Tag Poker already exists 
+error-msg: Category Poker already exists 

@@ -44,7 +44,7 @@ Time      ████████████░░░░░░░░░░░�
 
 ## 3. 🎯 Budget by Category (Budget vs. Actual)
 
-| Category              | Tag         | Budgeted | Spent  | Balance | % Used | Bar                       | Status |
+| Envelope              | Category    | Budgeted | Spent  | Balance | % Used | Bar                       | Status |
 | --------------------- | ----------- | -------: | -----: | ------: | -----: | ------------------------- | ------ |
 | 🏠 Housing            | `Home`      |  R$ 300  | R$ 300 |  R$ 0   |   100% | `██████████`              | 🟡 At cap |
 | 🍽️ Food               | `Food`      |  R$ 250  | R$ 180 |  R$ 70  |    72% | `███████░░░`              | 🟡      |
@@ -60,9 +60,9 @@ Time      ████████████░░░░░░░░░░░�
 
 ---
 
-## 4. 🏷️ Tags — Positive vs. Negative
+## 4. 🏷️ Categories — Positive vs. Negative
 
-| Tag          | Nature       | Movements  | Inflows  | Outflows | Net       | Trend vs. jul     |
+| Category     | Nature       | Movements  | Inflows  | Outflows | Net       | Trend vs. jul     |
 | ------------ | ------------ | ---------: | -------: | -------: | --------: | ----------------- |
 | `Freelance`  | ✅ Positive  |          1 |  R$ 500  |    R$ 0  |  +R$ 500  | ↘ -50%            |
 | `Home`       | ❌ Negative  |          1 |    R$ 0  |   R$ 300 |  -R$ 300  | → stable          |
@@ -72,7 +72,7 @@ Time      ████████████░░░░░░░░░░░�
 | `Transport`  | ❌ Negative  |          4 |    R$ 0  |    R$ 45 |   -R$ 45  | ↘ -20%            |
 | `Business`   | ❌ Negative  |          2 |    R$ 0  |    R$ 40 |   -R$ 40  | → stable          |
 
-> `Poker` is a **bidirectional** tag (`positive: true` / `negative: true`) — it accepts gains and losses in the same grouping.
+> `Poker` is a **bidirectional** category (`positive: true` / `negative: true`) — it accepts gains and losses in the same grouping.
 
 ---
 
@@ -149,19 +149,19 @@ Aug  ██████████▌  (proj) +1000
 
 | Sev. | Alert                                                     | Suggested action                                |
 | ---- | --------------------------------------------------------- | ----------------------------------------------- |
-| 🔴   | `Vices` blew the cap by **80%** (R$ 90 / R$ 50)            | Freeze tag until 01-sep                         |
+| 🔴   | `Vices` blew the cap by **80%** (R$ 90 / R$ 50)            | Freeze category until 01-sep                    |
 | 🔴   | **100% of income** comes from 1 client                     | Prospect a 2nd client still in August           |
 | 🔴   | Negative result 2 months in a row (jul + aug partial)      | Review global cap down to R$ 900                |
 | 🟡   | Cash trough of -R$ 380 projected on 20-aug                 | Pull Client A's invoice forward or defer the subscription |
 | 🟡   | Reserve at 3.2 months (target 6)                           | Keep the R$ 500 contribution on day 30          |
-| ⚪   | Tag `Study` unused for 2 months                            | Reallocate R$ 50 or make a commitment           |
-| ℹ️   | Attempt to create duplicate tag `Poker` — **error**        | Tag already exists; use the existing one        |
+| ⚪   | Category `Study` unused for 2 months                      | Reallocate R$ 50 or make a commitment           |
+| ℹ️   | Attempt to create duplicate category `Poker` — **error**  | Category already exists; use the existing one   |
 
 ---
 
 ## 10. ✅ Action Plan — Next 15 days
 
-- [ ] **By 18-aug** — Freeze spending on the `Vices` tag (savings: R$ 40/month)
+- [ ] **By 18-aug** — Freeze spending on the `Vices` category (savings: R$ 40/month)
 - [ ] **By 20-aug** — Confirm issuance of Client A's invoice (R$ 1,500) — *critical for cash*
 - [ ] **By 22-aug** — Send 3 commercial proposals (reduce income concentration)
 - [ ] **By 25-aug** — Reallocate R$ 50 from `Study` → `Vices` in September's budget

@@ -23,7 +23,7 @@
 
 ## 2. 📆 Daily Projection — 2nd Half of August
 
-| Date        | Description                  | Tag        | Type    |    Value | Balance     | Level |
+| Date        | Description                  | Category   | Type    |    Value | Balance     | Level |
 | ----------- | ---------------------------- | ---------- | ------- | -------: | ----------: | ----- |
 | 16-aug-2026 | *Opening balance*            | —          | —       |        — |  R$ 1,100   | 🟡    |
 | 17-aug-2026 | Cigarettes                   | `Vices`    | Expense |   -R$ 10 |  R$ 1,090   | 🟡    |
@@ -75,7 +75,7 @@ R$    0 ┼───────────────▁▁▁▁▁───
 
 ## 4. 📤 Bills Payable
 
-| Due date    | Description          | Tag        |  Value | Auto | Status     |
+| Due date    | Description          | Category   |  Value | Auto | Status     |
 | ----------- | -------------------- | ---------- | -----: | ---- | ---------- |
 | 20-aug-2026 | Cloud / VPS          | `Business` |  R$ 60 | ✅   | 🟡 Scheduled|
 | 20-aug-2026 | DAS-MEI              | `Business` |  R$ 76 | ✅   | 🟡 Scheduled|

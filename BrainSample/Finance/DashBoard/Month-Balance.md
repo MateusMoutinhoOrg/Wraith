@@ -18,14 +18,14 @@
 | **Closing cash (day 16)**  | **R$ 1,100**   |         — | 🟡     |
 
 > ℹ️ *Total spent* is gross. The `Poker` refund of R$ 30 is a bidirectional inflow on a
-> discretionary tag, so net expense = R$ 730 − R$ 30 = **R$ 700**, the figure carried into
+> discretionary category, so net expense = R$ 730 − R$ 30 = **R$ 700**, the figure carried into
 > [`Month-Results.md`](Month-Results.md).
 
 ---
 
 ## 2. 📒 Statement — Realized (01-aug → 16-aug)
 
-| Date        | Transaction               | Tag         |       Value |  Balance |
+| Date        | Transaction               | Category    |       Value |  Balance |
 | ----------- | ------------------------- | ----------- | ----------: | -------: |
 | 01-aug-2026 | Rent + utilities          | `Home`      |     -R$ 300 | R$ 1,000 |
 | 02-aug-2026 | Cigarettes                | `Vices`     |      -R$ 10 |   R$ 990 |
@@ -59,7 +59,7 @@
 
 ## 3. 📅 Scheduled — Not Yet Realized (17-aug → 31-aug)
 
-| Date        | Transaction                    | Tag         |        Value | Confidence |
+| Date        | Transaction                    | Category    |        Value | Confidence |
 | ----------- | ------------------------------ | ----------- | -----------: | ---------- |
 | 25-aug-2026 | **Client receivable — MEI**    | `Freelance` | +R$ 1,500\*  | 🟡 Medium  |
 | 17→31-aug   | Food at current pace           | `Food`      |   -R$ 150\*  | 🟢 High    |
@@ -73,9 +73,9 @@
 
 ---
 
-## 4. 🧮 Totals by Tag (day 16)
+## 4. 🧮 Totals by Category (day 16)
 
-| Tag         | Mov. |  Inflows |  Outflows |      Net | % of expense |
+| Category    | Mov. |  Inflows |  Outflows |      Net | % of expense |
 | ----------- | ---: | -------: | --------: | -------: | -----------: |
 | `Freelance` |    1 |  R$ 500  |     R$ 0  | +R$ 500  |           —  |
 | `Home`      |    1 |    R$ 0  |   R$ 300  | -R$ 300  |       42.9%  |
@@ -135,7 +135,7 @@ R$   700 ┤            ██
 | [`Month-Results.md`](Month-Results.md)         | Raw totals for actual vs. projected       |
 | [`Budget.md`](Budget.md)                       | Consumption against the envelope caps     |
 | [`Cash-Flow.md`](Cash-Flow.md)                 | Daily balance and the projected low point |
-| [`Categories-Tags.md`](Categories-Tags.md)     | Performance and frequency per tag         |
+| [`Categories.md`](Categories.md)               | Performance and frequency per category    |
 
 ---
 

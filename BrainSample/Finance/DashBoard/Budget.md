@@ -24,7 +24,7 @@ Over the **projected income of R$ 2,000/month**:
 
 ## 2. 📦 Envelopes of the Month (aug/2026)
 
-| # | Envelope            | Tag          | Type     | Cap      | Spent  | Balance | % Used | Bar            | Status |
+| # | Envelope            | Category     | Type     | Cap      | Spent  | Balance | % Used | Bar            | Status |
 | - | ------------------- | ------------ | -------- | -------: | -----: | ------: | -----: | -------------- | ------ |
 | 1 | 🏠 Housing          | `Home`       | Fixed    |   R$ 300 | R$ 300 |   R$ 0  |   100% | `██████████`   | 🟡     |
 | 2 | 🍽️ Food             | `Food`       | Variable |   R$ 250 | R$ 180 |  R$ 70  |    72% | `███████░░░`   | 🟡     |
@@ -53,7 +53,7 @@ Over the **projected income of R$ 2,000/month**:
 
 ## 4. 🔁 Recurring Fixed Costs
 
-| Description            | Tag        | Day | Value  | Frequency  | Auto-debit  | Last review    |
+| Description            | Category   | Day | Value  | Frequency  | Auto-debit  | Last review    |
 | ---------------------- | ---------- | --: | -----: | ---------- | ----------- | -------------- |
 | Rent / housing         | `Home`     |   5 | R$ 300 | Monthly    | ✅          | jan-2026       |
 | Cloud / VPS            | `Business` |  20 |  R$ 60 | Monthly    | ✅          | jun-2026       |
@@ -107,7 +107,7 @@ Actual spend █████████████░░░░░░░  R$  7
 
 ## 7. 📏 Budget Rules
 
-1. **An overrun freezes the tag** until day 1 of the following month — unless there's a formal reallocation (section 3).
+1. **An overrun freezes the category** until day 1 of the following month — unless there's a formal reallocation (section 3).
 2. **An envelope idle for 2 months** becomes a candidate for cutting or permanent reallocation.
 3. **The global cap only rises** if the average income of the last 3 months rises ≥ 15%.
 4. **Every expense > R$ 200** requires a 24h wait before purchase.
@@ -118,4 +118,4 @@ Actual spend █████████████░░░░░░░  R$  7
 ---
 
 ## 🔗 Related
-[`Month-Report.md`](Month-Report.md) · [`Categories-Tags.md`](Categories-Tags.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Alerts-Rules.md`](Alerts-Rules.md)
+[`Month-Report.md`](Month-Report.md) · [`Categories.md`](Categories.md) · [`Cash-Flow.md`](Cash-Flow.md) · [`Alerts-Rules.md`](Alerts-Rules.md)
