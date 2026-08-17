@@ -2,6 +2,4 @@ Name: AddCategory
 category: Poker 
 positive: true 
 negative: true 
-aply: false 
-result:  Error 
-error-msg: Category Poker already exists 
+aply: true
