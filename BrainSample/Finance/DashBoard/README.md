@@ -32,12 +32,12 @@ Year 2026  Income   █████████████▌░░░░░░
 ## 📁 Dashboard Map
 
 ### 🔵 Short term — the current month
-| File                                     | What it answers                                       | Frequency  |
-| ---------------------------------------- | ----------------------------------------------------- | ---------- |
-| [`Month-Results.md`](Month-Results.md)   | Raw month numbers (actual vs. projected)              | Daily      |
-| [`Month-Balance.md`](Month-Balance.md)   | Statement — every transaction of the month, line by line | Daily   |
-| [`Month-Report.md`](Month-Report.md)     | **Full month report** — KPIs, budget, actions         | Weekly     |
-| [`Cash-Flow.md`](Cash-Flow.md)           | Will I run out of money? When?                        | Weekly     |
+| File                                     | What it answers                                                           | Frequency  |
+| -------------------------------------- | ------------------------------------------------------------------------- | --------- |
+| [`Month-Results.md`](Month-Results.md)   | Raw month numbers (actual vs. projected)                                  | Daily      |
+| [`Month-Balance.md`](Month-Balance.md)   | Statement — every transac[[Month-Balance]]tion of the month, line by line | Daily   |
+| [`Month-Report.md`](Month-Report.md)     | **Full month report** — KPIs, budget, actions                             | Weekly     |
+| [`Cash-Flow.md`](Cash-Flow.md)           | Will I run out of money? When?                                            | Weekly     |
 
 ### 🟢 Planning — how much I can spend
 | File                                       | What it answers                                     | Frequency  |
