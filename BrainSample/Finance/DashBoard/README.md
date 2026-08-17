@@ -7,19 +7,19 @@
 
 ## ⚡ Visão de 1 Tela
 
-| Bloco                   | Número           | Status | Onde ver                            |
-| ----------------------- | ---------------- | ------ | ----------------------------------- |
-| Resultado do mês (real) | **-R$ 200**      | 🔴     | [Month-Report](Month-Report.md)     |
-| Resultado do mês (proj) | **+R$ 1.000**    | 🟢     | [Month-Report](Month-Report.md)     |
-| Orçamento usado         | 70% (R$ 700/1.000) | 🟡   | [Budget](Budget.md)                 |
-| Caixa hoje              | R$ 1.100         | 🟡     | [Cash-Flow](Cash-Flow.md)           |
-| Menor saldo previsto    | -R$ 380 (20-ago) | 🔴     | [Cash-Flow](Cash-Flow.md)           |
-| Patrimônio líquido      | **R$ 18.820**    | 🟡     | [Net-Worth](Net-Worth.md)           |
-| Dívida total            | R$ 5.180         | 🟡     | [Net-Worth](Net-Worth.md)           |
-| Ano 2026 acumulado      | +R$ 5.700        | 🟢     | [Year-Report](Year-Report.md)       |
-| Score de Saúde          | **48 / 100**     | 🟡     | [KPIs](KPIs.md)                     |
-| Progresso FIRE          | 2,5%             | ⚪     | [Long-Term](Long-Term.md)           |
-| Alertas abertos         | 3 🔴 · 3 🟡      | 🔴     | [Alerts-Rules](Alerts-Rules.md)     |
+| Bloco                   | Número             | Status | Onde ver                        |
+| ----------------------- | ------------------ | ------ | ------------------------------- |
+| Resultado do mês (real) | **-R$ 200**        | 🔴     | [Month-Report](Month-Report.md) |
+| Resultado do mês (proj) | **+R$ 1.000**      | 🟢     | [Month-Report](Month-Report.md) |
+| Orçamento usado         | 70% (R$ 700/1.000) | 🟡     | [Budget](Budget.md)             |
+| Caixa hoje              | R$ 1.100           | 🟡     | [Cash-Flow](Cash-Flow.md)       |
+| Menor saldo previsto    | -R$ 380 (20-ago)   | 🔴     | [Cash-Flow](Cash-Flow.md)       |
+| Patrimônio líquido      | **R$ 18.820**      | 🟡     | [Net-Worth](Net-Worth.md)       |
+| Dívida total            | R$ 5.180           | 🟡     | [Net-Worth](Net-Worth.md)       |
+| Ano 2026 acumulado      | +R$ 5.700          | 🟢     | [Year-Report](Year-Report.md)   |
+| Score de Saúde          | **48 / 100**       | 🟡     | [KPIs](KPIs.md)                 |
+| Progresso FIRE          | 2,5%               | ⚪      | [Long-Term](Long-Term.md)       |
+| Alertas abertos         | 3 🔴 · 3 🟡        | 🔴     | [Alerts-Rules](Alerts-Rules.md) |
 
 ```
 Ano 2026   Receita  █████████████▌░░░░░░  56%  (R$ 13.500 / R$ 24.000)
