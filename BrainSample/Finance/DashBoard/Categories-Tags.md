@@ -1,128 +1,128 @@
-# 🏷️ Categorias e Tags
+# 🏷️ Categories and Tags
 
-> Plano de contas da dashboard. Toda transação em `Month-Balance.md` **precisa** de exatamente 1 tag.
+> Chart of accounts for the dashboard. Every transaction in `Month-Balance.md` **must** have exactly 1 tag.
 
 ---
 
-## 1. 🌳 Plano de Contas
+## 1. 🌳 Chart of Accounts
 
 ```
-FINANÇAS
-├── 📥 RECEITAS
-│   ├── Freela ............ serviços PJ/MEI faturados
-│   ├── Salario ........... vínculo CLT (inativo)
-│   ├── Rendimento ........ juros, dividendos, cashback
-│   └── Extra ............. venda de itens, reembolso
+FINANCES
+├── 📥 INCOME
+│   ├── Freelance ......... invoiced company/MEI services
+│   ├── Salary ............ employment contract (inactive)
+│   ├── Yield ............. interest, dividends, cashback
+│   └── Extra ............. item sales, reimbursement
 │
-├── 📤 DESPESAS
-│   ├── 🔒 Essenciais
-│   │   ├── Casa .......... aluguel, contas, internet
-│   │   ├── Comida ........ mercado, refeições
-│   │   └── Transporte .... combustível, app, manutenção
-│   ├── 💼 Empresa
-│   │   └── Empresa ....... cloud, domínios, DAS, ferramentas
-│   ├── 🎈 Discricionárias
-│   │   ├── Poker ......... lazer, apostas, streaming
-│   │   ├── Vicios ........ cigarro, bebida
-│   │   └── Estudo ........ cursos, livros
-│   └── 💳 Dívidas
-│       └── Divida ........ juros e amortização
+├── 📤 EXPENSES
+│   ├── 🔒 Essentials
+│   │   ├── Home .......... rent, utilities, internet
+│   │   ├── Food .......... groceries, meals
+│   │   └── Transport ..... fuel, ride apps, maintenance
+│   ├── 💼 Business
+│   │   └── Business ...... cloud, domains, DAS, tools
+│   ├── 🎈 Discretionary
+│   │   ├── Poker ......... leisure, betting, streaming
+│   │   ├── Vices ......... cigarettes, drinks
+│   │   └── Study ......... courses, books
+│   └── 💳 Debts
+│       └── Debt .......... interest and amortization
 │
-└── 🔄 TRANSFERÊNCIAS (não entram no resultado)
-    ├── Reserva ........... aporte na emergência
-    └── Invest ............ aporte em carteira
+└── 🔄 TRANSFERS (do not affect the result)
+    ├── Reserve ........... emergency fund contribution
+    └── Invest ............ portfolio contribution
 ```
 
 ---
 
-## 2. 📇 Catálogo de Tags
+## 2. 📇 Tag Catalog
 
-| Tag          | Emoji | Grupo          | `positive` | `negative` | Teto/mês | Ativa | Criada em   |
-| ------------ | ----- | -------------- | ---------- | ---------- | -------: | ----- | ----------- |
-| `Freela`     | 💼    | Receita        | ✅ true    | ❌ false   |        — | ✅    | 03-jan-2026 |
-| `Rendimento` | 🪙    | Receita        | ✅ true    | ❌ false   |        — | ✅    | 03-jan-2026 |
-| `Extra`      | 🎁    | Receita        | ✅ true    | ❌ false   |        — | ✅    | 11-fev-2026 |
-| `Casa`       | 🏠    | Essencial      | ❌ false   | ✅ true    |   R$ 300 | ✅    | 03-jan-2026 |
-| `Comida`     | 🍽️    | Essencial      | ❌ false   | ✅ true    |   R$ 250 | ✅    | 03-jan-2026 |
-| `Transporte` | 🚗    | Essencial      | ❌ false   | ✅ true    |   R$ 120 | ✅    | 03-jan-2026 |
-| `Empresa`    | 💻    | Empresa        | ❌ false   | ✅ true    |   R$ 150 | ✅    | 05-jan-2026 |
-| `Poker`      | 🃏    | Discricionária | ✅ true    | ✅ true    |    R$ 80 | ✅    | 18-jan-2026 |
-| `Vicios`     | 🚬    | Discricionária | ❌ false   | ✅ true    |    R$ 50 | ✅    | 22-jan-2026 |
-| `Estudo`     | 📚    | Discricionária | ❌ false   | ✅ true    |    R$ 50 | ✅    | 02-fev-2026 |
-| `Divida`     | 💳    | Dívida         | ❌ false   | ✅ true    |   R$ 120 | ✅    | 14-mar-2026 |
-| `Reserva`    | 🛡️    | Transferência  | ✅ true    | ✅ true    |        — | ✅    | 03-jan-2026 |
-| `Invest`     | 📈    | Transferência  | ✅ true    | ✅ true    |        — | ✅    | 03-jan-2026 |
-| `Salario`    | 🧾    | Receita        | ✅ true    | ❌ false   |        — | ⚪ não| 03-jan-2026 |
+| Tag          | Emoji | Group          | `positive` | `negative` | Cap/month | Active | Created on  |
+| ------------ | ----- | -------------- | ---------- | ---------- | --------: | ------ | ----------- |
+| `Freelance`  | 💼    | Income         | ✅ true    | ❌ false   |         — | ✅     | 03-jan-2026 |
+| `Yield`      | 🪙    | Income         | ✅ true    | ❌ false   |         — | ✅     | 03-jan-2026 |
+| `Extra`      | 🎁    | Income         | ✅ true    | ❌ false   |         — | ✅     | 11-feb-2026 |
+| `Home`       | 🏠    | Essential      | ❌ false   | ✅ true    |    R$ 300 | ✅     | 03-jan-2026 |
+| `Food`       | 🍽️    | Essential      | ❌ false   | ✅ true    |    R$ 250 | ✅     | 03-jan-2026 |
+| `Transport`  | 🚗    | Essential      | ❌ false   | ✅ true    |    R$ 120 | ✅     | 03-jan-2026 |
+| `Business`   | 💻    | Business       | ❌ false   | ✅ true    |    R$ 150 | ✅     | 05-jan-2026 |
+| `Poker`      | 🃏    | Discretionary  | ✅ true    | ✅ true    |     R$ 80 | ✅     | 18-jan-2026 |
+| `Vices`      | 🚬    | Discretionary  | ❌ false   | ✅ true    |     R$ 50 | ✅     | 22-jan-2026 |
+| `Study`      | 📚    | Discretionary  | ❌ false   | ✅ true    |     R$ 50 | ✅     | 02-feb-2026 |
+| `Debt`       | 💳    | Debt           | ❌ false   | ✅ true    |    R$ 120 | ✅     | 14-mar-2026 |
+| `Reserve`    | 🛡️    | Transfer       | ✅ true    | ✅ true    |         — | ✅     | 03-jan-2026 |
+| `Invest`     | 📈    | Transfer       | ✅ true    | ✅ true    |         — | ✅     | 03-jan-2026 |
+| `Salary`     | 🧾    | Income         | ✅ true    | ❌ false   |         — | ⚪ no  | 03-jan-2026 |
 
-**Tags bidirecionais** (`positive` **e** `negative` = true): `Poker`, `Reserva`, `Invest`.
-São as únicas que aceitam entrada e saída no mesmo agrupamento.
+**Bidirectional tags** (`positive` **and** `negative` = true): `Poker`, `Reserve`, `Invest`.
+They are the only ones that accept both inflows and outflows in the same grouping.
 
 ---
 
-## 3. 📊 Desempenho por Tag (ago/2026, dia 16)
+## 3. 📊 Performance by Tag (aug/2026, day 16)
 
-| Tag          | Mov. | Entradas | Saídas | Líquido  | % da despesa | vs. jul  |
-| ------------ | ---: | -------: | -----: | -------: | -----------: | -------- |
-| `Freela`     |    1 |   R$ 500 |   R$ 0 | +R$ 500  |          — | ↘ -50%   |
-| `Casa`       |    1 |     R$ 0 | R$ 300 | -R$ 300  |        42,9% | → 0%     |
-| `Comida`     |    7 |     R$ 0 | R$ 180 | -R$ 180  |        25,7% | ↗ +12%   |
-| `Vicios`     |    9 |     R$ 0 |  R$ 90 |  -R$ 90  |        12,9% | ↗ +80% 🔴|
-| `Poker`      |    3 |    R$ 30 |  R$ 75 |  -R$ 45  |        10,7% | ↘ -10%   |
-| `Transporte` |    4 |     R$ 0 |  R$ 45 |  -R$ 45  |         6,4% | ↘ -20%   |
-| `Empresa`    |    2 |     R$ 0 |  R$ 40 |  -R$ 40  |         5,7% | → 0%     |
-| `Estudo`     |    0 |     R$ 0 |   R$ 0 |    R$ 0  |         0,0% | ⚪ ocioso|
-| `Divida`     |    0 |     R$ 0 |   R$ 0 |    R$ 0  |         0,0% | ⚪       |
+| Tag          | Mov. | Inflows  | Outflows | Net      | % of expense | vs. jul  |
+| ------------ | ---: | -------: | -------: | -------: | -----------: | -------- |
+| `Freelance`  |    1 |   R$ 500 |     R$ 0 | +R$ 500  |            — | ↘ -50%   |
+| `Home`       |    1 |     R$ 0 |   R$ 300 | -R$ 300  |        42.9% | → 0%     |
+| `Food`       |    7 |     R$ 0 |   R$ 180 | -R$ 180  |        25.7% | ↗ +12%   |
+| `Vices`      |    9 |     R$ 0 |    R$ 90 |  -R$ 90  |        12.9% | ↗ +80% 🔴|
+| `Poker`      |    3 |    R$ 30 |    R$ 75 |  -R$ 45  |        10.7% | ↘ -10%   |
+| `Transport`  |    4 |     R$ 0 |    R$ 45 |  -R$ 45  |         6.4% | ↘ -20%   |
+| `Business`   |    2 |     R$ 0 |    R$ 40 |  -R$ 40  |         5.7% | → 0%     |
+| `Study`      |    0 |     R$ 0 |     R$ 0 |    R$ 0  |         0.0% | ⚪ idle  |
+| `Debt`       |    0 |     R$ 0 |     R$ 0 |    R$ 0  |         0.0% | ⚪       |
 
 ```
-Distribuição da despesa
-Casa        ██████████████████████  42,9%
-Comida      █████████████░░░░░░░░░  25,7%
-Vicios      ██████▌░░░░░░░░░░░░░░░  12,9%
-Poker       █████▌░░░░░░░░░░░░░░░░  10,7%
-Transporte  ███▎░░░░░░░░░░░░░░░░░░   6,4%
-Empresa     ██▉░░░░░░░░░░░░░░░░░░░   5,7%
+Expense distribution
+Home        ██████████████████████  42.9%
+Food        █████████████░░░░░░░░░  25.7%
+Vices       ██████▌░░░░░░░░░░░░░░░  12.9%
+Poker       █████▌░░░░░░░░░░░░░░░░  10.7%
+Transport   ███▎░░░░░░░░░░░░░░░░░░   6.4%
+Business    ██▉░░░░░░░░░░░░░░░░░░░   5.7%
 ```
 
 ---
 
-## 4. 🔥 Ranking de Frequência (nº de transações)
+## 4. 🔥 Frequency Ranking (no. of transactions)
 
-| Pos | Tag        | Mov. | Ticket médio | Leitura                                    |
-| --: | ---------- | ---: | -----------: | ------------------------------------------ |
-|  1º | `Vicios`   |    9 |      R$ 10,0 | 🔴 Micro-gastos diários — maior vazamento  |
-|  2º | `Comida`   |    7 |      R$ 25,7 | 🟡 Compras fracionadas, sem lista          |
-|  3º | `Transporte`|   4 |      R$ 11,3 | 🟢 Saudável                                |
-|  4º | `Poker`    |    3 |      R$ 25,0 | 🟢 Dentro do envelope                      |
-|  5º | `Empresa`  |    2 |      R$ 20,0 | 🟢 Recorrentes                             |
-|  6º | `Casa`     |    1 |     R$ 300,0 | 🟢 Fixo único                              |
+| Pos | Tag         | Mov. | Avg. ticket | Read                                        |
+| --: | ----------- | ---: | ----------: | ------------------------------------------- |
+|  1st| `Vices`     |    9 |     R$ 10.0 | 🔴 Daily micro-spending — biggest leak      |
+|  2nd| `Food`      |    7 |     R$ 25.7 | 🟡 Fragmented purchases, no shopping list   |
+|  3rd| `Transport` |    4 |     R$ 11.3 | 🟢 Healthy                                  |
+|  4th| `Poker`     |    3 |     R$ 25.0 | 🟢 Within the envelope                      |
+|  5th| `Business`  |    2 |     R$ 20.0 | 🟢 Recurring                                |
+|  6th| `Home`      |    1 |    R$ 300.0 | 🟢 Single fixed cost                        |
 
-> 💡 **Insight:** `Vicios` custa R$ 10/dia. São **R$ 3.650/ano** no ritmo atual — mais que o aluguel anual.
-
----
-
-## 5. 📐 Regras de Categorização
-
-1. **Uma tag por transação.** Se couber em duas, vence a mais específica (`Empresa` > `Casa`).
-2. **Tag duplicada é erro.** Criar tag existente retorna `Error: Tag <X> already exists`.
-3. **Transferências não afetam o resultado** — `Reserva` e `Invest` movem dinheiro, não o consomem.
-4. **Toda tag nova** exige teto definido antes do primeiro lançamento.
-5. **Tag sem movimento por 3 meses** é desativada (`Ativa: ⚪ não`), não deletada — preserva histórico.
-6. **Renomear tag é proibido.** Desative a antiga e crie a nova, para não corromper meses fechados.
-7. **Reembolso** entra como valor positivo na **mesma tag** da despesa original, nunca como receita.
+> 💡 **Insight:** `Vices` costs R$ 10/day. That's **R$ 3,650/year** at the current pace — more than a year of rent.
 
 ---
 
-## 6. 🧾 Log de Alterações
+## 5. 📐 Categorization Rules
 
-| Data        | Operação   | Tag        | Resultado                          |
+1. **One tag per transaction.** If two fit, the more specific one wins (`Business` > `Home`).
+2. **A duplicate tag is an error.** Creating an existing tag returns `Error: Tag <X> already exists`.
+3. **Transfers don't affect the result** — `Reserve` and `Invest` move money, they don't consume it.
+4. **Every new tag** requires a cap defined before the first entry.
+5. **A tag with no movement for 3 months** is deactivated (`Active: ⚪ no`), not deleted — this preserves history.
+6. **Renaming a tag is forbidden.** Deactivate the old one and create a new one, so closed months aren't corrupted.
+7. **Reimbursements** are entered as a positive value on the **same tag** as the original expense, never as income.
+
+---
+
+## 6. 🧾 Change Log
+
+| Date        | Operation  | Tag        | Result                             |
 | ----------- | ---------- | ---------- | ---------------------------------- |
-| 14-mar-2026 | AddTag     | `Divida`   | ✅ OK                              |
-| 02-fev-2026 | AddTag     | `Estudo`   | ✅ OK                              |
-| 11-fev-2026 | AddTag     | `Extra`    | ✅ OK                              |
-| 09-ago-2026 | AddTag     | `Poker`    | ❌ `Error: Tag Poker already exists` |
-| 12-ago-2026 | RemoveTag  | `Salario`  | ⚪ Desativada (sem uso desde jan)  |
+| 14-mar-2026 | AddTag     | `Debt`     | ✅ OK                              |
+| 02-feb-2026 | AddTag     | `Study`    | ✅ OK                              |
+| 11-feb-2026 | AddTag     | `Extra`    | ✅ OK                              |
+| 09-aug-2026 | AddTag     | `Poker`    | ❌ `Error: Tag Poker already exists` |
+| 12-aug-2026 | RemoveTag  | `Salary`   | ⚪ Deactivated (unused since jan)  |
 
 ---
 
-## 🔗 Relacionados
+## 🔗 Related
 [`Budget.md`](Budget.md) · [`Month-Balance.md`](Month-Balance.md) · [`Alerts-Rules.md`](Alerts-Rules.md)

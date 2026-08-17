@@ -1,185 +1,185 @@
-# 📊 Relatório Financeiro — Agosto / 2026
+# 📊 Financial Report — August / 2026
 
-> **Período:** 01-ago-2026 → 31-ago-2026 · **Fechamento parcial:** dia 16 (52% do mês)
-> **Perfil:** Pessoa Física + MEI (Wraith Software)
-> **Status geral:** 🟡 **Atenção** — gasto acelerado, mas receita projetada cobre o mês.
+> **Period:** 01-aug-2026 → 31-aug-2026 · **Partial close:** day 16 (52% of the month)
+> **Profile:** Individual + MEI (Wraith Software)
+> **Overall status:** 🟡 **Attention** — accelerated spending, but projected income covers the month.
 
 ---
 
-## 1. 🚦 Semáforo Executivo
+## 1. 🚦 Executive Traffic Light
 
-| Indicador                | Valor        | Meta        | Status | Leitura rápida                          |
+| Indicator                | Value        | Target      | Status | Quick read                              |
 | ------------------------ | ------------ | ----------- | ------ | --------------------------------------- |
-| Receita realizada        | R$ 500       | R$ 2.000    | 🔴     | Só 25% da meta com 52% do mês corrido   |
-| Despesa realizada        | R$ 700       | R$ 1.000    | 🟡     | 70% do orçamento com 52% do mês         |
-| Resultado do mês (atual) | **-R$ 200**  | +R$ 1.000   | 🔴     | No vermelho hoje                        |
-| Resultado projetado      | **+R$ 1.000** | +R$ 1.000  | 🟢     | Depende do recebível do dia 25          |
-| Patrimônio (variação)    | -2%          | +50%        | 🔴     | Recuperável com o fechamento            |
-| Reserva de emergência    | 3,2 meses    | 6 meses     | 🟡     | Falta R$ 2.800 para a meta              |
-| Taxa de poupança         | -40%         | 50%         | 🔴     | Negativa até entrada da receita         |
+| Income realized          | R$ 500       | R$ 2,000    | 🔴     | Only 25% of target with 52% of month gone |
+| Expense realized         | R$ 700       | R$ 1,000    | 🟡     | 70% of budget with 52% of the month     |
+| Month result (current)   | **-R$ 200**  | +R$ 1,000   | 🔴     | In the red today                        |
+| Projected result         | **+R$ 1,000** | +R$ 1,000  | 🟢     | Depends on the receivable due on day 25 |
+| Net worth (change)       | -2%          | +50%        | 🔴     | Recoverable at close                    |
+| Emergency reserve        | 3.2 months   | 6 months    | 🟡     | R$ 2,800 short of target                |
+| Savings rate             | -40%         | 50%         | 🔴     | Negative until the income lands         |
 
 ---
 
-## 2. 💰 Resultado do Mês — Realizado vs. Projetado
+## 2. 💰 Month Result — Actual vs. Projected
 
-| Linha                    | Realizado (dia 16) | Projetado (dia 31) | Δ Projetado |
+| Line                     | Actual (day 16)    | Projected (day 31) | Δ Projected |
 | ------------------------ | -----------------: | -----------------: | ----------: |
-| **(+) Receitas**         |            R$ 500  |          R$ 2.000  |  +R$ 1.500  |
-| **(−) Despesas**         |            R$ 700  |          R$ 1.000  |    +R$ 300  |
-| **(=) Resultado**        |        **-R$ 200** |      **+R$ 1.000** |  +R$ 1.200  |
-| Margem sobre receita     |             -40,0% |             +50,0% |    +90 p.p. |
-| Variação de patrimônio   |               -2%  |              +50%  |   +52 p.p.  |
+| **(+) Income**           |            R$ 500  |          R$ 2,000  |  +R$ 1,500  |
+| **(−) Expenses**         |            R$ 700  |          R$ 1,000  |    +R$ 300  |
+| **(=) Result**           |        **-R$ 200** |      **+R$ 1,000** |  +R$ 1,200  |
+| Margin on income         |             -40.0% |             +50.0% |     +90 pp  |
+| Net worth change         |               -2%  |              +50%  |     +52 pp  |
 
-**Burn rate diário:** R$ 43,75/dia · **Runway sem novas receitas:** 6,8 dias
-**Ponto de equilíbrio do mês:** receber ao menos **R$ 500** até 31-ago para zerar.
+**Daily burn rate:** R$ 43.75/day · **Runway without new income:** 6.8 days
+**Month break-even point:** receive at least **R$ 500** by 31-aug to get back to zero.
 
 ```
-Receita   ██████░░░░░░░░░░░░░░░░░░  25%  (R$ 500 / R$ 2.000)
-Despesa   ████████████████░░░░░░░░  70%  (R$ 700 / R$ 1.000)
-Tempo     ████████████░░░░░░░░░░░░  52%  (16 / 31 dias)
+Income    ██████░░░░░░░░░░░░░░░░░░  25%  (R$ 500 / R$ 2,000)
+Expense   ████████████████░░░░░░░░  70%  (R$ 700 / R$ 1,000)
+Time      ████████████░░░░░░░░░░░░  52%  (16 / 31 days)
 ```
-> ⚠️ **Despesa correndo 18 p.p. à frente do tempo.** Ritmo atual projeta R$ 1.356 (+35% do teto).
+> ⚠️ **Expenses running 18 pp ahead of the calendar.** Current pace projects R$ 1,356 (+35% over the cap).
 
 ---
 
-## 3. 🎯 Orçamento por Categoria (Budget vs. Real)
+## 3. 🎯 Budget by Category (Budget vs. Actual)
 
-| Categoria             | Tag         | Orçado  | Gasto  | Saldo   | % Uso | Barra                      | Status |
-| --------------------- | ----------- | ------: | -----: | ------: | ----: | -------------------------- | ------ |
-| 🏠 Moradia            | `Casa`      | R$ 300  | R$ 300 |  R$ 0   |  100% | `██████████`               | 🟡 Teto |
-| 🍽️ Alimentação        | `Comida`    | R$ 250  | R$ 180 |  R$ 70  |   72% | `███████░░░`               | 🟡      |
-| 🚗 Transporte         | `Transporte`| R$ 120  | R$ 45  |  R$ 75  |   38% | `████░░░░░░`               | 🟢      |
-| 🚬 Vícios             | `Vicios`    | R$ 50   | R$ 90  | -R$ 40  |  180% | `██████████` ⨯1,8          | 🔴 Estouro |
-| 🃏 Lazer / Apostas    | `Poker`     | R$ 80   | R$ 45  |  R$ 35  |   56% | `██████░░░░`               | 🟢      |
-| 💻 Infra / Software   | `Empresa`   | R$ 150  | R$ 40  | R$ 110  |   27% | `███░░░░░░░`               | 🟢      |
-| 📚 Educação           | `Estudo`    | R$ 50   | R$ 0   |  R$ 50  |    0% | `░░░░░░░░░░`               | ⚪ Ocioso |
-| **TOTAL**             | —           | **R$ 1.000** | **R$ 700** | **R$ 300** | **70%** | `███████░░░` | 🟡 |
+| Category              | Tag         | Budgeted | Spent  | Balance | % Used | Bar                       | Status |
+| --------------------- | ----------- | -------: | -----: | ------: | -----: | ------------------------- | ------ |
+| 🏠 Housing            | `Home`      |  R$ 300  | R$ 300 |  R$ 0   |   100% | `██████████`              | 🟡 At cap |
+| 🍽️ Food               | `Food`      |  R$ 250  | R$ 180 |  R$ 70  |    72% | `███████░░░`              | 🟡      |
+| 🚗 Transport          | `Transport` |  R$ 120  | R$ 45  |  R$ 75  |    38% | `████░░░░░░`              | 🟢      |
+| 🚬 Vices              | `Vices`     |  R$ 50   | R$ 90  | -R$ 40  |   180% | `██████████` ⨯1.8         | 🔴 Over |
+| 🃏 Leisure / Betting  | `Poker`     |  R$ 80   | R$ 45  |  R$ 35  |    56% | `██████░░░░`              | 🟢      |
+| 💻 Infra / Software   | `Business`  |  R$ 150  | R$ 40  | R$ 110  |    27% | `███░░░░░░░`              | 🟢      |
+| 📚 Education          | `Study`     |  R$ 50   | R$ 0   |  R$ 50  |     0% | `░░░░░░░░░░`              | ⚪ Idle |
+| **TOTAL**             | —           | **R$ 1,000** | **R$ 700** | **R$ 300** | **70%** | `███████░░░` | 🟡 |
 
-**Regra dos envelopes:** categoria que estourar 100% congela até o próximo mês ou consome saldo de outra.
-**Realocação sugerida:** `Estudo` (R$ 50 ocioso) → cobre o estouro de `Vicios` (R$ 40). Sobra R$ 10.
-
----
-
-## 4. 🏷️ Tags — Positivas vs. Negativas
-
-| Tag          | Natureza     | Movimentos | Entradas | Saídas | Líquido   | Tendência vs. jul |
-| ------------ | ------------ | ---------: | -------: | -----: | --------: | ----------------- |
-| `Freela`     | ✅ Positiva  |          1 |  R$ 500  |  R$ 0  |  +R$ 500  | ↘ -50%            |
-| `Casa`       | ❌ Negativa  |          1 |    R$ 0  | R$ 300 |  -R$ 300  | → estável         |
-| `Comida`     | ❌ Negativa  |          7 |    R$ 0  | R$ 180 |  -R$ 180  | ↗ +12%            |
-| `Vicios`     | ❌ Negativa  |          9 |    R$ 0  |  R$ 90 |   -R$ 90  | ↗ +80% 🔴         |
-| `Poker`      | ⚖️ Ambas    |          3 |   R$ 30  |  R$ 75 |   -R$ 45  | ↘ -10%            |
-| `Transporte` | ❌ Negativa  |          4 |    R$ 0  |  R$ 45 |   -R$ 45  | ↘ -20%            |
-| `Empresa`    | ❌ Negativa  |          2 |    R$ 0  |  R$ 40 |   -R$ 40  | → estável         |
-
-> `Poker` é tag **bidirecional** (`positive: true` / `negative: true`) — aceita ganho e perda no mesmo agrupamento.
+**Envelope rule:** a category that blows past 100% is frozen until next month or consumes another envelope's balance.
+**Suggested reallocation:** `Study` (R$ 50 idle) → covers the `Vices` overrun (R$ 40). R$ 10 left over.
 
 ---
 
-## 5. 📈 KPIs de Saúde Financeira
+## 4. 🏷️ Tags — Positive vs. Negative
 
-| KPI                          | Fórmula                          | Atual   | Meta    | Status |
+| Tag          | Nature       | Movements  | Inflows  | Outflows | Net       | Trend vs. jul     |
+| ------------ | ------------ | ---------: | -------: | -------: | --------: | ----------------- |
+| `Freelance`  | ✅ Positive  |          1 |  R$ 500  |    R$ 0  |  +R$ 500  | ↘ -50%            |
+| `Home`       | ❌ Negative  |          1 |    R$ 0  |   R$ 300 |  -R$ 300  | → stable          |
+| `Food`       | ❌ Negative  |          7 |    R$ 0  |   R$ 180 |  -R$ 180  | ↗ +12%            |
+| `Vices`      | ❌ Negative  |          9 |    R$ 0  |    R$ 90 |   -R$ 90  | ↗ +80% 🔴         |
+| `Poker`      | ⚖️ Both     |          3 |   R$ 30  |    R$ 75 |   -R$ 45  | ↘ -10%            |
+| `Transport`  | ❌ Negative  |          4 |    R$ 0  |    R$ 45 |   -R$ 45  | ↘ -20%            |
+| `Business`   | ❌ Negative  |          2 |    R$ 0  |    R$ 40 |   -R$ 40  | → stable          |
+
+> `Poker` is a **bidirectional** tag (`positive: true` / `negative: true`) — it accepts gains and losses in the same grouping.
+
+---
+
+## 5. 📈 Financial Health KPIs
+
+| KPI                          | Formula                          | Current | Target  | Status |
 | ---------------------------- | -------------------------------- | ------: | ------: | ------ |
-| **Taxa de Poupança**         | (Receita − Despesa) / Receita    |  -40,0% |  ≥ 30%  | 🔴     |
-| **Índice de Cobertura**      | Receita / Despesa                |   0,71x |  ≥ 1,5x | 🔴     |
-| **Runway (Reserva)**         | Reserva / Despesa mensal média   |   3,2 m |   6,0 m | 🟡     |
-| **Custo Fixo / Receita**     | Fixos / Receita projetada        |   22,5% |  ≤ 50%  | 🟢     |
-| **Gasto Discricionário**     | (Vícios+Poker+Lazer) / Despesa   |   19,3% |  ≤ 15%  | 🟡     |
-| **Concentração de Receita**  | Maior cliente / Receita total    |    100% |  ≤ 60%  | 🔴     |
-| **Aderência ao Orçamento**   | Categorias dentro do teto        |    5/7  |    7/7  | 🟡     |
-| **Variação Patrimonial**     | Δ Patrimônio no mês              |     -2% |   +5%   | 🔴     |
-| **Ticket Médio de Gasto**    | Despesa / nº transações          | R$ 25,9 | ≤ R$ 30 | 🟢     |
-| **Dias sem gastar**          | Contagem de dias R$ 0            |   4/16  |   ≥ 8   | 🟡     |
+| **Savings Rate**             | (Income − Expense) / Income      |  -40.0% |  ≥ 30%  | 🔴     |
+| **Coverage Ratio**           | Income / Expense                 |   0.71x |  ≥ 1.5x | 🔴     |
+| **Runway (Reserve)**         | Reserve / average monthly expense|   3.2 m |   6.0 m | 🟡     |
+| **Fixed Cost / Income**      | Fixed / projected income         |   22.5% |  ≤ 50%  | 🟢     |
+| **Discretionary Spending**   | (Vices+Poker+Leisure) / Expense  |   19.3% |  ≤ 15%  | 🟡     |
+| **Income Concentration**     | Largest client / total income    |    100% |  ≤ 60%  | 🔴     |
+| **Budget Adherence**         | Categories within cap            |    5/7  |    7/7  | 🟡     |
+| **Net Worth Change**         | Δ Net worth in the month         |     -2% |   +5%   | 🔴     |
+| **Average Spend Ticket**     | Expense / no. of transactions    | R$ 25.9 | ≤ R$ 30 | 🟢     |
+| **No-spend days**            | Count of R$ 0 days               |   4/16  |   ≥ 8   | 🟡     |
 
-**Score de Saúde Financeira: 48 / 100** — `████▊░░░░░` 🟡
-Composição: Liquidez 30 · Orçamento 62 · Poupança 20 · Diversificação 25 · Disciplina 70
+**Financial Health Score: 48 / 100** — `████▊░░░░░` 🟡
+Composition: Liquidity 30 · Budget 62 · Savings 20 · Diversification 25 · Discipline 70
 
 ---
 
-## 6. 🧭 Fluxo de Caixa Projetado (2ª quinzena)
+## 6. 🧭 Projected Cash Flow (2nd half)
 
-| Data        | Descrição                    | Tipo     |    Valor | Saldo acum. |
+| Date        | Description                  | Type     |    Value | Running bal.|
 | ----------- | ---------------------------- | -------- | -------: | ----------: |
-| 16-ago-2026 | *Saldo atual*                | —        |        — |   -R$ 200   |
-| 18-ago-2026 | Mercado (quinzenal)          | Despesa  |  -R$ 120 |   -R$ 320   |
-| 20-ago-2026 | Assinatura infra/cloud       | Despesa  |   -R$ 60 |   -R$ 380   |
-| 25-ago-2026 | **Nota fiscal — Cliente A**  | Receita  | +R$ 1.500|  +R$ 1.120  |
-| 28-ago-2026 | Combustível                  | Despesa  |   -R$ 70 |  +R$ 1.050  |
-| 30-ago-2026 | Aporte reserva (automático)  | Transf.  |  -R$ 500 |    +R$ 550  |
-| 31-ago-2026 | Diversos / folga             | Despesa  |   -R$ 50 |  **+R$ 500**|
+| 16-aug-2026 | *Current balance*            | —        |        — |   -R$ 200   |
+| 18-aug-2026 | Groceries (biweekly)         | Expense  |  -R$ 120 |   -R$ 320   |
+| 20-aug-2026 | Infra/cloud subscription     | Expense  |   -R$ 60 |   -R$ 380   |
+| 25-aug-2026 | **Invoice — Client A**       | Income   | +R$ 1,500|  +R$ 1,120  |
+| 28-aug-2026 | Fuel                         | Expense  |   -R$ 70 |  +R$ 1,050  |
+| 30-aug-2026 | Reserve contribution (auto)  | Transfer |  -R$ 500 |    +R$ 550  |
+| 31-aug-2026 | Misc / slack                 | Expense  |   -R$ 50 |  **+R$ 500**|
 
-> 🔻 **Vale de caixa:** -R$ 380 em 20-ago. Menor saldo do mês — não agendar compras até dia 25.
+> 🔻 **Cash trough:** -R$ 380 on 20-aug. Lowest balance of the month — don't schedule purchases before day 25.
 
 ---
 
-## 7. 📆 Comparativo Histórico
+## 7. 📆 Historical Comparison
 
-| Mês       | Receita   | Despesa | Resultado | Poupança | Patrimônio |
+| Month     | Income    | Expense | Result    | Savings  | Net worth  |
 | --------- | --------: | ------: | --------: | -------: | ---------: |
-| Mai/2026  | R$ 1.800  | R$ 950  |  +R$ 850  |    47%   |     +4,2%  |
-| Jun/2026  | R$ 2.200  | R$ 1.100|  +R$ 1.100|    50%   |     +5,1%  |
-| Jul/2026  | R$ 1.000  | R$ 1.050|   -R$ 50  |    -5%   |     -0,3%  |
-| **Ago/26**| R$ 2.000* | R$ 1.000| +R$ 1.000*|   50%*   |    +50%*   |
+| May/2026  | R$ 1,800  | R$ 950  |  +R$ 850  |    47%   |     +4.2%  |
+| Jun/2026  | R$ 2,200  | R$ 1,100|  +R$ 1,100|    50%   |     +5.1%  |
+| Jul/2026  | R$ 1,000  | R$ 1,050|   -R$ 50  |    -5%   |     -0.3%  |
+| **Aug/26**| R$ 2,000* | R$ 1,000| +R$ 1,000*|   50%*   |    +50%*   |
 
-`*` projetado · **Média móvel 3m de despesa:** R$ 1.033 · **Volatilidade da receita:** ±38% 🔴
+`*` projected · **3-month moving average of expense:** R$ 1,033 · **Income volatility:** ±38% 🔴
 
 ```
-Resultado mensal (R$)
-Mai  ████████▌            +850
+Monthly result (R$)
+May  ████████▌            +850
 Jun  ███████████         +1100
 Jul  ▌                     -50
-Ago  ██████████▌  (proj) +1000
+Aug  ██████████▌  (proj) +1000
 ```
 
 ---
 
-## 8. 🎯 Metas do Ano
+## 8. 🎯 Year Goals
 
-| Meta                          | Alvo       | Atingido  | Progresso                   |
+| Goal                          | Target     | Achieved  | Progress                    |
 | ----------------------------- | ---------: | --------: | --------------------------- |
-| Reserva de emergência (6m)    | R$ 6.000   | R$ 3.200  | `█████▌░░░░` 53%            |
-| Zerar dívidas de cartão       | R$ 0       | R$ 380    | `████████░░` 81%            |
-| Faturamento anual MEI         | R$ 24.000  | R$ 13.500 | `█████▋░░░░` 56%            |
-| Investimentos aportados       | R$ 8.000   | R$ 3.200  | `████░░░░░░` 40%            |
-| Meses no azul                 | 12         | 6 de 8    | `█████░░░░░` 50%            |
+| Emergency reserve (6m)        | R$ 6,000   | R$ 3,200  | `█████▌░░░░` 53%            |
+| Clear credit card debt        | R$ 0       | R$ 380    | `████████░░` 81%            |
+| Annual MEI revenue            | R$ 24,000  | R$ 13,500 | `█████▋░░░░` 56%            |
+| Investments contributed       | R$ 8,000   | R$ 3,200  | `████░░░░░░` 40%            |
+| Months in the black           | 12         | 6 of 8    | `█████░░░░░` 50%            |
 
 ---
 
-## 9. 🚨 Alertas Automáticos
+## 9. 🚨 Automatic Alerts
 
-| Sev. | Alerta                                                    | Ação sugerida                                   |
+| Sev. | Alert                                                     | Suggested action                                |
 | ---- | --------------------------------------------------------- | ----------------------------------------------- |
-| 🔴   | `Vicios` estourou o teto em **80%** (R$ 90 / R$ 50)        | Congelar tag até 01-set                         |
-| 🔴   | **100% da receita** vem de 1 cliente                       | Prospectar 2º cliente ainda em agosto           |
-| 🔴   | Resultado negativo 2 meses seguidos (jul + ago parcial)    | Revisar teto global para R$ 900                 |
-| 🟡   | Vale de caixa de -R$ 380 previsto em 20-ago                | Antecipar NF do Cliente A ou adiar assinatura   |
-| 🟡   | Reserva em 3,2 meses (meta 6)                              | Manter aporte de R$ 500 no dia 30               |
-| ⚪   | Tag `Estudo` sem uso há 2 meses                            | Realocar R$ 50 ou assumir compromisso           |
-| ℹ️   | Tentativa de criar tag `Poker` duplicada — **erro**        | Tag já existe; usar a existente                 |
+| 🔴   | `Vices` blew the cap by **80%** (R$ 90 / R$ 50)            | Freeze tag until 01-sep                         |
+| 🔴   | **100% of income** comes from 1 client                     | Prospect a 2nd client still in August           |
+| 🔴   | Negative result 2 months in a row (jul + aug partial)      | Review global cap down to R$ 900                |
+| 🟡   | Cash trough of -R$ 380 projected on 20-aug                 | Pull Client A's invoice forward or defer the subscription |
+| 🟡   | Reserve at 3.2 months (target 6)                           | Keep the R$ 500 contribution on day 30          |
+| ⚪   | Tag `Study` unused for 2 months                            | Reallocate R$ 50 or make a commitment           |
+| ℹ️   | Attempt to create duplicate tag `Poker` — **error**        | Tag already exists; use the existing one        |
 
 ---
 
-## 10. ✅ Plano de Ação — Próximos 15 dias
+## 10. ✅ Action Plan — Next 15 days
 
-- [ ] **Até 18-ago** — Congelar gastos da tag `Vicios` (economia: R$ 40/mês)
-- [ ] **Até 20-ago** — Confirmar emissão da NF do Cliente A (R$ 1.500) — *crítico para o caixa*
-- [ ] **Até 22-ago** — Enviar 3 propostas comerciais (reduzir concentração de receita)
-- [ ] **Até 25-ago** — Realocar R$ 50 de `Estudo` → `Vicios` no orçamento de setembro
-- [ ] **30-ago** — Executar aporte de R$ 500 na reserva (automático)
-- [ ] **31-ago** — Fechar mês, atualizar `Month-Results.md` e `Month-Balance.md`
+- [ ] **By 18-aug** — Freeze spending on the `Vices` tag (savings: R$ 40/month)
+- [ ] **By 20-aug** — Confirm issuance of Client A's invoice (R$ 1,500) — *critical for cash*
+- [ ] **By 22-aug** — Send 3 commercial proposals (reduce income concentration)
+- [ ] **By 25-aug** — Reallocate R$ 50 from `Study` → `Vices` in September's budget
+- [ ] **30-aug** — Execute the R$ 500 reserve contribution (automatic)
+- [ ] **31-aug** — Close the month, update `Month-Results.md` and `Month-Balance.md`
 
 ---
 
-## 📖 Legenda
+## 📖 Legend
 
-| Símbolo | Significado                                   |
+| Symbol  | Meaning                                       |
 | ------- | --------------------------------------------- |
-| 🟢      | Dentro da meta / saudável                     |
-| 🟡      | Atenção — entre 70% e 100% do limite          |
-| 🔴      | Fora da meta / requer ação imediata           |
-| ⚪      | Sem movimentação no período                   |
-| ↗ ↘ →   | Tendência vs. mês anterior                    |
-| p.p.    | Pontos percentuais                            |
-| `*`     | Valor projetado, não realizado                |
+| 🟢      | On target / healthy                           |
+| 🟡      | Attention — between 70% and 100% of the limit  |
+| 🔴      | Off target / requires immediate action        |
+| ⚪      | No movement in the period                     |
+| ↗ ↘ →   | Trend vs. previous month                      |
+| pp      | Percentage points                             |
+| `*`     | Projected value, not realized                 |
 
-> 📌 *Documento fictício, gerado como modelo de dashboard. Fontes: `Month-Results.md`, `Month-Balance.md`, `Task.yaml`.*
+> 📌 *Fictional document, generated as a dashboard model. Sources: `Month-Results.md`, `Month-Balance.md`, `Task.yaml`.*

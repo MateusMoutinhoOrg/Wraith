@@ -1,90 +1,90 @@
-# 🧭 Dashboard Financeiro — Wraith
+# 🧭 Financial Dashboard — Wraith
 
-> **Última atualização:** 16-ago-2026 · **Moeda:** BRL (R$)
-> **Escopo:** Pessoa Física + MEI (Wraith Software)
-
----
-
-## ⚡ Visão de 1 Tela
-
-| Bloco                   | Número             | Status | Onde ver                        |
-| ----------------------- | ------------------ | ------ | ------------------------------- |
-| Resultado do mês (real) | **-R$ 200**        | 🔴     | [Month-Report](Month-Report.md) |
-| Resultado do mês (proj) | **+R$ 1.000**      | 🟢     | [Month-Report](Month-Report.md) |
-| Orçamento usado         | 70% (R$ 700/1.000) | 🟡     | [Budget](Budget.md)             |
-| Caixa hoje              | R$ 1.100           | 🟡     | [Cash-Flow](Cash-Flow.md)       |
-| Menor saldo previsto    | -R$ 380 (20-ago)   | 🔴     | [Cash-Flow](Cash-Flow.md)       |
-| Patrimônio líquido      | **R$ 18.820**      | 🟡     | [Net-Worth](Net-Worth.md)       |
-| Dívida total            | R$ 5.180           | 🟡     | [Net-Worth](Net-Worth.md)       |
-| Ano 2026 acumulado      | +R$ 5.700          | 🟢     | [Year-Report](Year-Report.md)   |
-| Score de Saúde          | **48 / 100**       | 🟡     | [KPIs](KPIs.md)                 |
-| Progresso FIRE          | 2,5%               | ⚪      | [Long-Term](Long-Term.md)       |
-| Alertas abertos         | 3 🔴 · 3 🟡        | 🔴     | [Alerts-Rules](Alerts-Rules.md) |
-
-```
-Ano 2026   Receita  █████████████▌░░░░░░  56%  (R$ 13.500 / R$ 24.000)
-           Despesa  ██████████████▍░░░░░  64%  (R$  7.800 / R$ 12.100)
-           Tempo    ████████████▍░░░░░░░  62%  (16-ago / 31-dez)
-```
+> **Last update:** 16-aug-2026 · **Currency:** BRL (R$)
+> **Scope:** Individual + MEI (Wraith Software)
 
 ---
 
-## 📁 Mapa da Dashboard
+## ⚡ One-Screen View
 
-### 🔵 Curto prazo — o mês corrente
-| Arquivo                                  | O que responde                                        | Frequência |
+| Block                     | Number             | Status | Where to look                   |
+| ------------------------- | ------------------ | ------ | ------------------------------- |
+| Month result (actual)     | **-R$ 200**        | 🔴     | [Month-Report](Month-Report.md) |
+| Month result (projected)  | **+R$ 1,000**      | 🟢     | [Month-Report](Month-Report.md) |
+| Budget used               | 70% (R$ 700/1,000) | 🟡     | [Budget](Budget.md)             |
+| Cash today                | R$ 1,100           | 🟡     | [Cash-Flow](Cash-Flow.md)       |
+| Lowest projected balance  | -R$ 380 (20-aug)   | 🔴     | [Cash-Flow](Cash-Flow.md)       |
+| Net worth                 | **R$ 18,820**      | 🟡     | [Net-Worth](Net-Worth.md)       |
+| Total debt                | R$ 5,180           | 🟡     | [Net-Worth](Net-Worth.md)       |
+| Year 2026 accumulated     | +R$ 5,700          | 🟢     | [Year-Report](Year-Report.md)   |
+| Health Score              | **48 / 100**       | 🟡     | [KPIs](KPIs.md)                 |
+| FIRE progress             | 2.5%               | ⚪      | [Long-Term](Long-Term.md)       |
+| Open alerts               | 3 🔴 · 3 🟡        | 🔴     | [Alerts-Rules](Alerts-Rules.md) |
+
+```
+Year 2026  Income   █████████████▌░░░░░░  56%  (R$ 13,500 / R$ 24,000)
+           Expense  ██████████████▍░░░░░  64%  (R$  7,800 / R$ 12,100)
+           Time     ████████████▍░░░░░░░  62%  (16-aug / 31-dec)
+```
+
+---
+
+## 📁 Dashboard Map
+
+### 🔵 Short term — the current month
+| File                                     | What it answers                                       | Frequency  |
 | ---------------------------------------- | ----------------------------------------------------- | ---------- |
-| [`Month-Results.md`](Month-Results.md)   | Números crus do mês (realizado vs. projetado)         | Diária     |
-| [`Month-Balance.md`](Month-Balance.md)   | Extrato — toda transação do mês, linha a linha        | Diária     |
-| [`Month-Report.md`](Month-Report.md)     | **Relatório completo do mês** — KPIs, budget, ações   | Semanal    |
-| [`Cash-Flow.md`](Cash-Flow.md)           | Vou ficar sem dinheiro? Quando?                       | Semanal    |
+| [`Month-Results.md`](Month-Results.md)   | Raw month numbers (actual vs. projected)              | Daily      |
+| [`Month-Balance.md`](Month-Balance.md)   | Statement — every transaction of the month, line by line | Daily   |
+| [`Month-Report.md`](Month-Report.md)     | **Full month report** — KPIs, budget, actions         | Weekly     |
+| [`Cash-Flow.md`](Cash-Flow.md)           | Will I run out of money? When?                        | Weekly     |
 
-### 🟢 Planejamento — quanto posso gastar
-| Arquivo                                    | O que responde                                      | Frequência |
+### 🟢 Planning — how much I can spend
+| File                                       | What it answers                                     | Frequency  |
 | ------------------------------------------ | --------------------------------------------------- | ---------- |
-| [`Budget.md`](Budget.md)                   | **Orçamento de envelopes** — tetos por categoria    | Mensal     |
-| [`Categories-Tags.md`](Categories-Tags.md) | Plano de contas + catálogo de tags e regras         | Trimestral |
-| [`Alerts-Rules.md`](Alerts-Rules.md)       | Regras que disparam alerta automático               | Trimestral |
+| [`Budget.md`](Budget.md)                   | **Envelope budget** — caps per category             | Monthly    |
+| [`Categories-Tags.md`](Categories-Tags.md) | Chart of accounts + tag catalog and rules           | Quarterly  |
+| [`Alerts-Rules.md`](Alerts-Rules.md)       | Rules that fire an automatic alert                  | Quarterly  |
 
-### 🟡 Médio prazo — trimestre e ano
-| Arquivo                                      | O que responde                                    | Frequência |
+### 🟡 Medium term — quarter and year
+| File                                         | What it answers                                   | Frequency  |
 | -------------------------------------------- | ------------------------------------------------- | ---------- |
-| [`Quarter-Report.md`](Quarter-Report.md)     | Fechamento trimestral e tendências                | Trimestral |
-| [`Year-Report.md`](Year-Report.md)           | Consolidado 2026 mês a mês + projeção de fechamento| Mensal     |
-| [`Business-MEI.md`](Business-MEI.md)         | A empresa dá lucro? Limite do MEI, DAS, clientes  | Mensal     |
-| [`Goals.md`](Goals.md)                       | Metas do ano e progresso                          | Mensal     |
+| [`Quarter-Report.md`](Quarter-Report.md)     | Quarterly close and trends                        | Quarterly  |
+| [`Year-Report.md`](Year-Report.md)           | 2026 consolidated month by month + closing forecast| Monthly   |
+| [`Business-MEI.md`](Business-MEI.md)         | Is the business profitable? MEI cap, DAS, clients | Monthly    |
+| [`Goals.md`](Goals.md)                       | Year goals and progress                           | Monthly    |
 
-### 🔴 Longo prazo — patrimônio
-| Arquivo                            | O que responde                                       | Frequência |
+### 🔴 Long term — net worth
+| File                               | What it answers                                      | Frequency  |
 | ---------------------------------- | ---------------------------------------------------- | ---------- |
-| [`Net-Worth.md`](Net-Worth.md)     | **Ativos, passivos, dívidas e carteira**             | Mensal     |
-| [`Long-Term.md`](Long-Term.md)     | Plano 2026–2031, independência financeira, cenários  | Semestral  |
-| [`KPIs.md`](KPIs.md)               | Dicionário de indicadores + série histórica          | Mensal     |
+| [`Net-Worth.md`](Net-Worth.md)     | **Assets, liabilities, debts and portfolio**         | Monthly    |
+| [`Long-Term.md`](Long-Term.md)     | 2026–2031 plan, financial independence, scenarios    | Semiannual |
+| [`KPIs.md`](KPIs.md)               | Indicator dictionary + historical series             | Monthly    |
 
 ---
 
-## 🔄 Rotina de Manutenção
+## 🔄 Maintenance Routine
 
-| Quando         | O que fazer                                                                 |
-| -------------- | --------------------------------------------------------------------------- |
-| **Todo dia**   | Lançar transações em `Month-Balance.md`                                     |
-| **Toda 2ª-f.** | Rodar `Cash-Flow.md`, checar `Alerts-Rules.md`, atualizar `Month-Report.md` |
-| **Dia 1**      | Fechar o mês: `Month-Results.md` → `Year-Report.md` → `KPIs.md` → zerar extrato |
-| **Dia 1 (mês)**| Revisar tetos em `Budget.md`; realocar envelopes ociosos                    |
-| **Fim de tri** | `Quarter-Report.md` + revisar `Goals.md`                                    |
-| **Fim de ano** | `Year-Report.md` final + recalibrar `Long-Term.md`                          |
+| When            | What to do                                                                  |
+| --------------- | --------------------------------------------------------------------------- |
+| **Every day**   | Record transactions in `Month-Balance.md`                                   |
+| **Every Mon.**  | Run `Cash-Flow.md`, check `Alerts-Rules.md`, update `Month-Report.md`        |
+| **Day 1**       | Close the month: `Month-Results.md` → `Year-Report.md` → `KPIs.md` → reset statement |
+| **Day 1 (month)**| Review caps in `Budget.md`; reallocate idle envelopes                      |
+| **End of qtr.** | `Quarter-Report.md` + review `Goals.md`                                     |
+| **End of year** | Final `Year-Report.md` + recalibrate `Long-Term.md`                         |
 
 ---
 
-## 🧾 Convenções (valem para todos os arquivos)
+## 🧾 Conventions (apply to every file)
 
-| Item        | Padrão                                            |
+| Item        | Standard                                          |
 | ----------- | ------------------------------------------------- |
-| Data        | `DD-mmm-AAAA` (ex.: `16-ago-2026`)                |
-| Valor       | `R$ 1.234,56` · saída sempre com sinal negativo   |
-| Tag         | `crase-minúscula` conforme `Categories-Tags.md`   |
-| Projeção    | sufixo `*` no número                              |
-| Status      | 🟢 ok · 🟡 atenção · 🔴 ação imediata · ⚪ inativo |
-| Tendência   | ↗ subindo · ↘ caindo · → estável                  |
+| Date        | `DD-mmm-YYYY` (e.g., `16-aug-2026`)               |
+| Value       | `R$ 1,234.56` · outflows always signed negative   |
+| Tag         | `Capitalized-single-word` per `Categories-Tags.md`|
+| Projection  | `*` suffix on the number                          |
+| Status      | 🟢 ok · 🟡 attention · 🔴 immediate action · ⚪ inactive |
+| Trend       | ↗ rising · ↘ falling · → stable                   |
 
-> 📌 *Dashboard fictícia, usada como modelo de gestão financeira pessoal + pequena empresa.*
+> 📌 *Fictional dashboard, used as a model for personal + small-business financial management.*
