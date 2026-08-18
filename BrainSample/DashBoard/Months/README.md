@@ -2,7 +2,7 @@
 
 > **Updated:** 18-aug-2026 · 2 months recorded
 
-[Dashboard](../README.md) · [Accounts](../Accounts.md) · [Credit Cards](../Credit-Cards.md) · [Categories](../Categories.md) · [Months](../Months/README.md)
+[Dashboard](../README.md) · [Accounts](../Accounts.md) · [Credit Cards](../Credit-Cards.md) · [Categories](../Categories.md) · [Months](../Months/README.md) · [Forecast](../Forecast.md)
 
 ---
 
@@ -33,6 +33,11 @@ aug-2026  █████░░░░░░░░░░░░░░░░░░�
 Balances are the account's value at the end of that month (or today, for the open one).
 
 ---
+
+Months ahead of the open one appear here only once a transaction carries a date inside them — an
+installment part, or a payment already scheduled. What is merely *expected* lives in
+[`Forecast.md`](../Forecast.md) instead, which projects the next 8 months from declared
+recurrences.
 
 A month appears here as soon as it holds a transaction — months are never created by hand, they are a grouping of the `date` field of every [`AddTransaction`](../../Tasks/AddTransaction.md).
 

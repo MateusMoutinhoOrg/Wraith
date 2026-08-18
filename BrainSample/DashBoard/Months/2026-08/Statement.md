@@ -2,7 +2,7 @@
 
 > Every transaction dated in August 2026 · 32 rows · income +R$ 2,200 · expenses -R$ 2,110 · result **+R$ 90**
 
-[Dashboard](../../README.md) · [Accounts](../../Accounts.md) · [Credit Cards](../../Credit-Cards.md) · [Categories](../../Categories.md) · [Months](../../Months/README.md)
+[Dashboard](../../README.md) · [Accounts](../../Accounts.md) · [Credit Cards](../../Credit-Cards.md) · [Categories](../../Categories.md) · [Months](../../Months/README.md) · [Forecast](../../Forecast.md)
 
 Month: **August 2026** · [July 2026](../2026-07/Statement.md) · [Overview](DashBoard.md)
 

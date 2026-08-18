@@ -2,7 +2,7 @@
 
 > 01-aug → 31-aug · **open — day 18 of 31** · 32 transactions · result **+R$ 90**
 
-[Dashboard](../../README.md) · [Accounts](../../Accounts.md) · [Credit Cards](../../Credit-Cards.md) · [Categories](../../Categories.md) · [Months](../../Months/README.md)
+[Dashboard](../../README.md) · [Accounts](../../Accounts.md) · [Credit Cards](../../Credit-Cards.md) · [Categories](../../Categories.md) · [Months](../../Months/README.md) · [Forecast](../../Forecast.md)
 
 Month: **August 2026** · [July 2026](../2026-07/DashBoard.md) · [Ledger](Statement.md)
 

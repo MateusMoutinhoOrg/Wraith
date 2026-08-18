@@ -3,7 +3,7 @@
 > **Credit card** · limit R$ 5,000 · closes day 28 · due day 5
 > Owed at the start of the month **R$ 800** · owed now **R$ 1,341**
 
-[Dashboard](../../../README.md) · [Accounts](../../../Accounts.md) · [Credit Cards](../../../Credit-Cards.md) · [Categories](../../../Categories.md) · [Months](../../../Months/README.md)
+[Dashboard](../../../README.md) · [Accounts](../../../Accounts.md) · [Credit Cards](../../../Credit-Cards.md) · [Categories](../../../Categories.md) · [Months](../../../Months/README.md) · [Forecast](../../../Forecast.md)
 
 Month: [August 2026](../../2026-08/Accounts/Nubank-Card.md) · **July 2026** · [Overview](../DashBoard.md) · [Full ledger](../Statement.md)
 

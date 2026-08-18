@@ -2,7 +2,7 @@
 
 > Opening **R$ 2,500** · closing **R$ 2,500** · 0 transactions
 
-[Dashboard](../../../README.md) · [Accounts](../../../Accounts.md) · [Credit Cards](../../../Credit-Cards.md) · [Categories](../../../Categories.md) · [Months](../../../Months/README.md)
+[Dashboard](../../../README.md) · [Accounts](../../../Accounts.md) · [Credit Cards](../../../Credit-Cards.md) · [Categories](../../../Categories.md) · [Months](../../../Months/README.md) · [Forecast](../../../Forecast.md)
 
 Month: **August 2026** · [July 2026](../../2026-07/Accounts/Emergency-Savings.md) · [Overview](../DashBoard.md) · [Full ledger](../Statement.md)
 

@@ -2,7 +2,7 @@
 
 > 01-jul → 31-jul · **closed** · 31 transactions · result **+R$ 419**
 
-[Dashboard](../../README.md) · [Accounts](../../Accounts.md) · [Credit Cards](../../Credit-Cards.md) · [Categories](../../Categories.md) · [Months](../../Months/README.md)
+[Dashboard](../../README.md) · [Accounts](../../Accounts.md) · [Credit Cards](../../Credit-Cards.md) · [Categories](../../Categories.md) · [Months](../../Months/README.md) · [Forecast](../../Forecast.md)
 
 Month: [August 2026](../2026-08/DashBoard.md) · **July 2026** · [Ledger](Statement.md)
 
