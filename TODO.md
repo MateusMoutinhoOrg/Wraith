@@ -3,9 +3,10 @@ Create the Wraith financial brain.
 
 ## READ
 
-- BrainSample/* 
+- Todo-Specs/BrainSample/* 
   - description:The Whole Visualization of wraith in the user workdir.
-- BrainSample/Help/*.txt
+
+- Todo-Specs/BrainSample/Help/*
   - description:Contains the guides of all the mechanics the project needs to have
 
 
