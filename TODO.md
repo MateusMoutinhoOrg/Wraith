@@ -11,5 +11,15 @@ Create the Wraith financial brain.
 
 
 
+### Expected Sandbox Tree:
+- sandbox/cli 
+  - action: Refatore aplying the new commands, and calling the new api 
+- sandbox/config/
+  - action: Refatore with these new configuration
+- sandbox/lib/
+  - action: Refatore aplying the new and the new contracts
 
-
+- sandbox/Tasks/Tasks/
+- sandbox/Tasks/run.go
+- sandbox/Visualization/Visualization/
+- sandbox/Visualization/run.go
