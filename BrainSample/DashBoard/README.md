@@ -16,11 +16,11 @@
 | Card limit available | R$ 3,815 of R$ 5,000 | `AddCreditCard.limit` − outstanding |
 | Pending settlement | +R$ 800 | transactions with a future `payment_date` |
 
-| Account | Balance | Share of the money you hold |
-| ------- | ------: | --------------------------- |
-| [Emergency Savings](Months/2026-08/Accounts/Emergency-Savings.md) | R$ 2,500 | `███████████░░░░░░░░░` 53% |
-| [Bank](Months/2026-08/Accounts/Bank.md) | R$ 2,119 | `█████████░░░░░░░░░░░` 45% |
-| [Cash](Months/2026-08/Accounts/Cash.md) | R$ 75 | `█░░░░░░░░░░░░░░░░░░░` 2% |
+| Account                                                           |  Balance | Share of the money you hold |
+| ----------------------------------------------------------------- | -------: | --------------------------- |
+| [Emergency Savings](Months/2026-08/Accounts/Emergency-Savings.md) | R$ 2,500 | `███████████░░░░░░░░░` 53%  |
+| [Bank](Months/2026-08/Accounts/Bank.md)                           | R$ 2,119 | `█████████░░░░░░░░░░░` 45%  |
+| [Cash](Months/2026-08/Accounts/Cash.md)                           |    R$ 75 | `█░░░░░░░░░░░░░░░░░░░` 2%   |
 
 ---
 

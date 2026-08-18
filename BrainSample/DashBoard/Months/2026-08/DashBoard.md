@@ -27,15 +27,15 @@ Elapsed   ██████████████░░░░░░░░░�
 
 ## 2. Accounts
 
-| Account | Opening | Income | Expenses | Transfers | Pending | Closing | Statement |
-| ------- | ------: | -----: | -------: | --------: | ------: | ------: | --------- |
-| `Bank` | R$ 2,640 | +R$ 2,150 | -R$ 585 | -R$ 1,286 | +R$ 800 | **R$ 2,119** | [open](Accounts/Bank.md) |
-| `Cash` | R$ 420 | +R$ 50 | -R$ 395 | R$ 0 | — | **R$ 75** | [open](Accounts/Cash.md) |
-| `Emergency Savings` | R$ 2,500 | R$ 0 | R$ 0 | R$ 0 | — | **R$ 2,500** | [open](Accounts/Emergency-Savings.md) |
-| `Nubank Card` | -R$ 1,341 | R$ 0 | -R$ 1,130 | +R$ 1,286 | — | **-R$ 1,185** | [open](Accounts/Nubank-Card.md) |
-| **Held in accounts** | | | | | | **R$ 4,694** | |
-| **Owed on cards** | | | | | | **R$ 1,185** | [Credit-Cards.md](../../Credit-Cards.md) |
-| **Net position** | | | | | | **R$ 3,509** | |
+| Account              |   Opening |    Income |  Expenses | Transfers | Pending |       Closing | Statement                                |
+| -------------------- | --------: | --------: | --------: | --------: | ------: | ------------: | ---------------------------------------- |
+| `Bank`               |  R$ 2,640 | +R$ 2,150 |   -R$ 585 | -R$ 1,286 | +R$ 800 |  **R$ 2,119** | [open](Accounts/Bank.md)                 |
+| `Cash`               |    R$ 420 |    +R$ 50 |   -R$ 395 |      R$ 0 |       — |     **R$ 75** | [open](Accounts/Cash.md)                 |
+| `Emergency Savings`  |  R$ 2,500 |      R$ 0 |      R$ 0 |      R$ 0 |       — |  **R$ 2,500** | [open](Accounts/Emergency-Savings.md)    |
+| `Nubank Card`        | -R$ 1,341 |      R$ 0 | -R$ 1,130 | +R$ 1,286 |       — | **-R$ 1,185** | [open](Accounts/Nubank-Card.md)          |
+| **Held in accounts** |           |           |           |           |         |  **R$ 4,694** |                                          |
+| **Owed on cards**    |           |           |           |           |         |  **R$ 1,185** | [Credit-Cards.md](../../Credit-Cards.md) |
+| **Net position**     |           |           |           |           |         |  **R$ 3,509** |                                          |
 
 `Closing` is the opening balance plus everything that has actually moved — a pending amount is recorded in the month but only reaches the balance on its `payment_date`.
 
