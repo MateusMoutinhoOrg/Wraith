@@ -5,15 +5,14 @@ monthly statement under `Month/Accounts/`.
 
 ## Fields
 
-| Field       | Required | Type   | Description                                             |
-| ----------- | :------: | ------ | ------------------------------------------------------- |
-| `name`      |    ✅    | string | Must be `AddAccount`                                    |
-| `id`        |    ✅    | string | Short unique ID in caps, e.g. `BANK`, `SAVE2`           |
-| `account`   |    ✅    | string | Display name, e.g. `Vacation savings`                   |
-| `type`      |    ✅    | string | `Checking`, `Cash`, `Credit card` or `Savings`          |
-| `opening`   |    ✅    | number | Opening balance in R$ (credit card: negative = owed)    |
-| `statement` |    ❌    | bool   | Create `Month/Accounts/<Name>.md`. Default `true`       |
-| `apply`     |    ✅    | bool   | Set `true` to execute on the next tick                  |
+| Field       | Required | Type   | Description                                          |
+| ----------- | :------: | ------ | ---------------------------------------------------- |
+| `name`      |    ✅     | string | Must be `AddAccount`                                 |
+| `account`   |    ✅     | string | Display name, e.g. `Vacation savings`                |
+| `type`      |    ✅     | string | `Cash` or `Credit card`                              |
+| `opening`   |    ✅     | number | Opening balance in R$ (credit card: negative = owed) |
+| `statement` |    ❌     | bool   | Create `Month/Accounts/<Name>.md`. Default `true`    |
+| `apply`     |    ✅     | bool   | Set `true` to execute on the next tick               |
 
 ## Renders
 

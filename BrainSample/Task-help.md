@@ -57,34 +57,7 @@ apply: true            # true = execute on the next tick
 | Task          | Description                                          | Links |
 | ------------- | ---------------------------------------------------- | ----- |
 | AddAccount    | Add an account (bank, cash, card, savings)           | [Guide](Tasks/AddAccount.md) |
-| RemoveAccount | Remove an empty account and its statement            | [Guide](Tasks/RemoveAccount.md) |
 
-### Recurring bills
-
-| Task                | Description                                       | Links |
-| ------------------- | ------------------------------------------------- | ----- |
-| AddRecurringBill    | Register a monthly bill (rent, subscriptions…)    | [Guide](Tasks/AddRecurringBill.md) |
-| RemoveRecurringBill | Remove a cancelled bill                           | [Guide](Tasks/RemoveRecurringBill.md) |
-
-### Net worth & goals
-
-| Task            | Description                                          | Links |
-| --------------- | ---------------------------------------------------- | ----- |
-| AddAsset        | Add a non-account asset (car, equipment…)            | [Guide](Tasks/AddAsset.md) |
-| RemoveAsset     | Remove a sold or written-off asset                   | [Guide](Tasks/RemoveAsset.md) |
-| AddLiability    | Add a debt (loans, financing)                        | [Guide](Tasks/AddLiability.md) |
-| RemoveLiability | Remove a paid-off debt                               | [Guide](Tasks/RemoveLiability.md) |
-| AddGoal         | Add a financial goal with target and deadline        | [Guide](Tasks/AddGoal.md) |
-| RemoveGoal      | Remove an achieved or abandoned goal                 | [Guide](Tasks/RemoveGoal.md) |
-
-### Maintenance
-
-| Task       | Description                                                       | Links |
-| ---------- | ----------------------------------------------------------------- | ----- |
-| CloseMonth | Close the month: totals → Year-Report, reset statements           | [Guide](Tasks/CloseMonth.md) |
-| Render     | Re-render all dashboards without executing any action             | [Guide](Tasks/Render.md) |
-
----
 
 ## 3. What each dashboard is fed by
 
