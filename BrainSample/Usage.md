@@ -34,6 +34,20 @@ Performs a single tick of the state machine: executes the pending actions and re
    - If the action fails → [Show Error](#show-error) and [Stop Execution](#stop-execution).
 5. Render all Markdown files in `Dashboard`.
 
+
+## Run Task
+
+```bash
+./brain run <task-name> <entries> 
+```
+runs a task, it usefull to use programaticaly 
+example:
+
+```bash
+./brain run AddTransaction --amount 100 --date 2026-08-18 --description test
+```
+
+
 ## Procedures
 
 ### Show Error
