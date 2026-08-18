@@ -14,14 +14,13 @@ Adds an account to the registry.
 
 ## Errors
 
-- `id` already exists → `Error.md`
+- `account` already exists → `Error.md`
 - Unknown `type` → `Error.md`
 
 ## Sample
 
 ```yaml
 name: AddAccount
-id: SAVE2
 account: Vacation savings
 opening: 0            # opening balance in R$ (credit cards: amount already owed, negative)
 apply: true

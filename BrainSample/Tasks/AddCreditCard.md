@@ -7,7 +7,6 @@ Adds a credit card to the registry.
 | Field         | Required | Type   | Description                                          |
 | ------------- | :------: | ------ | ---------------------------------------------------- |
 | `name`        |    ✅     | string | Must be `AddCreditCard`                              |
-| `id`          |    ✅     | string | Unique identifier for the card, e.g. `CARD1`         |
 | `account`     |    ✅     | string | Display name, e.g. `Nubank Card`                     |
 | `limit`       |    ✅     | number | Total credit limit in R$                             |
 | `closing_day` |    ✅     | number | Day of the month the bill closes (1-31)              |
@@ -18,14 +17,13 @@ Adds a credit card to the registry.
 
 ## Errors
 
-- `id` already exists → `Error.md`
+- `account` already exists → `Error.md`
 - Invalid `closing_day` or `due_day` → `Error.md`
 
 ## Sample
 
 ```yaml
 name: AddCreditCard
-id: NUBANK
 account: Nubank Card
 limit: 5000           # total credit limit in R$
 closing_day: 25       # day the bill closes
