@@ -3,8 +3,8 @@ package commands
 import (
 	"strings"
 
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/config"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 )
 
 // VersionCommand prints the interface version, held in its own file under

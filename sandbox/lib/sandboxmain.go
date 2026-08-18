@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 )
 
 // SandboxmainFactory fills the Sandboxmain field with a closure

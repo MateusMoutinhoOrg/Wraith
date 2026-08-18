@@ -1,8 +1,8 @@
 package visualizer
 
 import (
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps"
 )
 
 // New builds an api.Visualizer object, storing the injected deps on it and

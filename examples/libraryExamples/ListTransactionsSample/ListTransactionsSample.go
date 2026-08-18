@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Agnos-Cli/adapters/standard"
-	agnoslib "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox"
-	agnostypes "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
+	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
+	agnostypes "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 )
 
 func main() {

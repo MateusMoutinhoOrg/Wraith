@@ -1,7 +1,7 @@
 package task
 
 import (
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 )
 
 // HandleActionFactory fills the HandleAction field with a closure

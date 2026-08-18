@@ -105,8 +105,8 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Agnos-Cli/adapters/standard"
-	agnoskeep "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/keepdeps"
+	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	agnoskeep "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
 )
 
 func main() {

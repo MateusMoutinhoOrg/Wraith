@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/serverdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/serverdeps"
 )
 
 // requestTimeout bounds one whole round trip — connect, send, and read the

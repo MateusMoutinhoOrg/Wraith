@@ -3,11 +3,11 @@ package deps
 import (
 	"time"
 
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/embeddeps"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/iodeps"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/keepdeps"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/serverdeps"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/verbdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/embeddeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/iodeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/serverdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/verbdeps"
 )
 
 // Deps is the dependency contract every adapter must satisfy. It is a

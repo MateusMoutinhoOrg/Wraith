@@ -14,7 +14,7 @@ Defines the required shape of a runnable library example in `examples/libraryExa
 
 ## Structure
 1. **Package clause**: `package main`.
-2. **Imports**: every import of this module is aliased with the `agnos` prefix, so a reader sees at a glance which layer a call belongs to — the adapter as `agnosadapter` (e.g. `agnosadapter "github.com/MateusMoutinhoOrg/Agnos-Cli/adapters/standard"`), the sandbox entry point as `agnoslib "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox"`, and, when the example names an output type, `agnostypes "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"`.
+2. **Imports**: every import of this module is aliased with the `agnos` prefix, so a reader sees at a glance which layer a call belongs to — the adapter as `agnosadapter` (e.g. `agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"`), the sandbox entry point as `agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"`, and, when the example names an output type, `agnostypes "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"`.
 3. **`main` function**: build deps via `agnosadapter.New(...)`, inject them with `agnoslib.New`, then exercise the returned `agnostypes.Lib`.
 
 > **Note**: For a concrete example, refer to [sample.go](./sample.go).

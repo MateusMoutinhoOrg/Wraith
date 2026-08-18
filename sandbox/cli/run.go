@@ -19,9 +19,9 @@ package cli
 // SandboxmainFactory in sandbox/lib.
 
 import (
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/config"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/cli/commands"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/cli/commands"
 )
 
 // Run is the body of api.Lib.Sandboxmain: it dispatches one command line and

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/iodeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/iodeps"
 )
 
 // IoLibFactory returns the value that fills deps.Deps.IoLib: the implementation

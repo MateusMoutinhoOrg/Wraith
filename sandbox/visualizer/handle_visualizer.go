@@ -1,7 +1,7 @@
 package visualizer
 
 import (
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 )
 
 // HandleVisualizerFactory fills the HandleVisualizer field with a closure

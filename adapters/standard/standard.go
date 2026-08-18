@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/keepdeps"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/verbdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/verbdeps"
 
 	keepadapter "github.com/MateusMoutinhoOrg/Keep/adapters/standard"
 	keeplib "github.com/MateusMoutinhoOrg/Keep/sandbox"

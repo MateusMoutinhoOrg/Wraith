@@ -17,7 +17,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
 
    **Apple Silicon (M1/M2/M3 / arm64)**
    ```bash
-   curl -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/macarm64.bin -o agnos-cli && \
+   curl -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/macarm64.bin -o agnos-cli && \
      chmod +x agnos-cli && \
      sudo mv agnos-cli /usr/local/bin/ && \
      agnos-cli version
@@ -25,7 +25,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
 
    **Intel (x86_64)**
    ```bash
-   curl -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/mac86.bin -o agnos-cli && \
+   curl -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/mac86.bin -o agnos-cli && \
      chmod +x agnos-cli && \
      sudo mv agnos-cli /usr/local/bin/ && \
      agnos-cli version
@@ -39,7 +39,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
 
    **x86_64 (64-bit)**
    ```bash
-   curl -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/linux86.out -o agnos-cli && \
+   curl -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/linux86.out -o agnos-cli && \
      chmod +x agnos-cli && \
      sudo mv agnos-cli /usr/local/bin/ && \
      agnos-cli version
@@ -47,7 +47,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
 
    **ARM64**
    ```bash
-   curl -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/linuxarm64.out -o agnos-cli && \
+   curl -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/linuxarm64.out -o agnos-cli && \
      chmod +x agnos-cli && \
      sudo mv agnos-cli /usr/local/bin/ && \
      agnos-cli version
@@ -55,7 +55,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
 
    **x86 (32-bit)**
    ```bash
-   curl -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/linuxi32.out -o agnos-cli && \
+   curl -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/linuxi32.out -o agnos-cli && \
      chmod +x agnos-cli && \
      sudo mv agnos-cli /usr/local/bin/ && \
      agnos-cli version
@@ -71,7 +71,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
    ```powershell
    $dir = "$HOME\.local\bin"; `
      New-Item -ItemType Directory -Force -Path $dir | Out-Null; `
-     curl.exe -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/windows86.exe -o "$dir\agnos-cli.exe"; `
+     curl.exe -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/windows86.exe -o "$dir\agnos-cli.exe"; `
      if ($env:PATH -notlike "*$dir*") { `
        [Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH', 'User') + ";$dir", 'User'); `
        $env:PATH += ";$dir"; `
@@ -84,7 +84,7 @@ Covers installing the `agnos-cli` command-line interface globally, so it runs fr
    ```powershell
    $dir = "$HOME\.local\bin"; `
      New-Item -ItemType Directory -Force -Path $dir | Out-Null; `
-     curl.exe -sL https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest/download/windowsi32.exe -o "$dir\agnos-cli.exe"; `
+     curl.exe -sL https://github.com/MateusMoutinhoOrg/Wraith/releases/latest/download/windowsi32.exe -o "$dir\agnos-cli.exe"; `
      if ($env:PATH -notlike "*$dir*") { `
        [Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH', 'User') + ";$dir", 'User'); `
        $env:PATH += ";$dir"; `

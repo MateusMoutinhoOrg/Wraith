@@ -64,8 +64,8 @@ Covers recording spend and received transactions, listing them, and reading a ba
 package main
 
 import (
-    agnosadapter "github.com/MateusMoutinhoOrg/Agnos-Cli/adapters/standard"
-    agnoslib "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox"
+    agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+    agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
 )
 
 func main() {

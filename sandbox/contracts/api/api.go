@@ -3,7 +3,7 @@
 package api
 
 import (
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps"
 )
 
 // Task represents an executable action within the library.

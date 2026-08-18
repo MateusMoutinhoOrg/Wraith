@@ -50,8 +50,8 @@ Public library functions form the API exposed to the CLI and external consumers.
    package publicfunctions
 
    import (
-       "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
-       "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/lib/store"
+       "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+       "github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
    )
 
    // HasCategoryFactory returns the closure that fills api.Lib.HasCategory.

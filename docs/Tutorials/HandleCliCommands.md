@@ -26,8 +26,8 @@ Covers adding a command or a flag to the command-line interface — the dispatch
    package commands
    
    import (
-       "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/api"
-       "github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/config"
+       "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+       "github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
    )
    
    // Largest runs the `largest` command, printing the biggest single

@@ -14,8 +14,8 @@ import (
 	"io/fs"
 	"path"
 
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/assets"
-	"github.com/MateusMoutinhoOrg/Agnos-Cli/sandbox/contracts/deps/embeddeps"
+	"github.com/MateusMoutinhoOrg/Wraith/assets"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/embeddeps"
 )
 
 // assetPath resolves one path the library asked for against the root of the

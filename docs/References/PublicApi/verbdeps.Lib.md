@@ -70,7 +70,7 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Agnos-Cli/adapters/standard"
+	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
 )
 
 func main() {

@@ -205,7 +205,7 @@ go run ./cmd/main <command> [arguments]
 
 **Install it globally:**
 ```sh
-go install github.com/MateusMoutinhoOrg/Agnos-Cli/cmd/main@latest
+go install github.com/MateusMoutinhoOrg/Wraith/cmd/main@latest
 ```
 
 ---

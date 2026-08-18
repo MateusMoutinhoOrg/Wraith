@@ -1,7 +1,7 @@
 # Agnos-Cli
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/MateusMoutinhoOrg/Agnos-Cli.svg)](https://pkg.go.dev/github.com/MateusMoutinhoOrg/Agnos-Cli)
-[![Release](https://img.shields.io/github/v/release/MateusMoutinhoOrg/Agnos-Cli)](https://github.com/MateusMoutinhoOrg/Agnos-Cli/releases/latest)
+[![Go Reference](https://pkg.go.dev/badge/github.com/MateusMoutinhoOrg/Wraith.svg)](https://pkg.go.dev/github.com/MateusMoutinhoOrg/Wraith)
+[![Release](https://img.shields.io/github/v/release/MateusMoutinhoOrg/Agnos-Cli)](https://github.com/MateusMoutinhoOrg/Wraith/releases/latest)
 [![Go Version](https://img.shields.io/badge/go-%3E%3D1.22-blue)](go.mod)
 [![License](https://img.shields.io/badge/license-Unlicense-green)](LICENSE)
 
