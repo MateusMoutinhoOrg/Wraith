@@ -14,12 +14,13 @@ Create the Wraith financial brain.
 ### Expected Sandbox Tree:
 - sandbox/cli 
   - action: Refatore aplying the new commands, and calling the new api 
-
 - sandbox/config/
   - action: Refatore with these new configuration
 
 - sandbox/lib/
   - action: Refatore aplying the new and the new contracts
+- sandbox/contracts/api/api.go
+  - model: use sandbox/contracts/api/api.go as the model of how it needs to be made the contract 
 
 - sandbox/contracts/deps/serverdeps
   - action: rename these module to requestdeps
@@ -36,3 +37,5 @@ Create the Wraith financial brain.
 - sandbox/Visualization/run.go
   - implement the switcher to call eatch visualization based on VisualizationArray
 
+
+### Expected Doc Organization: 
