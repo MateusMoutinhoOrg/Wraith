@@ -28,20 +28,52 @@ Wraith works as a small state machine driven by two files, `Task.yaml` and `Visu
 
 ## Commands
 
+Every command follows the same shape:
+
+```bash
+./wraith <command> [arguments] [flags]
+```
+
+Arguments are positional and required unless the table below says otherwise; flags are named,
+order-free, and fall back to a default. A flag written `--<arg>` stands for a whole family: one flag
+per arg the named task or visualization declares.
+
+| Command | Arguments | Writes | Purpose |
+| --- | --- | --- | --- |
+| [`watch`](#watch) | — | database, every `dest` | Runs a tick on an interval |
+| [`tick`](#tick) | — | database, every `dest` | Runs one tick |
+| [`run`](#run) | `<task-name>` | database, every `dest` | Runs one task from the command line |
+| [`visualize`](#visualize) | `<visualization-name>` | one `dest` | Renders one visualization to disk |
+| [`render`](#render) | `<visualization-name>` | nothing | Previews one visualization in the terminal |
+
 ### watch
 
 ```bash
-./wraith watch --time 1s
+./wraith watch --time <interval> [flags]
 ```
 
-Runs a [tick](#tick) every `<time>` interval.
+Runs a [tick](#tick) every `<interval>`, until interrupted.
+
+**Arguments**
+
+| Argument | Required | Description | Example |
+| --- | --- | --- | --- |
+| — | — | Takes no positional argument | — |
+
+**Flags**
 
 | Flag | Default | Description | Example |
 | --- | --- | --- | --- |
-| `--time` | — | Interval between ticks | `1s`, `500ms`, `2m` |
+| `--time` | — | Interval between ticks. Required. | `--time 1s`, `--time 500ms`, `--time 2m` |
 | `--task` | `Task.yaml` | Task file every tick reads | `--task Inbox/Task.yaml` |
 | `--visualization` | `Visualization.yaml` | Visualization config every tick renders from | `--visualization Archive.yaml` |
 | `--database` | `data` | Folder the database lives in | `--database vaults/home` |
+
+**Example**
+
+```bash
+./wraith watch --time 1s --task Inbox/Task.yaml
+```
 
 The three path flags mean the same thing as in [`tick`](#tick), and are read once at startup:
 every tick of the loop uses them.
@@ -49,18 +81,32 @@ every tick of the loop uses them.
 ### tick
 
 ```bash
-./wraith tick
+./wraith tick [flags]
 ```
 
-Performs a single tick of the state machine: executes the pending action declared in
-`Task.yaml` and renders every visualization declared in `Visualization.yaml`. See
+Performs a single tick of the state machine: executes the pending action declared in `Task.yaml`
+and renders every visualization declared in `Visualization.yaml`. See
 [Tick Workflow](#tick-workflow).
+
+**Arguments**
+
+| Argument | Required | Description | Example |
+| --- | --- | --- | --- |
+| — | — | Takes no positional argument | — |
+
+**Flags**
 
 | Flag | Default | Description | Example |
 | --- | --- | --- | --- |
 | `--task` | `Task.yaml` | Which task file to read and reset | `--task Inbox/Task.yaml` |
 | `--visualization` | `Visualization.yaml` | Which visualization config to render from | `--visualization Archive.yaml` |
 | `--database` | `data` | Which folder the database lives in | `--database vaults/home` |
+
+**Example**
+
+```bash
+./wraith tick --database vaults/home
+```
 
 The three point the tick at a different vault without moving a file: `--task` replaces
 `Task.yaml` everywhere the [Tick Workflow](#tick-workflow) and the [Procedures](#procedures)
@@ -72,38 +118,69 @@ Every `dest` in the visualization config stays relative to the vault root, not t
 ### run
 
 ```bash
-./wraith run <task-name> [entries...]
+./wraith run <task-name> [flags]
 ```
 
-Runs a task directly from the command line, without editing `Task.yaml`. This is the
-preferred way to drive Wraith programmatically (scripts, automations, other tools).
+Runs a task directly from the command line, without editing `Task.yaml`. This is the preferred way
+to drive Wraith programmatically (scripts, automations, other tools). On success the database is
+written and every visualization is re-rendered, exactly as in a [tick](#tick).
 
-Example:
+**Arguments**
+
+| Argument | Required | Description | Example |
+| --- | --- | --- | --- |
+| `<task-name>` | yes | Which task to run — any name in [`Task.md`](Task.md) | `AddTransaction` |
+
+**Flags**
+
+| Flag | Default | Description | Example |
+| --- | --- | --- | --- |
+| `--<field>` | — | One flag per field the task declares. Required fields must be given. | `--amount 100` |
+| `--visualization` | `Visualization.yaml` | Which visualization config to render from | `--visualization Archive.yaml` |
+| `--database` | `data` | Which folder the database lives in | `--database vaults/home` |
+
+**Example**
 
 ```bash
 ./wraith run AddTransaction --amount 100 --date 2026-08-18 --description test
 ```
 
+Rules:
+
+- The name must be a known task. An unknown name, an unknown field, a missing required field or a
+  field of the wrong type is reported and nothing is written.
+- `Task.yaml` is neither read nor reset — the task comes entirely from the command line.
+
 ### visualize
 
 ```bash
-./wraith visualize <visualization-name> [args...]
+./wraith visualize <visualization-name> [flags]
 ```
 
 Renders a single visualization and **writes it to its `dest`**, without executing `Task.yaml` and
 without touching any other entry. It is to `Visualization.yaml` what [`run`](#run) is to
 `Task.yaml`: the whole tick narrowed down to one thing, driven from the command line.
 
-The destination and the defaults come from the matching entry in `Visualization.yaml`; any arg
+The destination and the defaults come from the matching entry in `Visualization.yaml`; any flag
 given on the command line overrides that entry's value for this invocation only — the file is never
 edited.
 
-| Flag | Description | Example |
-| --- | --- | --- |
-| `--dest` | Where to write, overriding the entry's `dest` | `--dest Archive` |
-| `--<arg>` | Any arg of the visualization, overriding the entry's value | `--future-months 12` |
+**Arguments**
 
-Example:
+| Argument | Required | Description | Example |
+| --- | --- | --- | --- |
+| `<visualization-name>` | yes | Which visualization to render — any name in [`Visualization.md`](Visualization.md) | `DashBoard` |
+
+**Flags**
+
+| Flag | Default | Description | Example |
+| --- | --- | --- | --- |
+| `--dest` | the entry's `dest` | Where to write. Required when the name is not declared. | `--dest Archive` |
+| `--<arg>` | the entry's value | One flag per arg the visualization declares | `--future-months 12` |
+| `--visualization` | `Visualization.yaml` | Which visualization config to look the name up in | `--visualization Archive.yaml` |
+| `--database` | `data` | Which folder the database is read from | `--database vaults/home` |
+
+**Example**
 
 ```bash
 ./wraith visualize DashBoard --future-months 12
@@ -124,19 +201,33 @@ Rules:
 ### render
 
 ```bash
-./wraith render <visualization-name> [args...]
+./wraith render <visualization-name> [flags]
 ```
 
 Renders a single visualization to standard output, without writing anything to `dest` and without
-touching the database. Use it to preview an entry — or a different set of `args` — before putting
-it into `Visualization.yaml`. For a visualization that renders a folder, it prints the tree it
-would write and every file below it.
+touching the database. Use it to preview an entry — or a different set of args — before putting it
+into `Visualization.yaml`. For a visualization that renders a folder, it prints the tree it would
+write and every file below it.
 
-It takes the same name and the same args as [`visualize`](#visualize) — the two differ only in
-where the output lands, the terminal or `dest`. Because nothing is written, `render` needs no
+It takes the same argument and the same arg flags as [`visualize`](#visualize) — the two differ only
+in where the output lands, the terminal or `dest`. Because nothing is written, `render` needs no
 `dest` at all: a name that appears nowhere in `Visualization.yaml` still previews fine.
 
-Example:
+**Arguments**
+
+| Argument | Required | Description | Example |
+| --- | --- | --- | --- |
+| `<visualization-name>` | yes | Which visualization to preview — any name in [`Visualization.md`](Visualization.md) | `DashBoard` |
+
+**Flags**
+
+| Flag | Default | Description | Example |
+| --- | --- | --- | --- |
+| `--<arg>` | the entry's value | One flag per arg the visualization declares | `--future-months 12` |
+| `--visualization` | `Visualization.yaml` | Which visualization config to read defaults from | `--visualization Archive.yaml` |
+| `--database` | `data` | Which folder the database is read from | `--database vaults/home` |
+
+**Example**
 
 ```bash
 ./wraith render DashBoard --future-months 12
