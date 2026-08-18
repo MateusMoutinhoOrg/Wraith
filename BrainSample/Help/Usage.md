@@ -10,7 +10,6 @@ current state of that database through several visualization dashboards.
   - [watch](#watch)
   - [tick](#tick)
   - [run](#run)
-  - [visualize](#visualize)
   - [render](#render)
 - [Tick Workflow](#tick-workflow)
 - [Visualization](#visualization)
@@ -43,8 +42,7 @@ per arg the named task or visualization declares.
 | [`watch`](#watch) | — | database, every `dest` | Runs a tick on an interval |
 | [`tick`](#tick) | — | database, every `dest` | Runs one tick |
 | [`run`](#run) | `<task-name>` | database, every `dest` | Runs one task from the command line |
-| [`visualize`](#visualize) | `<visualization-name>` | one `dest` | Renders one visualization to disk |
-| [`render`](#render) | `<visualization-name>` | nothing | Previews one visualization in the terminal |
+| [`render`](#render) | `<visualization-name>` | one `dest` | Renders one visualization to disk |
 
 ### watch
 
@@ -151,10 +149,10 @@ Rules:
   field of the wrong type is reported and nothing is written.
 - `Task.yaml` is neither read nor reset — the task comes entirely from the command line.
 
-### visualize
+### render
 
 ```bash
-./wraith visualize <visualization-name> [flags]
+./wraith render <visualization-name> [flags]
 ```
 
 Renders a single visualization and **writes it to its `dest`**, without executing `Task.yaml` and
@@ -183,7 +181,7 @@ edited.
 **Example**
 
 ```bash
-./wraith visualize DashBoard --future-months 12
+./wraith render DashBoard --future-months 12
 ```
 
 Rules:
@@ -197,41 +195,6 @@ Rules:
 - `dest` obeys the same rules as in a tick: it stays inside the vault, folders are created as
   needed, and a folder `dest` is written into, never emptied.
 - The database is only read. `Task.yaml` is neither executed nor reset.
-
-### render
-
-```bash
-./wraith render <visualization-name> [flags]
-```
-
-Renders a single visualization to standard output, without writing anything to `dest` and without
-touching the database. Use it to preview an entry — or a different set of args — before putting it
-into `Visualization.yaml`. For a visualization that renders a folder, it prints the tree it would
-write and every file below it.
-
-It takes the same argument and the same arg flags as [`visualize`](#visualize) — the two differ only
-in where the output lands, the terminal or `dest`. Because nothing is written, `render` needs no
-`dest` at all: a name that appears nowhere in `Visualization.yaml` still previews fine.
-
-**Arguments**
-
-| Argument | Required | Description | Example |
-| --- | --- | --- | --- |
-| `<visualization-name>` | yes | Which visualization to preview — any name in [`Visualization.md`](Visualization.md) | `DashBoard` |
-
-**Flags**
-
-| Flag | Default | Description | Example |
-| --- | --- | --- | --- |
-| `--<arg>` | the entry's value | One flag per arg the visualization declares | `--future-months 12` |
-| `--visualization` | `Visualization.yaml` | Which visualization config to read defaults from | `--visualization Archive.yaml` |
-| `--database` | `data` | Which folder the database is read from | `--database vaults/home` |
-
-**Example**
-
-```bash
-./wraith render DashBoard --future-months 12
-```
 
 ## Tick Workflow
 
