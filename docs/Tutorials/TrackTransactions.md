@@ -1,103 +1,86 @@
 # Track Transactions
 
 ## Description
-Covers recording spend and received transactions, listing them, and reading a balance. Creating the categories they are recorded under is covered by [ManageCategories.md](/docs/Tutorials/ManageCategories.md); installing and initializing the lib is covered by [LibInitialization.md](/docs/Tutorials/LibInitialization.md).
+Records a real month in the financial brain shipped with this repository: accounts, categories, what came in, what went out, a purchase split into installments, and a card bill. Creating the vault first is [StartABrain.md](/docs/Tutorials/StartABrain.md); the mechanics of running any task at all are [RunTasks.md](/docs/Tutorials/RunTasks.md).
 
 ### Rules
-- Amounts are expressed in the **smallest currency unit** (cents) and must be **positive**: `8450` is `84.50`. The direction of the money is the transaction's `Kind`, never the sign of its amount.
-- A transaction is always recorded under an existing category, so create it first — see [ManageCategories.md](/docs/Tutorials/ManageCategories.md).
+- A positive `amount` needs a category with `revenues: true`; a negative one needs `expenses: true`.
+- A category with **both** false is a **transfer category** — it counts as neither income nor expense, and is how money moving between your own accounts is recorded.
+- A card purchase counts on its `date`. The money leaves your bank when you record the bill payment.
 
 ---
 
 ## Workflow
-1. Initialize the lib and create the category to record under:
-   ```go
-   l := agnoslib.New(agnosadapter.New("trackerdata"))
-   groceries, _ := l.AddCategory("groceries")
-   ```
-2. Record money leaving the budget with `AddSpend`. It returns the persisted `api.Transaction` and a boolean that is `false` when the amount is not positive or the record could not be written:
-   ```go
-   transaction, ok := groceries.AddSpend("weekly shopping", 8450) // 84.50
-   if !ok {
-       println("nothing recorded")
-       return
-   }
-   println(transaction.String())
-   ```
-3. Record money entering the budget with `AddReceived`, which follows the same rules:
-   ```go
-   l.AddCategory("salary")
-   salary, _ := l.GetCategory("salary")
-   salary.AddReceived("august paycheck", 250000) // 2500.00
-   ```
-4. When the category is already stored, record straight from the lib instead — `l.AddSpend` and `l.AddReceived` take the category name as their first argument and report `false` when it is unknown:
-   ```go
-   if _, ok := l.AddSpend("holidays", "flight", 42000); !ok {
-       println("holidays: no such category, nothing recorded")
-   }
-   ```
-5. List the records. `Category.ListTransactions` returns one category's transactions, `l.ListTransactions` returns every category's:
-   ```go
-   for _, transaction := range l.ListTransactions() {
-       println(transaction.String())
-   }
-   ```
-6. Read a balance. Both `Category.Balance` and `l.Balance` sum signed amounts, so received money counts up and spent money counts down:
-   ```go
-   println(groceries.Balance()) // -8450
-   println(l.Balance())         // 241550
-   ```
-7. Delete a transaction recorded by mistake with `Remove`, which reports whether the record was found and deleted:
-   ```go
-   mistake, _ := groceries.AddSpend("wrong amount", 99900)
-   mistake.Remove()
-   ```
-8. Run the program:
-   ```bash
-   go run main.go
-   ```
 
----
+1. Create the places money sits.
 
-## Full Code
-```go
-package main
-
-import (
-    agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
-    agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
-)
-
-func main() {
-    l := agnoslib.New(agnosadapter.New("trackerdata"))
-
-    groceries, _ := l.AddCategory("groceries")
-
-    transaction, ok := groceries.AddSpend("weekly shopping", 8450) // 84.50
-    if !ok {
-        println("nothing recorded")
-        return
-    }
-    println(transaction.String())
-
-    l.AddCategory("salary")
-    salary, _ := l.GetCategory("salary")
-    salary.AddReceived("august paycheck", 250000) // 2500.00
-
-    // The category must exist to record straight from the lib
-    if _, ok := l.AddSpend("holidays", "flight", 42000); !ok {
-        println("holidays: no such category, nothing recorded")
-    }
-
-    for _, transaction := range l.ListTransactions() {
-        println(transaction.String())
-    }
-
-    println(groceries.Balance())
-    println(l.Balance())
-
-    // A transaction recorded by mistake removes itself
-    mistake, _ := groceries.AddSpend("wrong amount", 99900)
-    mistake.Remove()
-}
+```bash
+wraith run AddAccount --account Bank --opening 3000
+wraith run AddAccount --account Cash --opening 120
+wraith run AddCreditCard --account "Nubank Card" \
+  --limit 5000 --closing_day 25 --due_day 5 --opening -150.50
 ```
+
+2. Create the categories transactions are classified under.
+
+```bash
+wraith run AddCategory --category Salary --description "What comes in" \
+  --revenues true --expenses false
+wraith run AddCategory --category Food --description "Groceries and eating out" \
+  --revenues false --expenses true
+wraith run AddCategory --category "Card Payment" --description "Moving money to the card" \
+  --revenues false --expenses false
+```
+
+The third one is the transfer category. It accepts a positive amount and a negative one, because it is neither income nor expense.
+
+3. Record what came in and what went out.
+
+```bash
+wraith run AddTransaction --account Bank --category Salary \
+  --amount 2200 --date 2026-08-05 --description "August salary"
+wraith run AddTransaction --account Bank --category Food \
+  --amount -32.90 --date 2026-08-18 --description Market
+```
+
+4. Split a purchase over twelve months. It is still **one** task: `amount` is the total, and each part lands in its own month.
+
+```bash
+wraith run AddTransaction --account "Nubank Card" --category Food \
+  --amount -4200 --date 2026-08-20 --description Laptop --installments 12
+```
+
+Twelve transactions are written at once. The remainder goes to the first part, so the parts add back up to the total exactly.
+
+5. Pay the card bill: two transactions sharing the transfer category, netting to zero.
+
+```bash
+wraith run AddTransaction --account Bank --category "Card Payment" \
+  --amount -350 --date 2026-09-05 --description "August card bill"
+wraith run AddTransaction --account "Nubank Card" --category "Card Payment" \
+  --amount 350 --date 2026-09-05 --description "August card bill"
+```
+
+Paying a bill never shows up as an expense — the purchases were already counted on the day they happened.
+
+6. Declare what repeats. A recurrence moves no money and writes no transaction: it is a rule the forecast reads.
+
+```bash
+wraith run AddRecurrence --description Rent --account Bank --category Food \
+  --amount -1200 --day 10 --start 2026-08
+```
+
+7. Correct a line you got wrong. The `Id` is the one the statement shows.
+
+```bash
+wraith run ModifyTransaction --id 2 --amount -40 --description "Market, corrected"
+```
+
+8. Read the result:
+
+| Page | What it answers |
+|------|-----------------|
+| `DashBoard/README.md` | Where you stand today |
+| `DashBoard/Months/2026-08/Statement.md` | Every movement dated in August, with its id |
+| `DashBoard/Credit-Cards.md` | What is outstanding, and how much limit is left |
+| `DashBoard/Forecast.md` | What the declared commitments add up to |

@@ -37,7 +37,7 @@ Covers adding an asset — a file under [/assets/](/assets/) compiled into the b
 4. Add the file to the `/assets/` table in [Structure.md](/docs/References/Structure.md#assets).
 5. Build and run the command that reads it — a path typo surfaces at runtime as a `ReadFile` error, never at build time:
    ```bash
-   go build ./... && AGNOS_DATA=./scratch go run ./cmd/main report
+   go build ./... && (cd /tmp && go run <your-module>/cmd/main report)
    ```
 
 ---
@@ -77,7 +77,7 @@ The library reads one asset's content through `l.Deps.EmbedDeps.ReadFile`, passi
    content, err := l.Deps.EmbedDeps.ReadFile(config.ReportTemplateAsset)
    if err != nil {
        // The asset is missing from the binary — report which one, and exit
-       // ExitFailure: the command line was fine, the packaging was not.
+       // ExitError: the command line was fine, the packaging was not.
        return Failure(l, config.AssetUnreadable, config.ReportTemplateAsset)
    }
    l.Deps.Printf("%s", string(content))

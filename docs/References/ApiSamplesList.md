@@ -1,13 +1,13 @@
 # API Samples List
 
 ## Description
-A reference list of all API examples provided in this repository. These examples demonstrate how to execute different workflows and drive the `agnos-cli` tool in API mode.
+Every Go example shipped in [`examples/libraryExamples/`](/examples/libraryExamples/). Each one wires an adapter into the sandbox and exercises the returned `api.Lib` from code. Running one is [RunApiSample.md](/docs/Tutorials/RunApiSample.md); adding one is [HandleLibrarySamples.md](/docs/Tutorials/HandleLibrarySamples.md).
+
+---
 
 ## Examples
 
-| Example | Description |
+| Sample | Description |
 | --- | --- |
-| [AddCategorySample](/examples/libraryExamples/AddCategorySample) | Demonstrates how to create a new category to track transactions. |
-| [ListTransactionsSample](/examples/libraryExamples/ListTransactionsSample) | Shows how to retrieve and display the list of all recorded transactions. |
-| [MainCallSample](/examples/libraryExamples/MainCallSample) | Illustrates the standard initialization and basic usage of the library. |
-| [TrackSpendSample](/examples/libraryExamples/TrackSpendSample) | Shows how to record a spend transaction under an existing category. |
+| [RunTaskSample](/examples/libraryExamples/RunTaskSample) | Runs tasks from Go with no command line in sight, and lists what the brain can do. |
+| [RenderDashBoardSample](/examples/libraryExamples/RenderDashBoardSample) | Renders a visualization to bytes rather than to disk, and prints one of the files. |

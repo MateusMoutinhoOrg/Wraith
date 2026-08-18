@@ -5,43 +5,29 @@ package main
 
 import (
 	"os"
-	"path/filepath"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
-	agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithlib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
 )
 
 const (
-	// dataDirName is where the records live, under the user's home.
-	dataDirName = ".examplelib"
-	// dataDirEnv overrides that location, so a script can run against
-	// state of its own.
-	dataDirEnv = "EXAMPLELIB_DATA"
+	// vaultRoot is the folder the library reads and writes in: the one the
+	// command was run from.
+	vaultRoot = "."
+	// databaseDirName is the folder inside it the records live in.
+	databaseDirName = "data"
 )
 
 // main is the whole executable: wire, run, exit. No command is branched on
 // here and nothing is printed here — that all lives inside the sandbox.
 func main() {
 	// 1. Build deps through the adapter (the opinionated layer).
-	deps := agnosadapter.New(dataPath())
+	deps := wraithadapter.New(vaultRoot)
 
 	// 2. Inject them into the pure library.
-	l := agnoslib.New(deps)
+	l := wraithlib.New(deps, databaseDirName)
 
 	// 3. Run the interface and exit with its return — the same os.Args[1:]
 	//    the adapter wired the argv parser over.
 	os.Exit(l.Sandboxmain(os.Args[1:]))
-}
-
-// dataPath resolves where state is kept — an OS-bound choice, so it is made
-// out here rather than inside the sandbox.
-func dataPath() string {
-	if override := os.Getenv(dataDirEnv); override != "" {
-		return override
-	}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return dataDirName
-	}
-	return filepath.Join(home, dataDirName)
 }

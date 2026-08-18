@@ -85,19 +85,19 @@ Three fields are not behaviors but other libraries built with this same pattern:
 Take the `deps.Deps` an adapter returns and reassign the field you want; every other field keeps the adapter's implementation:
 
 ```go
-myDeps := agnosadapter.New("trackerdata")
+myDeps := wraithadapter.New("my-brain")
 
 // Replace only the clock — KeepLib stays as the adapter built it
 now := time.Unix(0, 0)
 myDeps.Now = func() time.Time { return now }
 
-l := agnoslib.New(myDeps)
-l.AddCategory("groceries")
+l := wraithlib.New(myDeps, "data")
 
-// Moving the captured variable moves the clock the lib sees
-now = time.Unix(120, 0)
-transaction, _ := l.AddSpend("groceries", "weekly shopping", 8450)
-println(transaction.OccurredAt.Unix()) // 120
+// Moving the captured variable moves the clock the lib sees, so a page
+// renders against whatever "today" the test wants.
+now = time.Date(2026, 8, 18, 0, 0, 0, 0, time.UTC)
+renders, _ := l.PerformVisualization("DashBoard", map[string]any{})
+println(string(renders[0].Content))
 ```
 
 > **Careful:** patch the `deps.Deps` value **before** calling `lib.New`. The factories close over the `api.Lib` they ran on, so assigning to `l.Deps.Now` afterwards changes nothing — see [StructContracts.md](/docs/References/StructContracts.md#what-it-costs).
@@ -129,9 +129,10 @@ Covers creating a new opinionated implementation of the `Deps` contract under [a
        "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps"
    )
 
-   // FrozenAdapter fills deps.Deps with a fixed clock, so every category
-   // and transaction is stamped with a known time. The database and the argv
-   // parser come from the embedded libraries, as in every other adapter.
+   // FrozenAdapter fills deps.Deps with a fixed clock, so every record is
+   // stamped with a known time and every page renders against a known
+   // "today". The database and the argv parser come from the embedded
+   // libraries, as in every other adapter.
    type FrozenAdapter struct {
        // Deps is the contract this adapter fills; its factories assign into it.
        Deps deps.Deps
@@ -168,6 +169,7 @@ Covers creating a new opinionated implementation of the `Deps` contract under [a
    func New(now time.Time) deps.Deps {
        adapter := &FrozenAdapter{now: now}
        adapter.Deps.Now = NowFactory(adapter)
+       adapter.Deps.Sleep = SleepFactory(adapter)
        adapter.Deps.Printf = PrintfFactory(adapter)
        adapter.Deps.VerbLib = VerbLibFactory(adapter)
        adapter.Deps.KeepLib = KeepLibFactory(adapter)
@@ -194,13 +196,14 @@ Covers creating a new opinionated implementation of the `Deps` contract under [a
 For complete control, build the `deps.Deps` as a struct literal — no type to declare, no method set to satisfy:
 
 ```go
-myDeps := agnosdeps.Deps{
+myDeps := wraithdeps.Deps{
 	Now:     func() time.Time { return time.Unix(0, 0) },
-	KeepLib: agnoskeepdeps.Lib{NewDatabase: myOwnDatabase},
+	KeepLib: wraithkeepdeps.Lib{NewDatabase: myOwnDatabase},
 	// Printf, VerbLib and EmbedDeps left zero: this program never calls
-	// Sandboxmain, and only Sandboxmain prints or reads an asset
+	// Sandboxmain, and only Sandboxmain prints, parses a flag, or reads
+	// the defaults a new vault is created from
 }
-l := agnoslib.New(myDeps)
+l := wraithlib.New(myDeps, "data")
 ```
 
 > **Careful:** the compiler cannot tell you a field is missing — an unfilled field panics on first call. In practice, start from an adapter and patch what you need: `KeepLib` is a whole database api, and no program should reimplement it just to change the clock.

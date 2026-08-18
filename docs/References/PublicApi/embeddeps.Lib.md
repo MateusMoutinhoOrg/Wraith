@@ -18,7 +18,7 @@ The sandbox's **copy** of the api an embedded-asset library exposes, declared in
 
 An asset is a payload better kept as a file than as a Go constant — a template, a long-form document, an image — reached by path at runtime and shipped inside the binary. Adding one is [HandleAssets.md](/docs/Tutorials/HandleAssets.md).
 
-The financial tracker **does not read assets**. Its display text is short and fixed, so it lives in [`sandbox/config`](/docs/References/Structure.md#sandboxconfig) as compile-time constants, where the compiler checks every reference; the asset tree ships empty. This contract is filled anyway, as a standing capability of the template — the mechanic is wired end to end and ready for a derived library to drop files into. See [`deps.Deps`](/docs/References/PublicApi/deps.Deps.md).
+It is what `wraith start` copies a new vault out of: the default `Task.yaml` and `Visualization.yaml` live under [assets/start/](/assets/start/), so what a new brain begins life with is editable content rather than a Go constant. The words the interface itself says are not assets — those are compile-time constants in [`sandbox/config`](/docs/References/Structure.md#sandboxconfig), where the compiler checks every reference. See [`deps.Deps`](/docs/References/PublicApi/deps.Deps.md).
 
 The contract is **read-only**: assets ship with the program, and nothing in the library ever writes one back. Writing a file at runtime is [`iodeps.Lib`](/docs/References/PublicApi/iodeps.Lib.md), not this. Paths are slash-separated and relative to the root of the asset tree the adapter serves, so `"templates/report.tmpl"` means the same asset whether the adapter serves it out of the binary, out of a directory on disk, or out of a network store. The root itself is addressed as `"."`.
 
@@ -40,13 +40,13 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
 )
 
 func main() {
 	// The adapter compiles the assets into the binary and hands them back as
 	// one field of the deps contract, serving the whole asset tree.
-	d := agnosadapter.New("trackerdata")
+	d := wraithadapter.New("my-brain")
 
 	// Reads assets/templates/report.tmpl. The asset tree ships empty, so this
 	// is what a derived library sees after adding that file.

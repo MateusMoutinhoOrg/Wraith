@@ -1,7 +1,7 @@
 # Factories Specification
 
 ## Description
-Defines the **factory pattern**, the single way any struct of function fields is filled in this project — on both sides of the sandbox wall. A factory takes a pointer to the struct that carries the state and returns exactly one field's value; the package's `New` constructor assigns that return value into the field. This spec describes the shape every factory shares; the per-tree specifications ([LibFunctions](/docs/References/Specs/LibFunctions/Specs.md), [LibObjects](/docs/References/Specs/LibObjects/Specs.md), [Adapters](/docs/References/Specs/Adapters/Specs.md)) build on it and add what is specific to their tree.
+Defines the **factory pattern**, the single way any struct of function fields is filled in this project — on both sides of the sandbox wall. A factory takes a pointer to the struct that carries the state and returns exactly one field's value; the package's `New` constructor assigns that return value into the field. This spec describes the shape every factory shares; the per-tree specifications ([LibFunctions](/docs/References/Specs/LibFunctions/Specs.md), [Adapters](/docs/References/Specs/Adapters/Specs.md)) build on it and add what is specific to their tree.
 
 ### Rules
 

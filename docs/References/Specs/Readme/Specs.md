@@ -9,7 +9,7 @@ Defines the required structure and layout for the project's root `README.md` fil
 
 #### Theme-Based Doc Index
 - The README is a **pointer, not a catalogue**: it links to each theme index under `docs/Index/`, and to nothing else inside `docs/`. Each index then lists the pages of its own theme — see the [Index](/docs/References/Specs/Index/Specs.md) specification.
-- Themes are the pages of `docs/Index/`: `CliUsage.md`, `LibUsage.md`, `Development.md`, `Templating.md`.
+- Themes are the pages of `docs/Index/`: `Brain-Usage.md`, `Brain-Config.md`, `LibUsage.md`, `Development.md`.
 - The Doc Index is a single table with `Theme` and `Description` columns:
 
 ```markdown

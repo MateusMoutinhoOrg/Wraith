@@ -12,7 +12,7 @@ Index of the documentation for people who drive the project from a terminal: ins
   - [macOS / Linux](/docs/Tutorials/InstallCli.md#macos--linux)
   - [Windows (PowerShell)](/docs/Tutorials/InstallCli.md#windows-powershell)
   - [Troubleshooting](/docs/Tutorials/InstallCli.md#troubleshooting)
-- [UseCli.md](/docs/Tutorials/UseCli.md)
+- [RunTasks.md](/docs/Tutorials/RunTasks.md)
   - **description:** Drive every operation of the interface from the terminal
 
 ---

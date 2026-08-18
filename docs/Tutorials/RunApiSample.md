@@ -11,9 +11,9 @@ API examples are Go programs that demonstrate how to consume the project as a de
 
 ### Workflow
 
-1. Browse the `/examples/libraryExamples/` directory for a package you want to explore (e.g., `AddCategorySample`).
+1. Browse the `/examples/libraryExamples/` directory for a package you want to explore (e.g., `RunTaskSample`).
 2. Run the package using `go run` from the project root:
    ```bash
-   go run ./examples/libraryExamples/AddCategorySample
+   go run ./examples/libraryExamples/RunTaskSample
    ```
 3. Examine the source code of the example to understand how the library API is invoked.

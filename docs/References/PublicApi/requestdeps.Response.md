@@ -19,7 +19,7 @@ One HTTP response, declared in `sandbox/contracts/deps/requestdeps/` and handed 
 
 An HTTP error **status** is not a transport error. `Fetch` returns no error for a `404` or a `500`; the status arrives through `GetStatusCode`, and the caller decides what it means.
 
-The caller **must** `Close` every response returned without an error, whether or not the body is read, or the underlying connection leaks. The financial tracker never creates one — see [`requestdeps.Request`](/docs/References/PublicApi/requestdeps.Request.md) for why the contract ships anyway.
+The caller **must** `Close` every response returned without an error, whether or not the body is read, or the underlying connection leaks. This brain never creates one — see [`requestdeps.Request`](/docs/References/PublicApi/requestdeps.Request.md) for why the contract ships anyway.
 
 ## Fields
 
@@ -38,11 +38,11 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
 )
 
 func main() {
-	d := agnosadapter.New("trackerdata")
+	d := wraithadapter.New("my-brain")
 
 	response, err := d.NewRequest("https://example.com/rates").Fetch()
 	if err != nil {

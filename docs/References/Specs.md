@@ -38,12 +38,13 @@ GeneralDoc applies on top of the others: a tutorial follows **both** GeneralDoc 
 | Outputs | `sandbox/contracts/api/api.go` | [Specs](/docs/References/Specs/Outputs/Specs.md) · [sample](/docs/References/Specs/Outputs/sample.go) |
 | Adapters | `adapters/<name>/<name>.go` | [Specs](/docs/References/Specs/Adapters/Specs.md) · [sample](/docs/References/Specs/Adapters/sample.go) |
 | LibFunctions | Factories filling `api.Lib` fields, in `sandbox/lib/` | [Specs](/docs/References/Specs/LibFunctions/Specs.md) · [sample](/docs/References/Specs/LibFunctions/sample.go) |
-| LibObjects | Factories and constructors for objects the lib creates, in `sandbox/<object>/` | [Specs](/docs/References/Specs/LibObjects/Specs.md) · [sample](/docs/References/Specs/LibObjects/sample.go) |
+| Tasks | Any task file in `sandbox/Tasks/Tasks/<Name>.go` | [Specs](/docs/References/Specs/Tasks/Specs.md) · [sample](/docs/References/Specs/Tasks/sample.go) |
+| Visualizations | Any visualization file in `sandbox/Visualization/Visualization/<Name>.go` | [Specs](/docs/References/Specs/Visualizations/Specs.md) · [sample](/docs/References/Specs/Visualizations/sample.go) |
 | CliMain | `cmd/main/main.go` | [Specs](/docs/References/Specs/CliMain/Specs.md) · [sample](/docs/References/Specs/CliMain/sample.go) |
 | LibraryExamples | `examples/libraryExamples/<example>/<example>.go` | [Specs](/docs/References/Specs/LibraryExamples/Specs.md) · [sample](/docs/References/Specs/LibraryExamples/sample.go) |
 | CliExamples | `examples/cliExamples/<Name>.sh` | [Specs](/docs/References/Specs/CliExamples/Specs.md) · [sample](/docs/References/Specs/CliExamples/sample.sh) |
 
-Factories applies on top of the others, as GeneralDoc does for documentation: an adapter follows **both** Factories and Adapters, and a lib function follows **both** Factories and LibFunctions.
+Factories applies on top of the others, as GeneralDoc does for documentation: an adapter follows **both** Factories and Adapters, and a lib function follows **both** Factories and LibFunctions. Tasks and Visualizations declare no factories, so they follow their own specification alone.
 
 ---
 

@@ -25,7 +25,7 @@ type Lib struct {
 
 The sandbox's **copy** of the api a filesystem library exposes, declared in `sandbox/contracts/deps/iodeps/` and injected whole as the [`deps.Deps.IoLib`](/docs/References/PublicApi/deps.Deps.md) field. It is the same mechanic as [`verbdeps.Lib`](/docs/References/PublicApi/verbdeps.Lib.md), [`keepdeps.Lib`](/docs/References/PublicApi/keepdeps.Lib.md) and [`embeddeps.Lib`](/docs/References/PublicApi/embeddeps.Lib.md), for the same reason: touching a file is an OS-bound effect, so `os` and `path/filepath` may not appear inside the sandbox. The adapter, which lives outside it, fills every field — see [`standard.New`](/docs/References/PublicApi/standard.New.md).
 
-The financial tracker **does not call it**: every record it keeps is persisted through [`KeepLib`](/docs/References/PublicApi/keepdeps.Lib.md). It is carried as a standing capability of the template, so a library derived from this repository that must touch the filesystem directly finds the contract already declared and already wired. See [SandboxIsolation.md](/docs/References/SandboxIsolation.md) for why the effect cannot simply be imported.
+It is what a tick is made of: `Task.yaml` and `Visualization.yaml` are read through it, every rendered page is written through it, and `Error.md` is created through it. The registries themselves live in [`KeepLib`](/docs/References/PublicApi/keepdeps.Lib.md) instead. See [SandboxIsolation.md](/docs/References/SandboxIsolation.md) for why the effect cannot simply be imported.
 
 Paths are whatever the host operating system accepts, resolved by the adapter — unlike `embeddeps.Lib`, which is always slash-separated and rooted at an asset tree. The listing functions return paths that already include the directory they were given, so a result can be passed straight back in.
 
@@ -56,13 +56,13 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
 )
 
 func main() {
 	// The adapter fills IoLib with os/filepath calls and hands it back as one
 	// field of the deps contract.
-	d := agnosadapter.New("trackerdata")
+	d := wraithadapter.New("my-brain")
 
 	// WriteFile creates the missing parent directory on its own.
 	if err := d.IoLib.WriteFile("scratch/notes/august.txt", []byte("groceries\n")); err != nil {

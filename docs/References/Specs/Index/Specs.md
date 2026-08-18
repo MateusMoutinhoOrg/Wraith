@@ -1,7 +1,7 @@
 # Index Specification
 
 ## Description
-Defines the required shape of a **theme index** — one page per theme under `docs/Index/` (`CliUsage.md`, `LibUsage.md`, `Development.md`, `Templating.md`). A theme is a reader goal, not a directory: pages live flat in `docs/Tutorials/` and `docs/References/`, and the index is what groups them. A theme index is the single entry point of its theme: the [README.md](/README.md) links only to indexes, and an index links to every page of its theme.
+Defines the required shape of a **theme index** — one page per theme under `docs/Index/` (`Brain-Usage.md`, `Brain-Config.md`, `LibUsage.md`, `Development.md`). A theme is a reader goal, not a directory: pages live flat in `docs/Tutorials/` and `docs/References/`, and the index is what groups them. A theme index is the single entry point of its theme: the [README.md](/README.md) links only to indexes, and an index links to every page of its theme.
 
 An index entry is a **nested list**, not a table row: the page, its one-line description, and a link to each topic the page covers. The topic links are the point — they let a reader see what is inside a page without opening it.
 

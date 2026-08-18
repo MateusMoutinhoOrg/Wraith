@@ -1,12 +1,13 @@
 # CLI Samples List
 
 ## Description
-A reference list of all CLI examples provided in this repository. These examples demonstrate how to execute different workflows and drive the `agnos-cli` tool in CLI mode.
+Every shell example shipped in [`examples/cliExamples/`](/examples/cliExamples/). Each one builds the binary and drives it in a temporary vault of its own, so it never touches a brain of yours. Running one is [RunCliSample.md](/docs/Tutorials/RunCliSample.md); adding one is [HandleCliExamples.md](/docs/Tutorials/HandleCliExamples.md).
+
+---
 
 ## Examples
 
-| Example | Description |
+| Sample | Description |
 | --- | --- |
-| [ManageCategories.sh](/examples/cliExamples/ManageCategories.sh) | Set up a budget: create categories to track transactions, list them, and remove them. |
-| [ScriptTheCli.sh](/examples/cliExamples/ScriptTheCli.sh) | Script the CLI: drive it from a shell, inspect exit codes, and feed output into other text tools. |
-| [TrackTransactions.sh](/examples/cliExamples/TrackTransactions.sh) | Track money: record spend and received transactions, list them, and read balances. |
+| [StartAVault.sh](/examples/cliExamples/StartAVault.sh) | Goes from an empty folder to a rendered vault, then records a first movement. |
+| [DriveItWithTaskFile.sh](/examples/cliExamples/DriveItWithTaskFile.sh) | Drives the state machine through `Task.yaml`, including what a failure looks like. |

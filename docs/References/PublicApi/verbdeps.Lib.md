@@ -70,13 +70,13 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
 )
 
 func main() {
 	// The adapter initializes the embedded Verb library and hands it back as
 	// one field of the deps contract.
-	d := agnosadapter.New("trackerdata")
+	d := wraithadapter.New("my-brain")
 
 	quiet := d.VerbLib.IsPresent([]string{"-q", "--quiet"})
 

@@ -19,7 +19,7 @@ One HTTP request under construction, declared in `sandbox/contracts/deps/request
 
 It differs from the other injected libraries in one way: a request is created **per call** rather than injected once, so the entry point is a function field on `Deps` rather than a library struct. Everything here is what that function hands back.
 
-The financial tracker **does not call it** — nothing it does leaves the machine. It is carried as a standing capability of the template, so a derived library that must speak HTTP finds the contract already declared and already wired.
+This brain **does not call it** — nothing it does leaves the machine. It is carried as a standing capability of the template, so a derived brain whose task must speak HTTP finds the contract already declared and already wired.
 
 The setters mutate the pending request and may be called in any order; nothing leaves the machine until `Fetch` is called, and a `Request` may be sent more than once. The method defaults to `GET` and the body to none, so a plain read is `NewRequest` followed by `Fetch`.
 
@@ -40,13 +40,13 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
 )
 
 func main() {
 	// The adapter fills NewRequest with net/http calls, bounding every round
 	// trip with a timeout the sandbox cannot set for itself.
-	d := agnosadapter.New("trackerdata")
+	d := wraithadapter.New("my-brain")
 
 	request := d.NewRequest("https://example.com/rates")
 	request.SetMethod("POST")

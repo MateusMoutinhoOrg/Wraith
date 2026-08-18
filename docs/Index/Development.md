@@ -1,7 +1,7 @@
 # Development
 
 ## Description
-Index of the documentation for contributors changing this repository: the binding rules, the mechanics every change runs into, the per-goal workflows, and the specifications every file must satisfy. Using the project is indexed by [CliUsage.md](/docs/Index/CliUsage.md) and [LibUsage.md](/docs/Index/LibUsage.md); turning the project into a new library is indexed by [Templating.md](/docs/Index/Templating.md).
+Index of the documentation for contributors changing this repository: the binding rules, the mechanics every change runs into, the per-goal workflows, and the specifications every file must satisfy. Driving a brain is indexed by [Brain-Usage.md](/docs/Index/Brain-Usage.md), consuming the library from Go by [LibUsage.md](/docs/Index/LibUsage.md), and turning this repository into a brain of your own by [Brain-Config.md](/docs/Index/Brain-Config.md).
 
 > [!IMPORTANT]
 > **Read before contributing.** [Structure.md](/docs/References/Structure.md) and [Specs.md](/docs/References/Specs.md) are required reading: they say **where** a change belongs and **how** the file you touch must be shaped.
@@ -10,8 +10,12 @@ Index of the documentation for contributors changing this repository: the bindin
 
 ## Tutorials
 
+- [HandleTasks.md](/docs/Tutorials/HandleTasks.md)
+  - **description:** Add an action: one file under `sandbox/Tasks/Tasks/`, one registry line
+- [HandleVisualizations.md](/docs/Tutorials/HandleVisualizations.md)
+  - **description:** Add a renderer: one file under `sandbox/Visualization/Visualization/`, one catalog line
 - [Build.md](/docs/Tutorials/Build.md)
-  - **description:** Cross-compile the CLI into a binary for each supported OS and architecture
+  - **description:** Cross-compile the binary for each supported OS and architecture
   - [Build a single target](/docs/Tutorials/Build.md#build-a-single-target)
   - [Build every target at once](/docs/Tutorials/Build.md#build-every-target-at-once)
   - [Add a new target](/docs/Tutorials/Build.md#add-a-new-target)
@@ -40,7 +44,7 @@ Index of the documentation for contributors changing this repository: the bindin
   - [Run a Library Sample](/docs/Tutorials/HandleLibrarySamples.md#run-a-library-sample)
   - [Add a Library Sample](/docs/Tutorials/HandleLibrarySamples.md#add-a-library-sample)
 - [HandleCliExamples.md](/docs/Tutorials/HandleCliExamples.md)
-  - **description:** Create and run shell scripts in `examples/cliExamples/` driving the built CLI
+  - **description:** Create and run shell scripts in `examples/cliExamples/` driving the built binary
   - [Run a CLI Example](/docs/Tutorials/HandleCliExamples.md#run-a-cli-example)
   - [Add a CLI Example](/docs/Tutorials/HandleCliExamples.md#add-a-cli-example)
 - [HandleDocuments.md](/docs/Tutorials/HandleDocuments.md)

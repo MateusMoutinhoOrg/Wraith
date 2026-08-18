@@ -60,7 +60,7 @@ The factories filling the `api` structs' function fields, unreachable from outsi
 | File | Description | Spec |
 |------|-------------|------|
 | `lib/lib.go` | `Lib`: reaches deps via `l.Deps.<Field>(...)` and creates the lib's objects | LibFunctions |
-| `<object>/<object>.go` | The factories filling an `api` struct's fields, plus its `New` constructor propagating `Deps` | LibObjects |
+| `<Name>.go` | One file per declared unit the tree holds — an action, a renderer | Tasks / Visualizations |
 
 ---
 

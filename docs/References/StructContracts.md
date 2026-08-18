@@ -13,21 +13,22 @@ A contract is a struct whose fields are functions. The library declares the shap
 // sandbox/contracts/deps/deps.go — what the library needs
 type Deps struct {
 	Now       func() time.Time
+	Sleep     func(d time.Duration)
 	VerbLib   verbdeps.Lib
 	KeepLib   keepdeps.Lib
-	EmbedDeps embeddeps.Lib
+	IoLib     iodeps.Lib
 }
 
 // sandbox/contracts/api/api.go — what the library hands back
 type Lib struct {
-	Deps        deps.Deps
-	AddCategory func(name string) (Category, bool)
-	Balance     func() int64
+	Deps            deps.Deps
+	PerformTask     func(taskName string, entries map[string]any) error
+	PerformFullTick func() error
 	// ... one field per library function
 }
 ```
 
-Callers use both exactly as they would an interface — `l.AddCategory("groceries")` reads the same either way. The api struct carries its own `Deps`, which removes the need for an internal mirror type: the struct handed to the caller is the same struct the library reads its dependencies from.
+Callers use both exactly as they would an interface — `l.PerformFullTick()` reads the same either way. The api struct carries its own `Deps`, which removes the need for an internal mirror type: the struct handed to the caller is the same struct the library reads its dependencies from.
 
 ---
 
@@ -36,24 +37,20 @@ Callers use both exactly as they would an interface — `l.AddCategory("grocerie
 `sandbox/` holds **factories**: functions taking a pointer to an api struct and returning a closure for one of its fields. The package's `New` constructor assigns them all:
 
 ```go
-// sandbox/lib/lib.go
-func GetCategoryFactory(l *api.Lib) func(name string) (api.Category, bool) {
-	return func(name string) (api.Category, bool) {
-		record, ok := store.FindCategory(l.Deps, name) // l.Deps read at call time
-		if !ok {
-			return api.Category{}, false
-		}
-		return category.New(l.Deps, record), true
+// sandbox/lib/publicfunctions/PerformTask.go
+func PerformTaskFactory(l *api.Lib) func(taskName string, entries map[string]any) error {
+	return func(taskName string, entries map[string]any) error {
+		// l.Deps and l.DatabasePath are read at call time
+		return task.Run(l.Deps, store.Database(l.Deps, l.DatabasePath), taskName, entries)
 	}
 }
 
 // New is the constructor and the factory aggregate in one —
 // the one place that must stay complete.
-func New(d deps.Deps) api.Lib {
-	l := api.Lib{Deps: d}
-	l.AddCategory = AddCategoryFactory(&l)
-	l.GetCategory = GetCategoryFactory(&l)
-	l.Balance = BalanceFactory(&l)
+func New(d deps.Deps, databasePath string) api.Lib {
+	l := api.Lib{Deps: d, DatabasePath: databasePath}
+	l.PerformTask = publicfunctions.PerformTaskFactory(&l)
+	l.PerformFullTick = publicfunctions.PerformFullTickFactory(&l)
 	// ... one assignment per field
 	return l
 }
@@ -102,9 +99,9 @@ Binding a method into a field would work in Go, but the project forbids it: one 
 With an interface, overriding one method means declaring a wrapper type. With a struct, it is an assignment — the everyday testing path:
 
 ```go
-myDeps := standard.New("trackerdata")
+myDeps := standard.New("my-brain")
 myDeps.Now = func() time.Time { return time.Unix(0, 0) } // control the clock
-l := lib.New(myDeps) // everything else keeps the adapter's implementation
+l := lib.New(myDeps, "data") // everything else keeps the adapter's implementation
 ```
 
 ---
@@ -124,7 +121,7 @@ l := lib.New(myDeps) // everything else keeps the adapter's implementation
 l.Deps.Now = func() time.Time { return time.Unix(0, 0) } // does nothing
 
 myDeps.Now = func() time.Time { return time.Unix(0, 0) } // patch here instead
-l = agnoslib.New(myDeps)
+l = wraithlib.New(myDeps, "data")
 ```
 
 In exchange, there is no partial-implementation ambiguity at the call site: a filled contract is a value that can be copied, patched field by field, and passed on.

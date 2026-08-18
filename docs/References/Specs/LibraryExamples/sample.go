@@ -4,19 +4,20 @@
 package main
 
 import (
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
-	agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithlib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
 )
 
 func main() {
 	// 1. Build deps through an adapter (the opinionated layer).
-	deps := agnosadapter.New("data.json")
+	deps := wraithadapter.New("my-brain")
 
 	// 2. Inject deps into the pure library.
-	l := agnoslib.New(deps)
+	l := wraithlib.New(deps, "data")
 
 	// 3. Exercise the library — it never knows which adapter is behind it.
 	//    Its functions are struct fields, called like any method.
-	obj := l.NewExampleObject(1, "2")
-	println(obj.ExampleObjectMethod())
+	if err := l.PerformTask("ExampleTask", map[string]any{"example": "value"}); err != nil {
+		panic(err)
+	}
 }

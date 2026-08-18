@@ -77,8 +77,8 @@ The api structs the caller holds are the same ones the library works on — a co
 
 ```go
 // sandbox/new.go
-func New(d deps.Deps) api.Lib {
-	return internallib.New(d)
+func New(d deps.Deps, databasePath string) api.Lib {
+	return internallib.New(d, databasePath)
 }
 ```
 
@@ -86,7 +86,7 @@ The caller decides which implementation fills the fields flowing in:
 
 ```go
 // This line lives outside the wall — the only place an adapter and the sandbox meet.
-l := agnoslib.New(agnosadapter.New("data.json"))
+l := wraithlib.New(wraithadapter.New("my-brain"), "data")
 ```
 
 For why the contracts are structs rather than interfaces, continue to [StructContracts.md](/docs/References/StructContracts.md).

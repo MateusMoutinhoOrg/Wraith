@@ -10,7 +10,7 @@ Sandboxmain func(args []string) int
 
 ## Description
 
-The command-line interface itself, run **inside the sandbox**. It reads the actions and flags of the command line through the injected Verb parser ([`deps.Deps.VerbLib`](/docs/References/PublicApi/verbdeps.Lib.md)), calls the library functions of [`api.Lib`](/docs/References/PublicApi/api.Lib.md), prints every result and error through `deps.Deps.Printf`, and returns the process exit code.
+The command-line interface itself, run **inside the sandbox**. It reads the actions and flags of the command line through the injected Verb parser ([`deps.Deps.VerbLib`](/docs/References/PublicApi/verbdeps.Lib.md)), calls the state-machine fields of [`api.Lib`](/docs/References/PublicApi/api.Lib.md), prints every result and error through `deps.Deps.Printf`, and returns the process exit code.
 
 Everything the interface does is a library call: the installed binary in `cmd/main` holds no command, no flag, and no output of its own — it wires an adapter into the library, hands this field the argument vector, and exits with what it returns. Every command, flag, and exit code the interface understands is listed in [Commands.md](/docs/References/Commands.md).
 
@@ -26,7 +26,7 @@ Everything the interface does is a library call: the installed binary in `cmd/ma
 
 | Type | Description |
 | :--- | :--- |
-| `int` | The process exit code: `api.ExitOk` (0) when the command ran to completion, `api.ExitUsage` (1) when the command line itself was wrong, `api.ExitFailure` (2) when a well-formed command could not be carried out. |
+| `int` | The process exit code: `api.ExitOk` (0) when the command did what it was asked to, `api.ExitError` (1) when a well-formed command failed, `api.ExitUsage` (2) when the command line could not be understood. |
 
 ## Examples
 
@@ -36,13 +36,13 @@ package main
 import (
 	"os"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
-	agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithlib "github.com/MateusMoutinhoOrg/Wraith/sandbox"
 )
 
 func main() {
 	// The adapter wires the Verb parser over the same vector handed below.
-	l := agnoslib.New(agnosadapter.New("trackerdata"))
+	l := wraithlib.New(wraithadapter.New("my-brain"), "data")
 
 	os.Exit(l.Sandboxmain(os.Args[1:]))
 }

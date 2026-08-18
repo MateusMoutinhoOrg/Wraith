@@ -8,14 +8,14 @@ Covers creating and running executable Go samples in [examples/libraryExamples/]
 ## Run a Library Sample
 
 ### Workflow
-1. Browse the [examples/libraryExamples/](/examples/libraryExamples/) directory and pick a sample (e.g., `TrackSpendSample/`).
+1. Browse the [examples/libraryExamples/](/examples/libraryExamples/) directory and pick a sample (e.g., `RunTaskSample/`).
 2. Run it from the project root with the Go toolchain:
    ```bash
-   go run ./examples/libraryExamples/TrackSpendSample/TrackSpendSample.go
+   go run ./examples/libraryExamples/RunTaskSample/RunTaskSample.go
    ```
-3. Pass arguments after the file when the sample takes them — `MainCallSample` runs the whole CLI, so it takes the same command line the installed binary does:
+3. Pass arguments after the file when the sample takes them — `RenderDashBoardSample` prints the markdown a visualization produced, so its output is what a tick would have written:
    ```bash
-   go run ./examples/libraryExamples/MainCallSample/MainCallSample.go category list
+   go run ./examples/libraryExamples/RenderDashBoardSample/RenderDashBoardSample.go
    ```
 
 ---

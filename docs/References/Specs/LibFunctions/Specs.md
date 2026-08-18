@@ -9,7 +9,7 @@ Defines the required shape of a library function — a **factory** in `sandbox/l
 - Every factory must be called from the package's `New(d deps.Deps) api.Lib` constructor, which assigns its return value into the matching field and doubles as the factory aggregate — there is no separate `Factory` function. A field whose factory's return value is never assigned stays nil and panics on first call; the compiler does not check this.
 - Dependencies are called **only** through `l.Deps.<Field>(...)` inside the closure — never construct or import a concrete implementation. Reading `l.Deps` inside the closure rather than capturing it at factory time is what lets the injected value stay authoritative.
 - `sandbox/` is a closed sandbox: a factory must never import `adapters/`, `examples/libraryExamples/`, a third-party module, or an OS-bound standard-library package (`os`, `net`, `syscall`, …). See [SandboxIsolation.md](/docs/References/SandboxIsolation.md).
-- A closure returning a library object returns that object's **api struct**, built by the object package's `New` constructor — see the [LibObjects](/docs/References/Specs/LibObjects/Specs.md) specification.
+- A closure delegates the work to an internal package rather than doing it inline: `PerformTask` calls the task switcher, `Sandboxmain` calls the CLI dispatch. One file per field, one delegation each.
 - A closure returning an optional object returns the api struct's **zero value** on the miss path; there is no nil struct to return.
 - Factories and the fields they fill must have doc comments, and the fields must be listed in [PublicApi.md](/docs/References/PublicApi.md).
 

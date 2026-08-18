@@ -7,14 +7,14 @@ Defines the required shape of a runnable library example in `examples/libraryExa
 - Each example lives in its own directory under `examples/libraryExamples/` named after the feature it demonstrates (e.g. `examples/libraryExamples/ExampleSample/`).
 - The file is named after its directory (`<example>/<example>.go`) and declares `package main` with a `main` function.
 - An example wires the two layers together: it builds a `deps.Deps` through an adapter's `New(...)` factory, then passes it to `lib.New(...)`, which returns an `api.Lib`.
-- An example may import `adapters/<name>` (aliased `agnosadapter`), `sandbox` (aliased `agnoslib`), and `sandbox/contracts/api` (aliased `agnostypes`); it must never import `sandbox/` — Go's `internal/` rule rejects it — nor reconstruct dependencies by hand, which is the adapter's job.
+- An example may import `adapters/<name>` (aliased `wraithadapter`), `sandbox` (aliased `wraithlib`), and `sandbox/contracts/api` (aliased `wraithtypes`); it must never import `sandbox/` — Go's `internal/` rule rejects it — nor reconstruct dependencies by hand, which is the adapter's job.
 - Examples live outside the sandbox and are the only place an adapter and the library are named in the same file.
 - Keep examples minimal and runnable via `go run ./examples/libraryExamples/<example>/<example>.go`; add explanatory comments on the key wiring steps.
 - Adding, renaming, or deleting an example requires updating [ApiSamplesList.md](/docs/References/ApiSamplesList.md) — see [HandleLibrarySamples.md](/docs/Tutorials/HandleLibrarySamples.md).
 
 ## Structure
 1. **Package clause**: `package main`.
-2. **Imports**: every import of this module is aliased with the `agnos` prefix, so a reader sees at a glance which layer a call belongs to — the adapter as `agnosadapter` (e.g. `agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"`), the sandbox entry point as `agnoslib "github.com/MateusMoutinhoOrg/Wraith/sandbox"`, and, when the example names an output type, `agnostypes "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"`.
-3. **`main` function**: build deps via `agnosadapter.New(...)`, inject them with `agnoslib.New`, then exercise the returned `agnostypes.Lib`.
+2. **Imports**: every import of this module is aliased with the `wraith` prefix, so a reader sees at a glance which layer a call belongs to — the adapter as `wraithadapter` (e.g. `wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"`), the sandbox entry point as `wraithlib "github.com/MateusMoutinhoOrg/Wraith/sandbox"`, and, when the example names an output type, `wraithtypes "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"`.
+3. **`main` function**: build deps via `wraithadapter.New(...)`, inject them with `wraithlib.New`, then exercise the returned `wraithtypes.Lib`.
 
 > **Note**: For a concrete example, refer to [sample.go](./sample.go).

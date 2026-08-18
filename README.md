@@ -1,33 +1,56 @@
-# Agnos-Cli
+# Wraith
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/MateusMoutinhoOrg/Wraith.svg)](https://pkg.go.dev/github.com/MateusMoutinhoOrg/Wraith)
-[![Release](https://img.shields.io/github/v/release/MateusMoutinhoOrg/Agnos-Cli)](https://github.com/MateusMoutinhoOrg/Wraith/releases/latest)
+[![Release](https://img.shields.io/github/v/release/MateusMoutinhoOrg/Wraith)](https://github.com/MateusMoutinhoOrg/Wraith/releases/latest)
 [![Go Version](https://img.shields.io/badge/go-%3E%3D1.22-blue)](go.mod)
 [![License](https://img.shields.io/badge/license-Unlicense-green)](LICENSE)
 
-An OS-independent Go **CLI template** — a command-line financial tracker whose entire interface lives inside a closed, dependency-injected library.
+A **second brain** you drive with two files — a template for building one, shipped with a financial brain already in it.
 
 ---
 
 ## Overview
 
-Agnos-Cli is a **full CLI template** designed to be completely independent of the underlying operating system. It provides a complete harness and architectural foundation for building command-line applications whose behavior is fully decoupled from the hosting environment. Furthermore, the repository is designed to be self-teaching, providing **comprehensive tutorials for every kind of usecase** directly within its own documentation.
+Wraith is a small state machine over a folder. You write an action into `Task.yaml`; it applies that action to your data and re-renders every dashboard you declared in `Visualization.yaml`. Nothing else happens, and nothing else needs to.
 
-The core of the application lives in **`/sandbox/`**: a **closed sandbox** that reaches nothing outside itself. Everything it can do arrives through an injected `Deps`.
+```yaml
+# Task.yaml — one action, waiting to be armed
+name: AddTransaction
+account: Bank
+category: Food
+amount: -32.90
+date: 2026-08-18
+apply: true
+```
+
+```bash
+wraith tick     # apply it, then redraw every page
+```
+
+Two ideas carry the whole project:
+
+- **Tasks** are what can happen. One file each, under [`/sandbox/Tasks/Tasks/`](/sandbox/Tasks/Tasks/), declared in one array.
+- **Visualizations** are what you get to see. One file each, under [`/sandbox/Visualization/Visualization/`](/sandbox/Visualization/Visualization/), declared in one array.
+
+Both are meant to be replaced. The financial brain in this repository — accounts, categories, transactions, recurrences, credit cards — is a **worked example of the shape**, not the point of it. Fork the repo, swap the tasks for yours, and you have a brain for something else entirely. That path is [Brain-Config](/docs/Index/Brain-Config.md).
+
+### Where the code lives
+
+The core lives in **`/sandbox/`**: a **closed sandbox** that reaches nothing outside itself. Everything it can do arrives through an injected `Deps`.
 
 ```
 adapters/  ──▶  sandbox/  ◀──  cmd/, examples/libraryExamples/
 (reaches the OS)  (closed)     (wire the two together)
 ```
 
-The CLI is `api.Lib.Sandboxmain` — one field of the library like any other. The installed binary in **`/cmd/main/`** holds no command, no flag, and no output of its own: it just wires an adapter into the library and calls that one field.
+The command line is `api.Lib.Sandboxmain` — one field of the library like any other. The installed binary in **`/cmd/main/`** holds no command, no flag, and no output of its own: it wires an adapter into the library and calls that one field.
 
-- **`/sandbox/`**: The closed library taking a `Deps` and returning an `api.Lib`.
-- **`/adapters/`**: Concrete implementations of the `Deps` contract.
-- **`/cmd/`** & **`/examples/libraryExamples/`**: Places where an adapter and the library are wired together.
-- **`/assets/`**: Files compiled into the binary and reached only through the injected `Deps` — templates, long-form text, images. Empty here by design, and wired end to end for a derived library to fill.
-
-The `Deps` contract is wider than this tracker uses. Reading embedded assets, touching the filesystem, and speaking HTTP are declared and filled by the standard adapter even though the demonstration never calls them: they are capabilities a derived library gets for free. See [PublicApi.md](/docs/References/PublicApi.md) for every field.
+- **`/sandbox/`**: the closed library taking a `Deps` and returning an `api.Lib`.
+- **`/sandbox/Tasks/`**: every action, one per file, plus the switcher that runs one by name.
+- **`/sandbox/Visualization/`**: every renderer, one per file, plus the switcher that renders one by name.
+- **`/adapters/`**: concrete implementations of the `Deps` contract.
+- **`/cmd/`** & **`/examples/`**: where an adapter and the library are wired together.
+- **`/assets/`**: files compiled into the binary and reached only through the injected `Deps` — including the default `Task.yaml` and `Visualization.yaml` that `wraith start` writes.
 
 See [SandboxIsolation.md](/docs/References/SandboxIsolation.md) and [StructContracts.md](/docs/References/StructContracts.md) for the full mechanic.
 
@@ -39,12 +62,12 @@ Documentation is split into four themes, one index page each under `docs/Index/`
 
 | Theme | Description |
 | --- | --- |
-| [CLI Usage](/docs/Index/CliUsage.md) | For end users: installing the binary, driving it from a terminal, and every command it takes. |
-| [Library Usage](/docs/Index/LibUsage.md) | For library consumers: installing the module, creating deps, and calling the Go API. |
+| [Brain Usage](/docs/Index/Brain-Usage.md) | For people driving a brain: installing the binary, running tasks, choosing what gets rendered. |
+| [Brain Config](/docs/Index/Brain-Config.md) | For people building their own brain: forking this one, adding tasks, adding visualizations. |
+| [Library Usage](/docs/Index/LibUsage.md) | For Go callers: wiring an adapter, running tasks and rendering from code. |
 | [Development](/docs/Index/Development.md) | For contributors: the rules, the mechanics, the per-goal workflows, and the specifications. |
-| [Templating](/docs/Index/Templating.md) | For template users: forking, renaming, and adapting this structure into a new CLI. |
 
-New here? [CLI Usage → InstallCli.md](/docs/Tutorials/InstallCli.md) installs the binary; [Library Usage → LibInitialization.md](/docs/Tutorials/LibInitialization.md) initializes the library.
+New here? [Brain Usage → InstallCli.md](/docs/Tutorials/InstallCli.md) installs the binary; [StartABrain.md](/docs/Tutorials/StartABrain.md) turns an empty folder into a working vault.
 
 ---
 

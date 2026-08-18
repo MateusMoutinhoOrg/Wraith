@@ -2,7 +2,7 @@
 
 This document maps the project **schema** — the kinds of files the project is built from — not every concrete file. A slot with a **Spec** name is governed by a specification; resolve the name through [Specs.md](/docs/References/Specs.md) to get its description and sample.
 
-The project is a **CLI** whose interface lives inside the library. It is split into three top-level trees, and the dependency flow between them is one-way:
+The project is a **brain**: a state machine over a folder, driven by two files, whose command-line interface lives inside the library. It is split into three top-level trees, and the dependency flow between them is one-way:
 
 ```
 adapters/  ──▶  sandbox/  ◀──  cmd/, examples/libraryExamples/
@@ -12,7 +12,7 @@ adapters/  ──▶  sandbox/  ◀──  cmd/, examples/libraryExamples/
 - **`/sandbox/`** is a **closed sandbox**: the pure library, and the command-line interface with it. Nothing inside it may import `adapters/`, `cmd/`, `examples/libraryExamples/`, a third-party module, or any OS-bound standard-library package. Every effect it needs arrives through the injected `Deps`. See [SandboxIsolation.md](/docs/References/SandboxIsolation.md).
 - **`/adapters/`** sits outside the sandbox and is the only place OS-bound and third-party code is allowed. Each adapter imports `sandbox/contracts/deps` and nothing else from the sandbox.
 - **`/cmd/`** and **`/examples/libraryExamples/`** sit outside the sandbox too, and are the only places where an adapter and the sandbox meet — `cmd/` for the installable binary, `examples/libraryExamples/` for the runnable Go samples.
-- **`/assets/`** sits outside the sandbox as well: files compiled into the binary and reached only through the injected `Deps.EmbedDeps` contract, so the sandbox holds no asset files of its own. The tree ships empty — see [`/assets/`](#assets).
+- **`/assets/`** sits outside the sandbox as well: files compiled into the binary and reached only through the injected `Deps.EmbedDeps` contract, so the sandbox holds no asset files of its own. It carries the defaults `wraith start` writes — see [`/assets/`](#assets).
 
 Because the interface is `api.Lib.Sandboxmain` — one field of the library like any other — the binary in `cmd/main/` holds no command, no flag, and no output of its own: it wires, runs, and exits.
 
@@ -58,7 +58,7 @@ The closed sandbox — the pure library. It holds its own entry point, the contr
 
 | File | Description | Spec |
 |------|-------------|------|
-| `new.go` | The `New` constructor storing `Deps` on `api.Lib` and delegating to the internal lib constructor | |
+| `new.go` | The `New(d deps.Deps, databasePath string) api.Lib` constructor, storing `Deps` and the database path on `api.Lib` and delegating to the internal lib constructor | |
 
 ### `/sandbox/contracts/`
 The structs the rest of the project is wired through — the only part of the sandbox anything outside it may import. Contracts hold the project's **public types** and are structs of function fields, never interfaces; see [StructContracts.md](/docs/References/StructContracts.md). Contracts import nothing from `adapters/` or `sandbox/`.
@@ -110,22 +110,22 @@ The structs the library hands back to callers.
 
 | File | Description | Spec |
 |------|-------------|------|
-| `api.go` | The `Lib` entry-point struct plus one struct per object the lib creates, each carrying a `Deps` field | Outputs |
+| `api.go` | The `Lib` entry-point struct, the `Task` and `Visualizer` declarations, the `Field` they are described with, and the argument structs a task and a visualization are handed | Outputs |
 
 ### `/sandbox/config/`
 Static configuration the sandbox reads at compile time: the text every command prints, the flag spellings the interface understands, and the version string. Holding them as Go constants rather than as files keeps every reference under the compiler's eye — a renamed constant is a build failure rather than a blank line at runtime — and costs no read at all. Text long enough to be edited as a document, or shaped as a template, belongs in [`/assets/`](#assets) instead. Nothing outside the sandbox imports this package.
 
 | File | Description | Spec |
 |------|-------------|------|
-| `cli.go` | The `Usages` help screen, every message constant the CLI prints, and the `HelpFlags`, `VersionFlags`, `QuietFlags` slices | |
-| `version.go` | The `Version` constant reported by `agnos-cli version` and `--version` | |
+| `cli.go` | The `Usages` help screen, every message constant the interface prints, the default `Task.yaml` / `Visualization.yaml` / `data` paths, and the flag spellings | |
+| `version.go` | The `Version` constant reported by `wraith version` and `--version` | |
 
 ### `/sandbox/lib/`
 The entry-point implementation and every internal package the library is built from. Each package here holds the functions that take a pointer to an [`api`](#sandboxcontractsapi) struct and return closures reading that struct's `Deps`, which the package's constructor assigns into the matching function fields. Types never live here; they stay in `contracts/`.
 
 | File | Description | Spec |
 |------|-------------|------|
-| `new.go` | The `New(d deps.Deps) api.Lib` constructor that assigns every factory's return value and runs them all | LibFunctions |
+| `new.go` | The `New(d deps.Deps, databasePath string) api.Lib` constructor: it reads the task and visualization registries once, then assigns every factory's return value | LibFunctions |
 
 #### `/sandbox/lib/publicfunctions/`
 One file per public function field of `api.Lib`. Each file holds its `<Field>Factory(l *api.Lib)` that returns a closure. The `New` constructor in `sandbox/lib/new.go` calls every factory here to fill `api.Lib`.
@@ -134,19 +134,75 @@ One file per public function field of `api.Lib`. Each file holds its `<Field>Fac
 |------|-------------|------|
 | `<Function>.go` | One file per lib function, holding its `<Field>Factory(l *api.Lib)` that returns a closure | LibFunctions |
 
-#### `/sandbox/lib/<object>/`
-One package per object the library creates, named after the object itself — `category/` and `transaction/` for this library.
-
-| File | Description | Spec |
-|------|-------------|------|
-| `<object>.go` | The object's `<Field>Factory` functions, each returning a closure, plus the `New(d deps.Deps, …) api.<Object>` constructor that propagates `Deps` and assigns every factory's return value | LibObjects |
-
 #### `/sandbox/lib/store/`
-Shared helpers over the injected database, used by `lib/` and by every object package: the schema the tracker's records are persisted under, the lookups that reach it, and the encoding of a transaction's reference. It declares **no types and no factories** — it is the one internal package that is neither an object nor the entry point, so no specification governs it.
+The registries and the helpers everything reaches them with: the schema each kind of record is persisted under, the typed views a record is read back as, and the encodings the injected database forces — money in cents, dates as whole numbers, free text packed into a unique key. It declares no factories, so no specification governs it.
 
 | File | Description | Spec |
 |------|-------------|------|
-| `store.go` | The database `Props`, the field-name constants, and the helpers that read a stored record through `deps.Deps.KeepLib` | |
+| `store.go` | The database `Props`, the field-name constants, and the readers that reach a stored record through `deps.Deps.KeepLib` | |
+| `records.go` | One typed view per registry, the ordered listings, and the lookups over them | |
+| `dates.go` | Dates and months as whole numbers, and the calendar arithmetic every month page and the forecast are built from | |
+| `money.go` | Rendering an amount held in cents, and the bars and percentages the dashboards show a share with | |
+
+#### `/sandbox/lib/ledger/`
+Every figure the vault shows, derived from the registries and nothing else. Keeping the arithmetic here is what lets a visualization be about layout. Declares no factories.
+
+| File | Description | Spec |
+|------|-------------|------|
+| `ledger.go` | The `State` read once per render, and the balances, month results and totals over it | |
+| `forecast.go` | Today's position rolled forward through the declared commitments | |
+
+#### `/sandbox/lib/vault/`
+The outside of a tick: reading the task file, disarming it, reading and validating the visualization config, writing rendered bytes under a `dest`, and reporting a failure in `Error.md`. Every path is reached through `deps.Deps.IoLib`. Declares no factories.
+
+| File | Description | Spec |
+|------|-------------|------|
+| `vault.go` | The task and config readers, the destination rules, and the writers a tick puts files on disk with | |
+
+#### `/sandbox/lib/yaml/`
+The subset of YAML the two driving files are written in — a flat mapping, and a list of mappings with one nested block. Pure computation over bytes, so it needs no dependency. Declares no factories.
+
+| File | Description | Spec |
+|------|-------------|------|
+| `yaml.go` | The decoders, the scalar coercion, and the encoder a disarmed task file is rewritten with | |
+
+#### `/sandbox/lib/entries/`
+The fields a task or a visualization was called with, read back as typed values and checked against what it declared. One validator serves every task, which is why a task never parses its own input. Declares no factories.
+
+| File | Description | Spec |
+|------|-------------|------|
+| `entries.go` | The typed readers, `Validate` against a `[]api.Field`, and the filling-in of declared defaults | |
+
+### `/sandbox/Tasks/`
+Every action the brain can perform. The switcher here is the seam between "what a brain can do" and everything that asks it to do something — a tick, the command line, a Go caller. Adding an action is [HandleTasks.md](/docs/Tutorials/HandleTasks.md).
+
+| File | Description | Spec |
+|------|-------------|------|
+| `run.go` | `TaskArray` — the one place a task is registered — plus `Find`, `Names`, and the `Run` switcher that validates a task's fields and calls its `HandleAction` | |
+
+#### `/sandbox/Tasks/Tasks/`
+One task per file, each returning an `api.Task` carrying its name, its declared fields, and the closure that runs it. A task writes through the database it is handed and nothing else.
+
+| File | Description | Spec |
+|------|-------------|------|
+| `<Task>.go` | One task, named after it: its declaration and its `HandleAction` closure | |
+| `shared.go` | The checks every task repeats — required names, dates, days of the month, amounts, insert and remove — so all of them report a failure in the same words | |
+
+### `/sandbox/Visualization/`
+Every renderer the brain carries. The mirror of `/sandbox/Tasks/`: a tick reads names out of the config, the command line takes one as an argument, and both arrive here. Adding a renderer is [HandleVisualizations.md](/docs/Tutorials/HandleVisualizations.md).
+
+| File | Description | Spec |
+|------|-------------|------|
+| `run.go` | `VisualizationArray` — the catalog, read from the package below — plus `Find`, `Names`, and the `Run` switcher that validates a visualization's args and calls its `HandleVisualizer` | |
+
+#### `/sandbox/Visualization/Visualization/`
+One visualization per file, each returning an `api.Visualizer`. A visualization **returns files** and never writes one; putting bytes on disk happens in `/sandbox/lib/vault/`.
+
+| File | Description | Spec |
+|------|-------------|------|
+| `<Visualization>.go` | One renderer, named after it: its declaration and its `HandleVisualizer` closure | |
+| `catalog.go` | `Catalog` — the one place a visualization is registered | |
+| `page.go` | The markdown builder every page is written with, and the naming rules its links follow | |
 
 ### `/sandbox/cli/`
 The command-line interface itself: the command dispatch `Sandboxmain` delegates to. It reads the command line through `deps.Deps.VerbLib`, takes the text it prints from `sandbox/config`, and writes every line through `deps.Deps.Printf`, so the whole interface stays inside the closed sandbox. Like `store/`, it is neither an object nor the entry point, so no specification governs it, and it declares **no types and no factories**.
@@ -177,15 +233,17 @@ Outside the sandbox. Opinionated implementations of the [`Deps`](#sandboxcontrac
 ---
 
 ## `/assets/`
-Outside the sandbox. The files the library serves through the injected `Deps.EmbedDeps` contract: compiled into the binary, so an installed `agnos-cli` carries them with no files beside it, and reached only through the injected contract — never imported by the sandbox. An asset is a payload better kept as a file than as a Go constant: a template, a long-form document, an image. Adding one is [HandleAssets.md](/docs/Tutorials/HandleAssets.md).
+Outside the sandbox. The files the library serves through the injected `Deps.EmbedDeps` contract: compiled into the binary, so an installed `wraith` carries them with no files beside it, and reached only through the injected contract — never imported by the sandbox. An asset is a payload better kept as a file than as a Go constant: a template, a long-form document, an image. Adding one is [HandleAssets.md](/docs/Tutorials/HandleAssets.md).
 
-The tree holds **no assets**, by design. The tracker's display text is short and fixed, so it lives in [`/sandbox/config/`](#sandboxconfig) as compile-time constants; what ships here is the mechanic — contract, adapter, and directive — wired end to end and ready for a library derived from this template. A derived project adds files under this directory and needs no other change.
+The tree carries what a new vault starts life with: `start/Task.yaml` and `start/Visualization.yaml`, the two files [`wraith start`](/docs/References/Commands.md#start) copies into an empty folder. They are assets rather than Go constants precisely because they are meant to be edited — changing what a forked brain begins with is editing those files and nothing else. The words the interface itself says are the opposite case, and live in [`/sandbox/config/`](#sandboxconfig) as compile-time constants.
 
 This directory is a Go package for one reason: a `//go:embed` directive can only reach files inside its own package directory, so the directive has to sit next to the assets. That single directive is `//go:embed all:*`, which takes **every** file in the tree, so a new asset needs no change to it — put the file here and it exists at runtime.
 
 | File | Description | Spec |
 |------|-------------|------|
 | `asset.go` | Package `assets`: the `//go:embed all:*` directive and the `Files` embedded filesystem the standard adapter serves | |
+| `start/Task.yaml` | The default task file `wraith start` writes | |
+| `start/Visualization.yaml` | The default visualization config `wraith start` writes | |
 
 ---
 
@@ -211,7 +269,7 @@ go install github.com/MateusMoutinhoOrg/Wraith/cmd/main@latest
 ---
 
 ## `/examples/cliExamples/`
-Outside the sandbox. Shell scripts driving the built binary the way a user would from a terminal. Each one builds the CLI into a scratch directory and points it at a budget of its own, so nothing a script does touches the records in the user's home.
+Outside the sandbox. Shell scripts driving the built binary the way a user would from a terminal. Each one builds the binary into a scratch directory and runs it in a temporary vault of its own, so nothing a script does touches a brain of yours.
 
 | File | Description | Spec |
 |------|-------------|------|
@@ -219,7 +277,7 @@ Outside the sandbox. Shell scripts driving the built binary the way a user would
 
 **Run a CLI example:**
 ```sh
-bash ./examples/cliExamples/ManageCategories.sh
+bash ./examples/cliExamples/StartAVault.sh
 ```
 
 ---
@@ -251,7 +309,7 @@ Documentation of the project, split by **kind of page**: `Index/` holds one entr
 | `References/` | Every lookup and explanation page, whatever theme it belongs to |
 
 ### `/docs/Index/`
-One page per theme. The four themes are `CliUsage` — installing the binary, driving it from a terminal, and the command surface; `LibUsage` — consuming the same behavior as a Go library, and the public API; `Development` — contributing: the mechanics, the workflows, the specifications; and `Templating` — turning this repository into another library.
+One page per theme. The four themes are `Brain-Usage` — installing the binary, driving a vault from a terminal, and the command surface; `Brain-Config` — forking this repository into a brain of your own, and adding tasks and visualizations to it; `LibUsage` — consuming the same behavior as a Go library, and the public API; and `Development` — contributing: the mechanics, the workflows, the specifications.
 
 | File | Description | Spec |
 |------|-------------|------|
@@ -270,7 +328,7 @@ One page per lookup table or explained mechanic, plus the two directories the pr
 | File | Description | Spec |
 |------|-------------|------|
 | `<Name>.md` | One page per lookup table or explained mechanic | ReferenceDocs / ExplanationDocs |
-| `Commands.md` | Every command, flag, and exit code of the interface | ReferenceDocs |
+| `Commands.md` | Every command, flag, value format and exit code of the interface, and the tick workflow | ReferenceDocs |
 | `SamplesList.md` | Every example under `examples/cliExamples/` | ReferenceDocs |
 | `PublicApi.md` | Index of all public-facing components, linking to their detail pages | ReferenceDocs |
 | `Adapters.md` | Lists every shipped adapter and when to use each one | AdaptersDoc |

@@ -53,6 +53,15 @@ func NowFactory(s *StandardAdapter) func() time.Time {
 	}
 }
 
+// SleepFactory returns the closure that fills deps.Deps.Sleep, pausing the
+// process for the given duration. It is what the `watch` command waits with
+// between two ticks, and the one place in this adapter that spends time.
+func SleepFactory(s *StandardAdapter) func(d time.Duration) {
+	return func(d time.Duration) {
+		time.Sleep(d)
+	}
+}
+
 // PrintfFactory returns the closure that fills deps.Deps.Printf, writing one
 // formatted message to the process's standard output. It is what the
 // command-line interface inside the sandbox reports through.
@@ -305,6 +314,7 @@ func New(basePath string) deps.Deps {
 		keepBasePath: basePath,
 	}
 	adapter.Deps.Now = NowFactory(adapter)
+	adapter.Deps.Sleep = SleepFactory(adapter)
 	adapter.Deps.Printf = PrintfFactory(adapter)
 	adapter.Deps.VerbLib = VerbLibFactory(adapter)
 	adapter.Deps.KeepLib = KeepLibFactory(adapter)

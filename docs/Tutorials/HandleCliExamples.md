@@ -12,17 +12,17 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
 - It writes to a scratch directory it removes on exit, so running one never touches the records in your home directory.
 
 ### Workflow
-1. Browse [examples/cliExamples/](/examples/cliExamples/) and pick a script — each is named after the goal it demonstrates, so `ManageCategories.sh` is a good starting point.
+1. Browse [examples/cliExamples/](/examples/cliExamples/) and pick a script — each is named after the goal it demonstrates, so `StartAVault.sh` is a good starting point.
 2. Run it from the project root:
    ```bash
-   bash ./examples/cliExamples/ManageCategories.sh
+   bash ./examples/cliExamples/StartAVault.sh
    ```
 3. Read the transcript alongside the script: each `== …` line in the output is the comment above the commands that produced what follows it.
 4. Run the rest in order to see the whole interface:
    ```bash
    for script in ./examples/cliExamples/*.sh; do bash "$script"; done
    ```
-5. Try the same commands against your own budget once you have installed the binary, following [InstallCli.md](/docs/Tutorials/InstallCli.md) and [UseCli.md](/docs/Tutorials/UseCli.md).
+5. Try the same commands against a brain of your own once you have installed the binary, following [InstallCli.md](/docs/Tutorials/InstallCli.md) and [RunTasks.md](/docs/Tutorials/RunTasks.md).
 
 ---
 
@@ -34,7 +34,7 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
 - Adding one requires updating [SamplesList.md](/docs/References/SamplesList.md) and [Structure.md](/docs/References/Structure.md).
 
 ### Workflow
-1. Create the script under [examples/cliExamples/](/examples/cliExamples/), named with a descriptive PascalCase name matching the goal it demonstrates — e.g. `ManageCategories.sh`, `TrackTransactions.sh`.
+1. Create the script under [examples/cliExamples/](/examples/cliExamples/), named with a descriptive PascalCase name matching the goal it demonstrates — e.g. `StartAVault.sh`, `DriveItWithTaskFile.sh`.
 2. Open it with the shebang, a comment naming the goal, how to run it, and the shell options:
    ```bash
    #!/usr/bin/env bash
@@ -44,20 +44,21 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
    #   bash ./examples/cliExamples/<Name>.sh
    set -euo pipefail
    ```
-3. Build the CLI into a scratch directory and point it at a budget of its own, so nothing the script does touches the user's records:
+3. Build the binary into a scratch directory and run it in a temporary vault of its own, so nothing the script does touches a brain of the reader's:
    ```bash
    workdir="$(mktemp -d)"
    trap 'rm -rf "$workdir"' EXIT
 
-   go build -o "$workdir/agnos-cli" ./cmd/main
-   export AGNOS_DATA="$workdir/data"
-   agnos-cli() { "$workdir/agnos-cli" "$@"; }
+   go build -o "$workdir/wraith" ./cmd/main
+   mkdir -p "$workdir/vault"
+   cd "$workdir/vault"
+   wraith() { "$workdir/wraith" "$@"; }
    ```
 4. Write the demonstration as sections, each announced by an `echo` line saying what the commands below it show:
    ```bash
    echo "== record what came in and what went out"
-   agnos-cli --quiet category add groceries
-   agnos-cli spend groceries "weekly shopping" 84.50
+   wraith start > /dev/null
+   wraith run AddAccount --account Bank --opening 3000
    ```
 5. Make it executable and run it:
    ```bash

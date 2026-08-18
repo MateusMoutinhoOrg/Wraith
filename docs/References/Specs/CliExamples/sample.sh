@@ -7,20 +7,21 @@
 #   bash ./examples/cliExamples/<Name>.sh
 set -euo pipefail
 
-# Build the CLI into a scratch directory and point it at a budget of its own,
-# so the example never touches the records in your home directory.
+# Build the binary into a scratch directory and run it in a vault of its own,
+# so the example never touches a brain of yours.
 workdir="$(mktemp -d)"
 trap 'rm -rf "$workdir"' EXIT
 
-go build -o "$workdir/agnos-cli" ./cmd/main
-export AGNOS_DATA="$workdir/data"
-agnos-cli() { "$workdir/agnos-cli" "$@"; }
+go build -o "$workdir/wraith" ./cmd/main
+mkdir -p "$workdir/vault"
+cd "$workdir/vault"
+wraith() { "$workdir/wraith" "$@"; }
 
 echo "== what the commands below show"
-agnos-cli category add examplecategory
-agnos-cli spend examplecategory "an example transaction" 12.34
+wraith start
+wraith run AddAccount --account Bank --opening 3000
 
 echo
 echo "== what the next commands show"
-agnos-cli transactions examplecategory
-agnos-cli balance examplecategory
+wraith tick
+sed -n '1,12p' DashBoard/README.md

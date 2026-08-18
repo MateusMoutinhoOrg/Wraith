@@ -105,25 +105,25 @@ package main
 import (
 	"fmt"
 
-	agnosadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
-	agnoskeep "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+	wraithadapter "github.com/MateusMoutinhoOrg/Wraith/adapters/standard"
+	wraithkeep "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
 )
 
 func main() {
 	// The adapter initializes the embedded Keep library — here over Keep's
 	// own filesystem backend — and hands it back as one field of the deps
 	// contract.
-	d := agnosadapter.New("trackerdata")
+	d := wraithadapter.New("my-brain")
 
-	db := d.KeepLib.NewDatabase(agnoskeep.Props{
+	db := d.KeepLib.NewDatabase(wraithkeep.Props{
 		Path: "app/",
-		Schemas: []agnoskeep.Schema{{
+		Schemas: []wraithkeep.Schema{{
 			Name: "user",
-			Itens: []agnoskeep.Item{
-				{Name: "email", Type: agnoskeep.Key, Required: true},
-				{Name: "age", Type: agnoskeep.Int, Required: true},
-				{Name: "sessions", Type: agnoskeep.Database, Itens: []agnoskeep.Item{
-					{Name: "token", Type: agnoskeep.Key, Required: true},
+			Itens: []wraithkeep.Item{
+				{Name: "email", Type: wraithkeep.Key, Required: true},
+				{Name: "age", Type: wraithkeep.Int, Required: true},
+				{Name: "sessions", Type: wraithkeep.Database, Itens: []wraithkeep.Item{
+					{Name: "token", Type: wraithkeep.Key, Required: true},
 				}},
 			},
 		}},
@@ -142,7 +142,7 @@ func main() {
 
 	// A duplicate value for a Key field is a KeyConflict, not a panic.
 	if _, err := users.NewItem(map[string]any{"email": "a@b.c", "age": 30}); err != nil {
-		fmt.Println(err.Type == agnoskeep.KeyConflict, err.Message) // true ...
+		fmt.Println(err.Type == wraithkeep.KeyConflict, err.Message) // true ...
 	}
 
 	user.NewSubItem("sessions", map[string]any{"token": "t1"})

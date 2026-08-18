@@ -1,2 +1,9 @@
-Name: YourTask
-aply: false
+# The one action the next tick will run.
+#
+# Pick a task from the Tasks/ folder — or run `wraith tasks` — copy its sample
+# over these lines, fill in your values, and set apply: true when you are
+# ready. A tick runs it once and sets apply back to false.
+name: AddAccount
+account: Bank
+opening: 0
+apply: false

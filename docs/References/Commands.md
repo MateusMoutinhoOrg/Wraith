@@ -1,68 +1,119 @@
-# CLI Commands
+# Commands
 
 ## Description
-Every command, flag, and exit code of the `agnos-cli` command-line interface. The interface itself is `api.Lib.Sandboxmain`, a field of the library like any other; the binary in [cmd/main](/cmd/main/) only wires an adapter into it and exits with what it returns. To install it, follow [InstallCli.md](/docs/Tutorials/InstallCli.md); to walk through a first budget, follow [UseCli.md](/docs/Tutorials/UseCli.md).
-
-```bash
-agnos-cli <command> [arguments] [flags]
-```
+Every command, flag, value format and exit code of the `wraith` interface. The interface itself is `api.Lib.Sandboxmain` — one field of the library — so everything below is produced inside the closed sandbox. Running your first action is [RunTasks.md](/docs/Tutorials/RunTasks.md); choosing what gets rendered is [ChooseVisualizations.md](/docs/Tutorials/ChooseVisualizations.md).
 
 ---
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `category add <name>` | Creates the category. Already-taken names are not an error: the stored category comes back instead. |
-| `category list` | Prints every category, oldest first, with its balance and transaction count. |
-| `category remove <name>` | Deletes the category and every transaction stored under it. |
-| `spend <category> <description> <amount>` | Records money leaving the budget under an existing category. |
-| `received <category> <description> <amount>` | Records money entering the budget under an existing category. |
-| `transactions [category]` | Prints every transaction, or only the given category's when a name follows. |
-| `balance [category]` | Prints the total balance, or the given category's when a name follows. |
-| `help` | Prints the usage screen. |
-| `version` | Prints the interface version. |
+Every command follows the same shape:
+
+```bash
+wraith <command> [arguments] [flags]
+```
+
+Arguments are positional and required unless the table says otherwise; flags are named, order-free, and fall back to a default.
+
+| Command | Arguments | Writes | Purpose |
+| --- | --- | --- | --- |
+| `start` | — | `Task.yaml`, `Visualization.yaml` | Create a vault where there was none |
+| `tick` | — | the data, every `dest` | Run the pending task, then render everything |
+| `watch` | — | the data, every `dest` | Run a tick on an interval, until interrupted |
+| `run` | `<task-name>` | the data, every `dest` | Run one task from the command line |
+| `render` | `<visualization-name>` | one `dest` | Render one visualization to disk |
+| `tasks` | — | nothing | List every task the binary carries |
+| `visualizations` | — | nothing | List every visualization it can render |
+| `help` | — | nothing | Print the usage screen |
+| `version` | — | nothing | Print the interface version |
+
+### `start`
+
+Writes the two files a brain is driven by, copied from the defaults compiled into the binary. It **never overwrites**: a file already on disk is reported and left as it is.
+
+### `tick`
+
+Performs a single tick of the state machine — see [The Tick Workflow](#the-tick-workflow).
+
+### `watch`
+
+```bash
+wraith watch --time 1s
+```
+
+Runs a tick every `--time`, until interrupted. A failing tick prints its error and does not stop the loop; the task file is disarmed by the tick itself, so a broken action costs one tick rather than the session.
+
+### `run`
+
+```bash
+wraith run AddTransaction --account Bank --category Food --amount -32.90 --date 2026-08-18
+```
+
+Runs one task without touching `Task.yaml`, then re-renders every visualization exactly as a tick does. One `--flag` per field the task declares; required fields must be given. An unknown name, a missing required field or a field of the wrong type is reported and **nothing** is written.
+
+### `render`
+
+```bash
+wraith render DashBoard --future-months 24
+```
+
+Renders one visualization and writes it to its `dest`, without executing `Task.yaml` and without touching any other entry. Where it writes and what its args default to come from the matching entry in `Visualization.yaml`; a flag given here overrides that entry for this invocation only, and the file is never edited.
+
+`--dest` is **required** when the name is declared nowhere in the config, and is what picks the entry when the same name is declared twice. `enabled: false` does not block an explicit invocation: asking for an entry by name is the decision to render it.
 
 ---
 
 ## Flags
 
-| Flag | Description |
-|------|-------------|
-| `-h`, `--help` | Prints the usage screen and exits, whatever else is on the command line. |
-| `-v`, `--version` | Prints the interface version and exits. |
-| `-q`, `--quiet` | Suppresses the confirmation line a mutating command prints, leaving listings and errors. |
+| Flag | Default | Description |
+| --- | --- | --- |
+| `--task <path>` | `Task.yaml` | The task file a tick reads and resets |
+| `--visualization <path>` | `Visualization.yaml` | The config a tick renders from |
+| `--database <path>` | `data` | The folder inside the vault the data lives in |
+| `--dest <path>` | the entry's `dest` | Where a single `render` writes |
+| `--time <interval>` | — | How long `watch` sleeps between ticks. Required by `watch` |
+| `--<field> <value>` | the declared default | One flag per field a task or a visualization declares |
+| `-h`, `--help` | — | Print the usage screen and exit |
+| `-v`, `--version` | — | Print the interface version and exit |
+| `-q`, `--quiet` | — | Print only listings and errors |
 
-Flags are read by the injected [Verb](https://github.com/MateusMoutinhoOrg/Verb) parser before the command words are drained, so a flag may appear anywhere on the command line: `agnos-cli spend groceries lunch 12.00 --quiet` and `agnos-cli --quiet spend groceries lunch 12.00` do the same thing.
+The three path flags point the same binary at another vault without moving a file. Every `dest` stays relative to the vault root, not to `--database`.
 
 ---
 
-## Amounts
+## Values
 
-Amounts are written the way a person types money — `84.50`, `84.5`, and `84` are all accepted — and stored in the smallest currency unit, which is what the library's [`AddSpend`](/docs/References/PublicApi/api.AddSpend.md) and [`AddReceived`](/docs/References/PublicApi/api.AddReceived.md) take.
+| Kind | Written as | Examples |
+| --- | --- | --- |
+| Text | Bare, or quoted when it carries a space | `Bank`, `"Nubank Card"` |
+| Number | Decimal, negative for money going out | `3000`, `-32.90` |
+| Switch | `true` or `false` | `--revenues true` |
+| Date | `YYYY-MM-DD` | `2026-08-18` |
+| Month | `YYYY-MM` | `2026-08` |
+| Interval | A Go duration | `1s`, `500ms`, `2m` |
 
-| Written | Stored | |
-|---------|--------|--|
-| `84.50` | `8450` | Two decimal places. |
-| `84.5` | `8450` | One place is padded. |
-| `84` | `8400` | No places at all. |
-| `-84.50` | — | Rejected: the command chooses the direction, so an amount is always positive. |
-| `84.505` | — | Rejected: more than two places. |
+A value written into `Task.yaml` and the same value passed as a flag reach a task identically — the command line has only text, and the same validator turns it into a number or a switch either way.
 
 ---
 
 ## Exit Codes
 
-| Code | Constant | Meaning |
-|------|----------|---------|
-| `0` | `api.ExitOk` | The command ran to completion. |
-| `1` | `api.ExitUsage` | The command line was wrong — unknown command, missing operand, unparsable amount — and the usage screen was printed. |
-| `2` | `api.ExitFailure` | The command was well-formed but could not be carried out: a record was missing or could not be written. |
+| Code | Meaning |
+| --- | --- |
+| `0` | The command did what it was asked to |
+| `1` | The command failed — an unknown task, an invalid field, a file that could not be written |
+| `2` | The command line could not be understood, and was answered with the usage screen |
 
 ---
 
-## Environment
+## The Tick Workflow
 
-| Variable | Description |
-|----------|-------------|
-| `AGNOS_DATA` | Directory the records are kept in. Defaults to `.agnos` in the user's home directory. Read by [cmd/main](/cmd/main/), never by the sandbox — where state lives is an OS-bound choice, so it is made outside the library. |
+1. Read the task file. If it does not exist, stop — a vault that has not been started is not a broken vault, and this is not an error.
+2. Check `apply`. If it is `false`, stop. Not an error either: that is an action waiting to be armed.
+3. Check the task's name and its fields. An unknown task, an unknown field or a field of the wrong type writes `Error.md` and stops.
+4. Execute the task. On failure, write `Error.md` and stop — **nothing** is changed.
+5. Read the visualization config, validating every entry before writing a single file. A broken config renders nothing rather than half a vault.
+6. Render every enabled entry, in order, writing each under its `dest`.
+7. Set `apply` back to `false`, so the same action never runs twice.
+
+A folder `dest` is written **into**, never emptied: a file a visualization no longer produces is left where it is rather than deleted.

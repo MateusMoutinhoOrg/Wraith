@@ -16,7 +16,7 @@ To locate any file: find its exact path below; if it is not listed by name, it f
 
 ## Copy
 
-Taken as-is from the template. They describe the structure itself, not the financial tracker, so they carry over unchanged. Adapting them is allowed but never required.
+Taken as-is from the template. They describe the structure itself, not the financial brain, so they carry over unchanged. Adapting them is allowed but never required.
 
 Copying these files carries over the template's **generic** guides and specifications only. The new library must still **create** its own case-specific tutorials and reference pages — see [Create](#create).
 
@@ -51,8 +51,8 @@ Kept in place, with their content replaced by the new library's. The file keeps 
 | `docs/References/Commands.md` | The commands, flags, and exit codes of the new library's interface | ReferenceDocs |
 | `docs/References/PublicApi.md` | The index of the new public API entries | ReferenceDocs |
 | `docs/References/Adapters.md` | The adapters the new library ships | AdaptersDoc |
-| `docs/Index/CliUsage.md`, `docs/Index/LibUsage.md`, `docs/Index/Development.md`, `docs/Index/Templating.md` | The new library's page list, one index per theme | Index |
-| `docs/Tutorials/InstallCli.md`, `docs/Tutorials/UseCli.md` | Installing and driving the new library's CLI | TutorialDocs |
+| `docs/Index/Brain-Usage.md`, `docs/Index/Brain-Config.md`, `docs/Index/LibUsage.md`, `docs/Index/Development.md` | The new library's page list, one index per theme | Index |
+| `docs/Tutorials/InstallCli.md`, `docs/Tutorials/StartABrain.md`, `docs/Tutorials/RunTasks.md`, `docs/Tutorials/ChooseVisualizations.md` | Installing and driving the new brain | TutorialDocs |
 | `docs/Tutorials/LibInitialization.md` | Installing the new library and wiring its standard adapter | TutorialDocs |
 | `docs/Tutorials/RunCliSample.md`, `docs/Tutorials/RunApiSample.md` | Running the new library's samples | TutorialDocs |
 | `docs/References/SamplesList.md`, `docs/References/ApiSamplesList.md` | The new library's own samples | ReferenceDocs |
@@ -66,7 +66,8 @@ Written from scratch for the library being built or adapted. Nothing of the temp
 | Path | Description | Specification |
 |------|-------------|---------------|
 | `sandbox/lib/*` | The lib's field factories and the `New` constructor running them all, reaching every dependency through `l.Deps` | LibFunctions |
-| `sandbox/<object>/*` | One package per object the library hands back: its field factories and the `New` constructor running them all | LibObjects |
+| `sandbox/Tasks/Tasks/<Name>.go` | One file per action the brain can perform | Tasks |
+| `sandbox/Visualization/Visualization/<Name>.go` | One file per renderer the brain can write | Visualizations |
 | `sandbox/cli/*` | The command dispatch behind `api.Lib.Sandboxmain`, and its operand parsing | |
 | `sandbox/config/*` | The new interface's usage screen, one constant per line it prints, its flag spellings, and its version | |
 | `assets/*` | Any template, long-form document, or image the new library reads at runtime — optional, and empty in the template | |
@@ -81,14 +82,16 @@ Written from scratch for the library being built or adapted. Nothing of the temp
 
 ## Delete
 
-The template's example content — the financial tracker. Removed once the new library's own files exist. For `.md` files, follow [HandleDocuments.md](/docs/Tutorials/HandleDocuments.md) so the theme indexes stay in sync.
+The template's example content — the financial brain. Removed once your own tasks and visualizations exist. For `.md` files, follow [HandleDocuments.md](/docs/Tutorials/HandleDocuments.md) so the theme indexes stay in sync.
 
 | Path | Description |
 |------|-------------|
-| `sandbox/*` | The tracker's lib factories, object packages, CLI dispatch, and store helpers — replaced by **[Create](#create)** |
+| `sandbox/Tasks/Tasks/*` | The financial tasks — replaced by **[Create](#create)**, following [HandleTasks.md](/docs/Tutorials/HandleTasks.md) |
+| `sandbox/Visualization/Visualization/*` | The financial visualizations — replaced by **[Create](#create)**, following [HandleVisualizations.md](/docs/Tutorials/HandleVisualizations.md) |
+| `sandbox/lib/store/*`, `sandbox/lib/ledger/*` | The registries and the arithmetic over them — replaced by **[Create](#create)** |
 | `sandbox/contracts/deps/verbdeps/`, `sandbox/contracts/deps/keepdeps/` | The sandbox copies of the embedded Verb and Keep libraries — keep one only if the new library embeds the same library |
-| `examples/libraryExamples/*` | The tracker's Go samples |
-| `examples/cliExamples/*` | The tracker's CLI scripts |
-| `docs/References/PublicApi/*` | The tracker's public API detail pages |
-| `sandbox/config/*` | The tracker's usage screen, messages, flag spellings, and version — replaced by **[Create](#create)** |
-| `docs/Tutorials/ManageCategories.md`, `docs/Tutorials/TrackTransactions.md` | The tracker's domain tutorials |
+| `examples/libraryExamples/*` | The financial brain's Go samples |
+| `examples/cliExamples/*` | The financial brain's shell scripts |
+| `docs/References/PublicApi/*` | The public API detail pages |
+| `sandbox/config/*` | The usage screen, messages, flag spellings, and version — replaced by **[Create](#create)** |
+| `docs/Tutorials/TrackTransactions.md` | The financial brain's worked example |
