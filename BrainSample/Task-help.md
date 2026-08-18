@@ -57,6 +57,8 @@ apply: true            # true = execute on the next tick
 | Task          | Description                                          | Links |
 | ------------- | ---------------------------------------------------- | ----- |
 | AddAccount    | Add an account (bank, cash, card, savings)           | [Guide](Tasks/AddAccount.md) |
+| RemoveAccount | Remove an account                                    | [Guide](Tasks/RemoveAccount.md) |
+| AddCreditCard | Add a credit card account                            | [Guide](Tasks/AddCreditCard.md) |
 
 
 ## 3. What each dashboard is fed by
