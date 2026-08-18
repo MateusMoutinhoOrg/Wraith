@@ -38,7 +38,8 @@ apply: true            # true = execute on the next tick
 
 | Task           | Description                               | Links |
 | -------------- | ----------------------------------------- | ----- |
-| AddTransaction | Record an income, an expense or one leg of a transfer | [Guide](Tasks/AddTransaction.md) |
+| AddTransaction    | Record an income, an expense or one leg of a transfer | [Guide](Tasks/AddTransaction.md) |
+| ModifyTransaction | Modify any attribute of an existing transaction       | [Guide](Tasks/ModifyTransaction.md) |
 
 ### Categories
 
