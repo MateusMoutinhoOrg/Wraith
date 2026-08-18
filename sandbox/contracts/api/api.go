@@ -74,18 +74,17 @@ type Lib struct {
 
 	// PerformVisualization executes a specific visualizer by name.
 	// It is filled by lib.PerformVisualizationFactory.
-	PerformVisualization func(visualizerName string) (string, error)
+	PerformVisualization func(visualizerName string, entries map[string]any) ([]VisualizationRender, error)
 
 	// PerformTaskTick runs the periodic task tick operations.
-	// It is filled by lib.PerformTaskTickFactory.
+	// It reads the task.yaml and runs the tasks based on the schedule.
 	PerformTaskTick func() error
 
 	// PerformVisualizationTick runs the periodic visualization tick operations.
-	// It is filled by lib.PerformVisualizationTickFactory.
+	// It reads the visualization.yaml and runs the visualizers based on the schedule.
 	PerformVisualizationTick func() error
 
 	// PerformFullTick runs both task and visualization tick operations.
-	// It is filled by lib.PerformFullTickFactory.
 	PerformFullTick func() error
 
 	// Sandboxmain is the CLI entry point.
