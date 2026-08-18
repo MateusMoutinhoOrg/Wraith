@@ -44,6 +44,15 @@ per arg the named task or visualization declares.
 | [`run`](#run) | `<task-name>` | database, every `dest` | Runs one task from the command line |
 | [`render`](#render) | `<visualization-name>` | one `dest` | Renders one visualization to disk |
 
+
+
+### Start:
+start creating a new Task.yaml, and a new Visualization.yaml,with defaults values, they are setted in [start-config](https://github.com/MateusMoutinhoOrg/Wraith/tree/main/assets/start)
+```bash
+./wraith start
+```
+
+
 ### watch
 
 ```bash
