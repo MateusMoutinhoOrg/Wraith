@@ -10,6 +10,7 @@ current state of that database through several visualization dashboards.
   - [watch](#watch)
   - [tick](#tick)
   - [run](#run)
+  - [visualize](#visualize)
   - [render](#render)
 - [Tick Workflow](#tick-workflow)
 - [Visualization](#visualization)
@@ -64,6 +65,43 @@ Example:
 ./wraith run AddTransaction --amount 100 --date 2026-08-18 --description test
 ```
 
+### visualize
+
+```bash
+./wraith visualize <visualization-name> [args...]
+```
+
+Renders a single visualization and **writes it to its `dest`**, without executing `Task.yaml` and
+without touching any other entry. It is to `Visualization.yaml` what [`run`](#run) is to
+`Task.yaml`: the whole tick narrowed down to one thing, driven from the command line.
+
+The destination and the defaults come from the matching entry in `Visualization.yaml`; any arg
+given on the command line overrides that entry's value for this invocation only — the file is never
+edited.
+
+| Flag | Description | Example |
+| --- | --- | --- |
+| `--dest` | Where to write, overriding the entry's `dest` | `--dest Archive` |
+| `--<arg>` | Any arg of the visualization, overriding the entry's value | `--future-months 12` |
+
+Example:
+
+```bash
+./wraith visualize DashBoard --future-months 12
+```
+
+Rules:
+
+- The name must be a known visualization. An unknown name, an unknown arg or an arg of the wrong
+  type is reported and nothing is written.
+- If the name is not declared in `Visualization.yaml`, `--dest` is required. If it is declared more
+  than once with different destinations, `--dest` is what picks which one to write.
+- `enabled: false` does not block an explicit invocation — asking for the entry by name is the
+  decision to render it.
+- `dest` obeys the same rules as in a tick: it stays inside the vault, folders are created as
+  needed, and a folder `dest` is written into, never emptied.
+- The database is only read. `Task.yaml` is neither executed nor reset.
+
 ### render
 
 ```bash
@@ -74,6 +112,10 @@ Renders a single visualization to standard output, without writing anything to `
 touching the database. Use it to preview an entry — or a different set of `args` — before putting
 it into `Visualization.yaml`. For a visualization that renders a folder, it prints the tree it
 would write and every file below it.
+
+It takes the same name and the same args as [`visualize`](#visualize) — the two differ only in
+where the output lands, the terminal or `dest`. Because nothing is written, `render` needs no
+`dest` at all: a name that appears nowhere in `Visualization.yaml` still previews fine.
 
 Example:
 

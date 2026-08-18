@@ -141,18 +141,38 @@ whose `dest` falls inside another entry's folder is rejected. Declare `Usage` se
 
 ---
 
-## 4. Previewing without writing
+## 4. Running one entry
 
-To render one entry to the terminal without writing anything to disk — useful to check a change to
-`args` before committing to it:
+A tick renders every entry. Two commands narrow that down to a single one, both taking the
+visualization's name followed by its args:
 
 ```bash
-./wraith render DashBoard
-./wraith render DashBoard --future-months 24
+./wraith render DashBoard --future-months 24      # to the terminal, nothing written
+./wraith visualize DashBoard --future-months 24   # to dest, nothing else touched
 ```
 
-For a folder visualization, `render` prints the tree it would write and each file below it. It never
-touches `dest`. See [`Usage.md`](Usage.md) for the full tick workflow.
+`render` is the preview: for a folder visualization it prints the tree it would write and each file
+below it, and it never touches `dest` — so it works even for a name that appears nowhere in this
+file.
+
+`visualize` is the write. It looks the name up here to know where the output goes and what the args
+default to, then overrides those defaults with whatever the command line gave it — this file is
+never edited, and the override lasts only for that invocation. Nothing else in the tick happens:
+`Task.yaml` is not executed, no other entry is re-rendered.
+
+```bash
+./wraith visualize DashBoard --prev-months 36 --dest Archive
+```
+
+`--dest` overrides where it writes, and is **required** when the name is not declared here — a
+visualization Wraith knows about but your config never asked for has no destination to fall back
+on. When the same name is declared twice, `--dest` is what picks which entry to write.
+
+An explicit invocation ignores `enabled: false`: asking for the entry by name is the decision to
+render it. Everything else holds as in a tick — `dest` stays inside the vault, missing folders are
+created, and a folder `dest` is written into rather than emptied.
+
+See [`Usage.md`](Usage.md) for the full tick workflow and every other command.
 
 ---
 
