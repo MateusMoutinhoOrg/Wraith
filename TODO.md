@@ -10,7 +10,10 @@ Create the Wraith financial brain.
   - description:Contains the guides of all the mechanics the project needs to have
 
 
- 
+### IMMPORTANT:
+- task and visualization must be easly changed, since the are the. heart of the project
+- the doc must be easier to beguiner,since the ideia of these project, its to allow people create or use a "second brain"
+
 ### Expected Sandbox Tree:
 - sandbox/cli 
   - action: Refatore aplying the new commands, and calling the new api 
