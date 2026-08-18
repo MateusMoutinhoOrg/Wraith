@@ -98,12 +98,12 @@ The sandbox's copy of a filesystem IO library's public api. The sandbox may not 
 |------|-------------|------|
 | `iodeps.go` | The `Lib` struct declaring every filesystem operation the sandbox requires, injected whole as the `Deps.IoLib` field | |
 
-##### `/sandbox/contracts/deps/serverdeps/`
+##### `/sandbox/contracts/deps/requestdeps/`
 The sandbox's copy of an HTTP client library's public api. The sandbox may not import `net/http`, so it declares the request/response shape it needs, and the adapter fills it.
 
 | File | Description | Spec |
 |------|-------------|------|
-| `serverdeps.go` | The `Request` and `Response` structs for HTTP communication, used by the `Deps.NewRequest` function field | |
+| `requestdeps.go` | The `Request` and `Response` structs for HTTP communication, used by the `Deps.NewRequest` function field | |
 
 #### `/sandbox/contracts/api/`
 The structs the library hands back to callers.
