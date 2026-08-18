@@ -1,6 +1,6 @@
 # Task Guide
 
-Every action in Brain is performed by writing a task into [`Task.yaml`](Task.yaml) and letting
+Every action in Wraith is performed by writing a task into [`Task.yaml`](Task.yaml) and letting
 the state machine pick it up. This page lists every available task and how to run one.
 
 ---
@@ -14,8 +14,8 @@ the state machine pick it up. This page lists every available task and how to ru
 4. Trigger a tick:
 
 ```bash
-./brain tick              # run once
-./brain watch --time 1s   # or keep watching; every tick picks up Task.yaml
+./wraith tick              # run once
+./wraith watch --time 1s   # or keep watching; every tick picks up Task.yaml
 ```
 
 On success the dashboards under [`DashBoard/`](DashBoard/README.md) are re-rendered and
@@ -82,7 +82,7 @@ actually happened with `AddTransaction`.
 ## 3. Moving money between your own accounts
 
 There is no transfer task. A one-off transfer is two `AddTransaction`s sharing a **transfer category** — a
-category created with `revenues: false` **and** `expenses: false`, which is how Brain knows the
+category created with `revenues: false` **and** `expenses: false`, which is how Wraith knows the
 movement is neither income nor expense:
 
 ```yaml
