@@ -36,9 +36,15 @@ Wraith works as a small state machine driven by two files, `Task.yaml` and `Visu
 
 Runs a [tick](#tick) every `<time>` interval.
 
-| Flag | Description | Example |
-| --- | --- | --- |
-| `--time` | Interval between ticks | `1s`, `500ms`, `2m` |
+| Flag | Default | Description | Example |
+| --- | --- | --- | --- |
+| `--time` | — | Interval between ticks | `1s`, `500ms`, `2m` |
+| `--task` | `Task.yaml` | Task file every tick reads | `--task Inbox/Task.yaml` |
+| `--visualization` | `Visualization.yaml` | Visualization config every tick renders from | `--visualization Archive.yaml` |
+| `--database` | `data` | Folder the database lives in | `--database vaults/home` |
+
+The three path flags mean the same thing as in [`tick`](#tick), and are read once at startup:
+every tick of the loop uses them.
 
 ### tick
 
@@ -49,6 +55,19 @@ Runs a [tick](#tick) every `<time>` interval.
 Performs a single tick of the state machine: executes the pending action declared in
 `Task.yaml` and renders every visualization declared in `Visualization.yaml`. See
 [Tick Workflow](#tick-workflow).
+
+| Flag | Default | Description | Example |
+| --- | --- | --- | --- |
+| `--task` | `Task.yaml` | Which task file to read and reset | `--task Inbox/Task.yaml` |
+| `--visualization` | `Visualization.yaml` | Which visualization config to render from | `--visualization Archive.yaml` |
+| `--database` | `data` | Which folder the database lives in | `--database vaults/home` |
+
+The three point the tick at a different vault without moving a file: `--task` replaces
+`Task.yaml` everywhere the [Tick Workflow](#tick-workflow) and the [Procedures](#procedures)
+name it — it is the file read, reset to `apply: false`, and created with defaults when missing.
+`--visualization` replaces `Visualization.yaml` the same way, including the create-with-defaults
+step. `--database` is the folder read and written by the action, created if it does not exist.
+Every `dest` in the visualization config stays relative to the vault root, not to `--database`.
 
 ### run
 

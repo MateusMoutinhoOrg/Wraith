@@ -21,7 +21,9 @@ the state machine pick it up. This page lists every available task and how to ru
 On success every visualization declared in [`Visualization.yaml`](../Visualization.yaml) is
 re-rendered — in this vault that includes the tree under [`DashBoard/`](../DashBoard/README.md) —
 and `apply` is reset to `false`. On failure an `Error.md` file is created with the details and
-nothing is changed. See [`Usage.md`](Usage.md) for the full tick workflow and
+nothing is changed. Both commands take `--task`, `--visualization` and `--database` to point at a
+file or a vault other than the defaults (`Task.yaml`, `Visualization.yaml` and `data`). See
+[`Usage.md`](Usage.md) for the full tick workflow and
 [`Visualization.md`](Visualization.md) for how to choose what gets rendered.
 
 ### Anatomy of `Task.yaml`
