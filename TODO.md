@@ -39,3 +39,15 @@ Create the Wraith financial brain.
 
 
 ### Expected Doc Organization: 
+
+### Brain-Usage
+- these doc its the actual Cli-Usage (needs to rename), and must cover every thing about how to execute actions, show visualizations,etc..
+
+### Brain-Config
+- explain how to add new tasks, and new visualizations in the given brain,  it needs to show how to fork these template, rename to the new github name, and configure the users functions.
+
+## Developer
+- just refatore to these project, but the ideia. is the same
+
+## Templating
+ - will be removed, all its contents will go to Brain-Config ,since the ideia of these projetct, its to be forked.
