@@ -28,9 +28,13 @@ type Task struct {
 
 type HandleVisualizationArgs struct {
 	Deps     deps.Deps
-	dataBase keepdeps.KeepDatabase
-	DestPath string
+	DataBase keepdeps.KeepDatabase
 	Entries  map[string]any
+}
+
+type VisualizationRender struct {
+	Path    string
+	Content []byte
 }
 
 // Visualizer represents a component that generates visual output.
@@ -45,7 +49,7 @@ type Visualizer struct {
 
 	// HandleVisualizer produces the visualization output.
 	// It is filled by visualizer.HandleVisualizerFactory.
-	HandleVisualizer func(args HandleVisualizationArgs) error
+	HandleVisualizer func(args HandleVisualizationArgs) (VisualizationRender, error)
 }
 
 // Lib is the entry point handed back by lib.New. Every object it
