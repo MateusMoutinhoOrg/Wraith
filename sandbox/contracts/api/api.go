@@ -9,7 +9,7 @@ import (
 
 type HandleActionArgs struct {
 	Deps     deps.Deps
-	KeepDeps keepdeps.KeepDatabase
+	dataBase keepdeps.KeepDatabase
 	Entries  map[string]any
 }
 
@@ -28,7 +28,7 @@ type Task struct {
 
 type HandleVisualizationArgs struct {
 	Deps     deps.Deps
-	KeepDeps keepdeps.KeepDatabase
+	dataBase keepdeps.KeepDatabase
 	DestPath string
 	Entries  map[string]any
 }
@@ -54,6 +54,9 @@ type Lib struct {
 	// Deps is the dependency set injected by lib.New, carried here so
 	// every factory-built function field can reach it.
 	Deps deps.Deps
+
+	// these must be required on construction
+	DatabasePath string
 
 	// Tasks is a collection of available tasks.
 	Tasks []Task
