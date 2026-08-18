@@ -1,52 +1,113 @@
 # Categories
 
-> **Updated:** 16-aug-2026 · 14 categories · Limits managed in [`Budget.md`](Budget.md)
+> **Updated:** 18-aug-2026 · 14 categories · every transaction carries exactly one
 
-Registry of every category. Each transaction in [`Month/Statement.md`](Month/Statement.md) carries
-exactly one category.
-
----
-
-## 1. Income
-
-| Category    | Description                     | This month | Year to date |
-| ----------- | ------------------------------- | ---------: | -----------: |
-| `Freelance` | Client work (Wraith Software)   |  +R$ 1,200 |    R$ 29,300 |
-| `Extra`     | One-off income                  |       R$ 0 |       R$ 500 |
-| `Yield`     | Investment income               |       R$ 0 |       R$ 200 |
+[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md)
 
 ---
 
-## 2. Expenses
+## 1. Tree
 
-| Category    | Kind          | Monthly limit | Spent (aug) | Remaining | Status |
-| ----------- | ------------- | ------------: | ----------: | --------: | :----: |
-| `Home`      | Fixed         |      R$ 1,200 |    R$ 1,200 |      R$ 0 |   🟡   |
-| `Food`      | Essential     |        R$ 700 |      R$ 450 |    R$ 250 |   🟡   |
-| `Business`  | Fixed         |        R$ 350 |       R$ 50 |    R$ 300 |   🟢   |
-| `Transport` | Essential     |        R$ 350 |      R$ 120 |    R$ 230 |   🟢   |
-| `Poker`     | Discretionary |        R$ 200 |      R$ 100 |    R$ 100 |   🟢   |
-| `Vices`     | Discretionary |        R$ 100 |      R$ 180 |    -R$ 80 |   🔴   |
-| `Study`     | Discretionary |        R$ 100 |        R$ 0 |    R$ 100 |   ⚪   |
-| `Debt`      | Debt service  |        R$ 550 |        R$ 0 |    R$ 550 |   ⚪   |
+A category with a `parent` is a child of it; a parent's totals below include its children.
 
----
-
-## 3. Transfers (never income nor expense)
-
-| Category       | Description                              |
-| -------------- | ---------------------------------------- |
-| `Card-Payment` | Bank → card bill payment                 |
-| `Reserve`      | Bank → emergency savings                 |
-| `Invest`       | Bank → investments                       |
+```
+├── Income
+│   ├── Freelance
+│   └── Extra
+├── Home
+├── Food
+├── Transport
+├── Business
+├── Leisure
+│   ├── Poker
+│   └── Vices
+├── Study
+└── Transfers
+    ├── Card Payment
+    └── Reserve
+```
 
 ---
 
-## 4. Rules
+## 2. Registry
 
-1. One category and one account per transaction — no exceptions, no splits.
-2. `Poker` may register income (winnings); it still counts against its expense limit when negative.
-3. New categories start with a limit of R$ 0 and are reviewed on the 1st.
-4. Renaming or merging categories is done at month close, never mid-month.
+| Category | Parent | Accepts | Description | Transactions |
+| -------- | ------ | ------- | ----------- | -----------: |
+| `Income` | — | income | Everything that comes in | 0 |
+| `Freelance` | `Income` | income | Client work (Wraith Software) | 3 |
+| `Extra` | `Income` | income | One-off income, sales of used goods | 1 |
+| `Home` | — | expense | Rent, utilities, internet | 4 |
+| `Food` | — | expense | Groceries, bakery, eating out | 14 |
+| `Transport` | — | expense | Fuel, ride apps, public transport | 5 |
+| `Business` | — | expense | Cloud, domains, taxes, tools | 4 |
+| `Leisure` | — | expense | Discretionary spending | 1 |
+| `Poker` | `Leisure` | income + expense | Buy-ins and cash-outs | 5 |
+| `Vices` | `Leisure` | expense | Cigarettes and the like | 19 |
+| `Study` | — | expense | Courses and books | 1 |
+| `Transfers` | — | transfer | Money moving between own accounts | 0 |
+| `Card Payment` | `Transfers` | transfer | Bank pays the credit card bill | 4 |
+| `Reserve` | `Transfers` | transfer | Bank feeds the emergency fund | 2 |
 
-> *Fictional document. Month usage derives from [`Month/Statement.md`](Month/Statement.md).*
+`Accepts` is read from the `revenues` / `expenses` flags given to `AddCategory`. A category with both flags off is a transfer category: money moving between your own accounts, counted as neither income nor expense.
+
+---
+
+## 3. Income categories
+
+What each category brought in. A category that accepts both income and expenses appears here with its income side only — its spending side is in the next table.
+
+| Category | August 2026 | July 2026 | All time | Share of income this month |
+| -------- | ---: | ---: | ---: | --- |
+| `Income` | +R$ 2,150 | +R$ 2,500 | +R$ 4,650 | `████████████` 98% |
+| ↳ `Freelance` | +R$ 2,000 | +R$ 2,500 | +R$ 4,500 | `███████████░` 91% |
+| ↳ `Extra` | +R$ 150 | R$ 0 | +R$ 150 | `█░░░░░░░░░░░` 7% |
+| `Poker` | +R$ 50 | +R$ 180 | +R$ 230 | `█░░░░░░░░░░░` 2% |
+| **Total** | **+R$ 2,200** | **+R$ 2,680** | | |
+
+---
+
+## 4. Expense categories
+
+What each category cost. Indented rows are children — their totals are already included in the parent above them.
+
+| Category | August 2026 | July 2026 | Change | All time | Share of spending this month |
+| -------- | ---: | ---: | ---: | ---: | --- |
+| `Home` | -R$ 1,020 | -R$ 1,020 | R$ 0 | -R$ 2,040 | `██████░░░░░░` 48% |
+| `Food` | -R$ 450 | -R$ 545 | +R$ 95 | -R$ 995 | `███░░░░░░░░░` 21% |
+| `Transport` | -R$ 90 | -R$ 145 | +R$ 55 | -R$ 235 | `█░░░░░░░░░░░` 4% |
+| `Business` | -R$ 160 | -R$ 196 | +R$ 36 | -R$ 356 | `█░░░░░░░░░░░` 8% |
+| `Leisure` | -R$ 330 | -R$ 355 | +R$ 25 | -R$ 685 | `██░░░░░░░░░░` 16% |
+| ↳ `Poker` | -R$ 150 | -R$ 100 | -R$ 50 | -R$ 250 | `█░░░░░░░░░░░` 7% |
+| ↳ `Vices` | -R$ 180 | -R$ 200 | +R$ 20 | -R$ 380 | `█░░░░░░░░░░░` 9% |
+| `Study` | -R$ 60 | R$ 0 | -R$ 60 | -R$ 60 | `█░░░░░░░░░░░` 3% |
+| **Total** | **-R$ 2,110** | **-R$ 2,261** | | | |
+
+---
+
+## 5. Transfer categories
+
+| Category | Moves | August 2026 | July 2026 | Transactions |
+| -------- | ----- | ---: | ---: | ---: |
+| `Transfers` | Money moving between own accounts | R$ 1,286 | R$ 1,300 | 6 |
+| `Card Payment` | Bank pays the credit card bill | R$ 1,286 | R$ 800 | 4 |
+| `Reserve` | Bank feeds the emergency fund | R$ 0 | R$ 500 | 2 |
+
+A transfer is recorded as two transactions in the same category — negative on the account the money leaves, positive on the account it reaches — so the pair nets to zero and never shows up as income or expense. The amounts above count each pair once.
+
+---
+
+## 6. Unused categories
+
+Every registered category has at least one transaction.
+
+---
+
+## 7. What you can do here
+
+| Want to | Task |
+| ------- | ---- |
+| Add a category | [`AddCategory`](../Tasks/AddCategory.md) |
+| Remove a category | [`RemoveCategory`](../Tasks/RemoveCategory.md) |
+| Classify a transaction | [`AddTransaction`](../Tasks/AddTransaction.md) |
+
+> Generated by `./brain tick` from the tasks in [`../Task-help.md`](../Task-help.md) — do not edit by hand.

@@ -1,79 +1,89 @@
-# Financial Dashboard
+# Dashboard
 
-> **Updated:** 16-aug-2026 · **Currency:** BRL (R$) · **Scope:** personal + Wraith Software (MEI)
+> **Updated:** 18-aug-2026 · **Currency:** BRL (R$) · **Registry:** 3 accounts, 1 credit card, 14 categories, 63 transactions
+
+[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md)
 
 ---
 
-## 1. Position
+## 1. Position on 18-aug-2026
 
-| Indicator                       |           Value | Status |
-| ------------------------------- | --------------: | :----: |
-| Available balance (cash + bank) |    **R$ 2,250** |   🟡   |
-| Credit card outstanding         |        R$ 1,350 |   🟡   |
-| **Net available**               |      **R$ 900** |   🔴   |
-| Month result (day 16)           |         -R$ 900 |   🔴   |
-| Month result — projected        |      +R$ 2,000* |   🟢   |
-| Budget used                     | 70% of R$ 3,000 |   🟡   |
-| Net worth                       |       R$ 10,000 |   🟡   |
-| Total debt                      |        R$ 7,750 |   🟡   |
-| Saved year-to-date              |       +R$ 7,550 |   🟢   |
+| Indicator | Value | Where it comes from |
+| --------- | ----: | ------------------- |
+| Balance in accounts | **R$ 4,694** | opening balances + every transaction |
+| Owed on credit cards | R$ 1,185 | card opening + purchases − payments |
+| **Net position** | **R$ 3,509** | what you hold − what you owe |
+| Card limit available | R$ 3,815 of R$ 5,000 | `AddCreditCard.limit` − outstanding |
+| Pending settlement | +R$ 800 | transactions with a future `payment_date` |
+
+| Account | Balance | Share of the money you hold |
+| ------- | ------: | --------------------------- |
+| [Emergency Savings](Months/2026-08/Accounts/Emergency-Savings.md) | R$ 2,500 | `███████████░░░░░░░░░` 53% |
+| [Bank](Months/2026-08/Accounts/Bank.md) | R$ 2,119 | `█████████░░░░░░░░░░░` 45% |
+| [Cash](Months/2026-08/Accounts/Cash.md) | R$ 75 | `█░░░░░░░░░░░░░░░░░░░` 2% |
+
+---
+
+## 2. August 2026 so far
+
+| Line | This month | Previous month | Change |
+| ---- | ---------: | -------------: | -----: |
+| Income | +R$ 2,200 | +R$ 2,680 | -R$ 480 |
+| Expenses | -R$ 2,110 | -R$ 2,261 | +R$ 151 |
+| **Result** | **+R$ 90** | +R$ 419 | -R$ 329 |
+| Transactions | 32 | 31 | +1 |
+
+Full month: [`Months/2026-08/DashBoard.md`](Months/2026-08/DashBoard.md) · ledger: [`Months/2026-08/Statement.md`](Months/2026-08/Statement.md)
+
+---
+
+## 3. Where to go next
+
+| Document | Answers | Fed by |
+| -------- | ------- | ------ |
+| [`Accounts.md`](Accounts.md) | Which accounts exist and what each one holds | `AddAccount`, `RemoveAccount`, `AddTransaction` |
+| [`Credit-Cards.md`](Credit-Cards.md) | Limit, outstanding, when each bill closes and is due | `AddCreditCard`, `RemoveCreditCard`, `AddTransaction` |
+| [`Categories.md`](Categories.md) | How spending is classified and what each category costs | `AddCategory`, `RemoveCategory`, `AddTransaction` |
+| [`Months/README.md`](Months/README.md) | Every closed and open month | `AddTransaction` |
 
 ```
-Year to date
-Income        ███████████▏░░░░░░░░  56%   R$ 30,000 of R$ 54,000 planned
-Expenses      ████████████▍░░░░░░░  62%   R$ 22,450 of R$ 36,050 planned
-Year elapsed  ████████████▍░░░░░░░  62%
+DashBoard/
+├── README.md              ← you are here
+├── Accounts.md
+├── Credit-Cards.md
+├── Categories.md
+└── Months/
+    ├── README.md
+    ├── 2026-08/   ← current month
+    │   ├── DashBoard.md
+    │   ├── Statement.md
+    │   └── Accounts/
+    │       ├── Bank.md
+    │       ├── Cash.md
+    │       ├── Emergency-Savings.md
+    │       └── Nubank-Card.md
+    └── 2026-07/
+        ├── DashBoard.md
+        ├── Statement.md
+        └── Accounts/
+            ├── Bank.md
+            ├── Cash.md
+            ├── Emergency-Savings.md
+            └── Nubank-Card.md
 ```
 
 ---
 
-## 2. Active alerts
+## 4. Conventions
 
-| Status | Alert                                            |
-| :----: | ------------------------------------------------ |
-|   🔴   | `Vices` over budget — R$ 180 spent, limit R$ 100 |
-|   🟡   | Net available dips to ~R$ 400 around 20-aug      |
+| Notation | Meaning |
+| -------- | ------- |
+| Income | A positive `amount` in a category whose `revenues` is `true` |
+| Expense | A negative `amount` in a category whose `expenses` is `true` |
+| Transfer | Any amount in a category with `revenues: false` **and** `expenses: false` — moving money between your own accounts is neither income nor expense |
+| Pending | `payment_date` is later than today: the transaction is recorded but has not moved money yet, so it is excluded from balances |
+| Card purchase | Counts in the month of `date`; the cash leaves the bank when you record the bill payment |
 
-Full list in [`Month/DashBoard.md`](Month/DashBoard.md).
+Every figure on these pages is computed from the four registries the tasks write: accounts, credit cards, categories and transactions. Nothing here needs information you were never asked for.
 
----
-
-## 3. Structure
-
-| File                                                    | Contents                                          | Review    |
-| ------------------------------------------------------- | ------------------------------------------------- | --------- |
-| [`Accounts.md`](Accounts.md)                            | Account registry, balances, links to statements   | Weekly    |
-| [`Categories.md`](Categories.md)                        | Category registry, limits, month usage            | Monthly   |
-| [`Budget.md`](Budget.md)                                | Active budgets, allocation targets, recurring bills | Monthly |
-| [`Month/DashBoard.md`](Month/DashBoard.md)              | Current month: result, balances, alerts           | Weekly    |
-| [`Month/Statement.md`](Month/Statement.md)              | Consolidated ledger — every transaction           | Daily     |
-| [`Month/Accounts/Bank.md`](Month/Accounts/Bank.md)      | Bank account statement (isolated)                 | Weekly    |
-| [`Month/Accounts/Cash.md`](Month/Accounts/Cash.md)      | Cash statement (isolated)                         | Weekly    |
-| [`Month/Accounts/Credit-Card.md`](Month/Accounts/Credit-Card.md) | Credit card statement (isolated)         | Weekly    |
-| [`Net-Worth.md`](Net-Worth.md)                          | Assets, liabilities, investments, goals           | Monthly   |
-| [`Year-Report.md`](Year-Report.md)                      | Month-by-month results + business figures         | Monthly   |
-
----
-
-## 4. Routine
-
-| When         | Task                                                                       |
-| ------------ | -------------------------------------------------------------------------- |
-| Daily        | Record each transaction in [`Month/Statement.md`](Month/Statement.md)      |
-| Monday       | Review [`Month/DashBoard.md`](Month/DashBoard.md) and the active alerts    |
-| Day 5        | Pay the card bill in full from the bank account                            |
-| Day 1        | Close the previous month: totals → `Year-Report.md`, reset the statements  |
-
----
-
-## 5. Conventions
-
-| Notation      | Meaning                                                                    |
-| ------------- | -------------------------------------------------------------------------- |
-| 🟢 🟡 🔴 ⚪    | on track · attention · action required · no activity                       |
-| `*`           | projected value, not yet realized                                          |
-| Category      | classification of a transaction (`Food`, `Business`, …) — see [`Categories.md`](Categories.md) |
-| Transfer      | movement between own accounts — never counted as income or expense         |
-| Card purchase | counted as expense on purchase date; leaves the bank on the bill due date  |
-
-> *Fictional dashboard, used as a model for personal + small-business financial management. All files are generated — do not edit by hand.*
+> Generated by `./brain tick` from the tasks in [`../Task-help.md`](../Task-help.md) — do not edit by hand.

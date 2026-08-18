@@ -1,56 +1,67 @@
 # Accounts
 
-> **Updated:** 16-aug-2026 · 4 accounts · Net available: **R$ 900**
+> **Updated:** 18-aug-2026 · 3 accounts · Total held **R$ 4,694**
 
-Registry of every account. Each active account has an isolated monthly statement under
-[`Month/Accounts/`](Month/Accounts/).
+[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md)
 
----
-
-## 1. Account registry
-
-| ID     | Account          | Type        | Opening (01-aug) | Current (16-aug) | Projected (31-aug) | Status | Statement |
-| ------ | ---------------- | ----------- | ---------------: | ---------------: | -----------------: | :----: | --------- |
-| `BANK` | Bank account     | Checking    |         R$ 2,000 |         R$ 1,995 |          R$ 3,895* |   🟢   | [`Month/Accounts/Bank.md`](Month/Accounts/Bank.md) |
-| `CASH` | Cash             | Cash        |           R$ 600 |           R$ 255 |             R$ 50* |   🔴   | [`Month/Accounts/Cash.md`](Month/Accounts/Cash.md) |
-| `CARD` | Credit card      | Credit card |          -R$ 800 |        -R$ 1,350 |         -R$ 1,650* |   🟡   | [`Month/Accounts/Credit-Card.md`](Month/Accounts/Credit-Card.md) |
-| `SAVE` | Emergency savings| Savings     |         R$ 2,000 |         R$ 2,000 |          R$ 3,500* |   🟢   | — (movements in [`Net-Worth.md`](Net-Worth.md)) |
-
-| Totals                          |        Value |
-| ------------------------------- | -----------: |
-| Available (`BANK` + `CASH`)     | **R$ 2,250** |
-| Card outstanding (`CARD`)       |    -R$ 1,350 |
-| **Net available**               |   **R$ 900** |
-| Reserves (`SAVE`)               |     R$ 2,000 |
-
-```
-Where the money sits
-Savings  ████████████████████  R$ 2,000   47%
-Bank     ███████████████████▉  R$ 1,995   47%
-Cash     ██▌                   R$   255    6%
-Card     █████████████▌ (owed) -R$ 1,350  due 05-sep
-```
+Credit cards live in their own registry — see [`Credit-Cards.md`](Credit-Cards.md).
 
 ---
 
-## 2. Account rules
+## 1. Registry
 
-| Account | Purpose                                            |
-| ------- | -------------------------------------------------- |
-| `BANK`  | Income, bills, transfers — main operating account  |
-| `CASH`  | Discretionary spending only; not refilled mid-month |
-| `CARD`  | Subscriptions and planned purchases; paid in full on day 5 |
-| `SAVE`  | Emergency fund — receives R$ 1,500 on day 30; withdrawals only for emergencies |
+| Account | Opening | Movements | Current balance | Statement |
+| ------- | ------: | --------: | --------------: | --------- |
+| `Bank` | R$ 2,000 | 21 | **R$ 2,119** | [aug-2026](Months/2026-08/Accounts/Bank.md) · [jul-2026](Months/2026-07/Accounts/Bank.md) |
+| `Cash` | R$ 600 | 28 | **R$ 75** | [aug-2026](Months/2026-08/Accounts/Cash.md) · [jul-2026](Months/2026-07/Accounts/Cash.md) |
+| `Emergency Savings` | R$ 2,000 | 1 | **R$ 2,500** | [aug-2026](Months/2026-08/Accounts/Emergency-Savings.md) · [jul-2026](Months/2026-07/Accounts/Emergency-Savings.md) |
+| **Total** | R$ 4,600 | | **R$ 4,694** | |
+
+`Opening` is the value given to `AddAccount.opening`; the current balance is that opening plus every transaction recorded against the account.
 
 ---
 
-## 3. Credit card cycle
+## 2. Balance history
 
-| Item                | Value      |
-| ------------------- | ---------- |
-| Statement closes    | day 28     |
-| Bill due            | day 5      |
-| Current bill (aug)  | R$ 1,350 owed — projected R$ 1,650*, due 05-sep |
-| Payment policy      | Always in full — revolving interest is 14%/month |
+| Account | Opening jul-2026 | Opening aug-2026 | 18-aug |
+| ------- | ---: | ---: | ---: |
+| `Bank` | R$ 2,000 | R$ 2,640 | **R$ 2,119** |
+| `Cash` | R$ 600 | R$ 420 | **R$ 75** |
+| `Emergency Savings` | R$ 2,000 | R$ 2,500 | **R$ 2,500** |
 
-> *Fictional document. Balances derive from [`Month/Statement.md`](Month/Statement.md).*
+---
+
+## 3. Movement per account
+
+### `Bank`
+
+| Month | Income | Expenses | Transfers | Pending | Balance change | Transactions |
+| ----- | -----: | -------: | --------: | ------: | -------------: | -----------: |
+| [August 2026](Months/2026-08/Accounts/Bank.md) | +R$ 2,150 | -R$ 585 | -R$ 1,286 | +R$ 800 | **-R$ 521** | 13 |
+| [July 2026](Months/2026-07/Accounts/Bank.md) | +R$ 2,500 | -R$ 560 | -R$ 1,300 | — | **+R$ 640** | 9 |
+
+### `Cash`
+
+| Month | Income | Expenses | Transfers | Pending | Balance change | Transactions |
+| ----- | -----: | -------: | --------: | ------: | -------------: | -----------: |
+| [August 2026](Months/2026-08/Accounts/Cash.md) | +R$ 50 | -R$ 395 | R$ 0 | — | **-R$ 345** | 14 |
+| [July 2026](Months/2026-07/Accounts/Cash.md) | +R$ 180 | -R$ 360 | R$ 0 | — | **-R$ 180** | 14 |
+
+### `Emergency Savings`
+
+| Month | Income | Expenses | Transfers | Pending | Balance change | Transactions |
+| ----- | -----: | -------: | --------: | ------: | -------------: | -----------: |
+| [August 2026](Months/2026-08/Accounts/Emergency-Savings.md) | R$ 0 | R$ 0 | R$ 0 | — | **R$ 0** | 0 |
+| [July 2026](Months/2026-07/Accounts/Emergency-Savings.md) | R$ 0 | R$ 0 | +R$ 500 | — | **+R$ 500** | 1 |
+
+---
+
+## 4. What you can do here
+
+| Want to | Task |
+| ------- | ---- |
+| Add an account | [`AddAccount`](../Tasks/AddAccount.md) |
+| Remove an account | [`RemoveAccount`](../Tasks/RemoveAccount.md) |
+| Record money in or out | [`AddTransaction`](../Tasks/AddTransaction.md) |
+
+> Generated by `./brain tick` from the tasks in [`../Task-help.md`](../Task-help.md) — do not edit by hand.

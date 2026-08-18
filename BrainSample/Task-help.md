@@ -34,55 +34,96 @@ apply: true            # true = execute on the next tick
 
 ## 2. Available tasks
 
-### Transactions & transfers — day-to-day
+### Transactions — day-to-day
 
-| Task              | Description                                            | Links |
-| ----------------- | ------------------------------------------------------ | ----- |
-| AddTransaction    | Record an income or expense in the ledger              | [Guide](Tasks/AddTransaction.md) |
-| RemoveTransaction | Remove a wrong or duplicated transaction               | [Guide](Tasks/RemoveTransaction.md) |
-| AddTransfer       | Move money between own accounts (card bill, reserve)   | [Guide](Tasks/AddTransfer.md) |
-| RemoveTransfer    | Remove a wrong transfer                                | [Guide](Tasks/RemoveTransfer.md) |
+| Task           | Description                               | Links |
+| -------------- | ----------------------------------------- | ----- |
+| AddTransaction | Record an income, an expense or one leg of a transfer | [Guide](Tasks/AddTransaction.md) |
 
-### Categories & budget
+### Categories
 
-| Task            | Description                                              | Links |
-| --------------- | -------------------------------------------------------- | ----- |
-| AddCategory     | Add a category to classify transactions                  | [Guide](Tasks/AddCategory.md) |
-| RemoveCategory  | Remove a category, migrating its transactions            | [Guide](Tasks/RemoveCategory.md) |
-| SetBudget       | Set or update a category's spending limit                | [Guide](Tasks/SetBudget.md) |
-| AddReallocation | Move budget between categories inside the current month  | [Guide](Tasks/AddReallocation.md) |
+| Task           | Description                                   | Links |
+| -------------- | --------------------------------------------- | ----- |
+| AddCategory    | Add a category to classify transactions       | [Guide](Tasks/AddCategory.md) |
+| RemoveCategory | Remove a category                             | [Guide](Tasks/RemoveCategory.md) |
 
 ### Accounts
 
-| Task          | Description                                          | Links |
-| ------------- | ---------------------------------------------------- | ----- |
-| AddAccount    | Add an account (bank, cash, card, savings)           | [Guide](Tasks/AddAccount.md) |
-| RemoveAccount | Remove an account                                    | [Guide](Tasks/RemoveAccount.md) |
-| AddCreditCard | Add a credit card account                            | [Guide](Tasks/AddCreditCard.md) |
+| Task          | Description                | Links |
+| ------------- | -------------------------- | ----- |
+| AddAccount    | Add an account             | [Guide](Tasks/AddAccount.md) |
+| RemoveAccount | Remove an account          | [Guide](Tasks/RemoveAccount.md) |
 
+### Credit cards
 
-## 3. What each dashboard is fed by
-
-| Dashboard file | Rendered from |
-| -------------- | ------------- |
-| [`DashBoard/README.md`](DashBoard/README.md) | Everything — top-level position and alerts |
-| [`DashBoard/Month/Statement.md`](DashBoard/Month/Statement.md) | AddTransaction, RemoveTransaction, AddTransfer, RemoveTransfer |
-| [`DashBoard/Month/Accounts/*.md`](DashBoard/Accounts.md) | Transactions and transfers, per account |
-| [`DashBoard/Month/DashBoard.md`](DashBoard/Month/DashBoard.md) | Transactions, budgets, recurring bills |
-| [`DashBoard/Accounts.md`](DashBoard/Accounts.md) | AddAccount, RemoveAccount, transactions, transfers |
-| [`DashBoard/Categories.md`](DashBoard/Categories.md) | AddCategory, RemoveCategory, SetBudget |
-| [`DashBoard/Budget.md`](DashBoard/Budget.md) | SetBudget, AddReallocation, AddRecurringBill, RemoveRecurringBill |
-| [`DashBoard/Net-Worth.md`](DashBoard/Net-Worth.md) | AddAsset/RemoveAsset, AddLiability/RemoveLiability, AddGoal/RemoveGoal |
-| [`DashBoard/Year-Report.md`](DashBoard/Year-Report.md) | CloseMonth |
+| Task             | Description           | Links |
+| ---------------- | --------------------- | ----- |
+| AddCreditCard    | Add a credit card     | [Guide](Tasks/AddCreditCard.md) |
+| RemoveCreditCard | Remove a credit card  | [Guide](Tasks/RemoveCreditCard.md) |
 
 ---
 
-## 4. Rules to remember
+## 3. Moving money between your own accounts
+
+There is no transfer task. A transfer is two `AddTransaction`s sharing a **transfer category** — a
+category created with `revenues: false` **and** `expenses: false`, which is how Brain knows the
+movement is neither income nor expense:
+
+```yaml
+name: AddTransaction        # money leaves the bank
+account: Bank
+category: Card Payment
+description: August card bill
+amount: -1286
+date: 2026-09-05
+apply: true
+```
+
+```yaml
+name: AddTransaction        # ...and lands on the card
+account: Nubank Card
+category: Card Payment
+description: August card bill
+amount: 1286
+date: 2026-09-05
+apply: true
+```
+
+The pair nets to zero, so paying a card bill never shows up as an expense — the purchases were
+already counted on the day they happened.
+
+---
+
+## 4. What each dashboard page is fed by
+
+| Dashboard file | Rendered from |
+| -------------- | ------------- |
+| [`DashBoard/README.md`](DashBoard/README.md) | Everything — balances, the open month, and the index of every other page |
+| [`DashBoard/Accounts.md`](DashBoard/Accounts.md) | AddAccount, RemoveAccount, AddTransaction |
+| [`DashBoard/Credit-Cards.md`](DashBoard/Credit-Cards.md) | AddCreditCard, RemoveCreditCard, AddTransaction |
+| [`DashBoard/Categories.md`](DashBoard/Categories.md) | AddCategory, RemoveCategory, AddTransaction |
+| [`DashBoard/Months/README.md`](DashBoard/Months/README.md) | Every month that holds at least one transaction |
+| `DashBoard/Months/<year>-<month>/DashBoard.md` | That month's result, accounts, categories and dated commitments |
+| `DashBoard/Months/<year>-<month>/Statement.md` | Every transaction dated in that month |
+| `DashBoard/Months/<year>-<month>/Accounts/<account>.md` | One account's statement for that month |
+
+Every figure on those pages is computed from the four registries the tasks above write — accounts,
+credit cards, categories and transactions. If a number cannot be derived from them, it does not
+belong on the dashboard.
+
+---
+
+## 5. Rules to remember
 
 - One task per tick — `Task.yaml` holds a single action.
-- Dashboard files are **generated**: never edit them by hand (a hand edit is overwritten on
-  the next tick; use `Render` to force a clean re-render).
-- Transfers between own accounts are never income or expense — use `AddTransfer`, not
-  `AddTransaction`.
+- Dashboard files are **generated**: never edit them by hand, a hand edit is overwritten on the
+  next tick.
 - One category and one account per transaction — no splits.
-- Category renames/merges and limit reviews happen at month close (`CloseMonth`), never mid-month.
+- A positive `amount` is only valid in a category whose `revenues` is `true`; a negative one only
+  where `expenses` is `true`. A transfer category accepts both because it counts as neither.
+- A card purchase counts on its `date`; the money leaves the paying account when you record the
+  bill payment.
+- `payment_date` is when the money actually moves. Until that date arrives the transaction counts
+  in the month's result but not in the account balance.
+- Months are never created by hand — a month appears on the dashboard as soon as a transaction
+  carries a `date` inside it.
