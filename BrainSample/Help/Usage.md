@@ -70,14 +70,15 @@ Example:
 ./wraith render <visualization-name> [args...]
 ```
 
-Renders a single visualization to standard output, without writing its `dest` file and without
+Renders a single visualization to standard output, without writing anything to `dest` and without
 touching the database. Use it to preview an entry — or a different set of `args` — before putting
-it into `Visualization.yaml`.
+it into `Visualization.yaml`. For a visualization that renders a folder, it prints the tree it
+would write and every file below it.
 
 Example:
 
 ```bash
-./wraith render ForeCast --months 12
+./wraith render DashBoard --future-months 12
 ```
 
 ## Tick Workflow
@@ -96,45 +97,59 @@ Example:
 
 ## Visualization
 
-Wraith renders no page on its own. Every file it writes is one entry you declared in
-`Visualization.yaml`, so the set of dashboards you see is yours to choose:
+Wraith renders no page on its own. Everything it writes is one entry you declared in
+`Visualization.yaml`, so the shape of your vault is yours to choose:
 
 ```yaml
-- name: Usage
-  dest: Usage.md
-
 - name: DashBoard
-  dest: DashBoard/README.md
-
-- name: ForeCast
   args:
-    months: 8
-  dest: DashBoard/Forecast.md
+    prev-months: 3
+    future-months: 8
+  dest: DashBoard
+
+- name: Task-List
+  dest: Tasks
+
+- name: Help
+  dest: Help
 ```
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `name` | yes | Which visualization to render — `DashBoard`, `ForeCast`, `Accounts`, `Month`, … |
+| `name` | yes | Which visualization to render — `DashBoard`, `Task-List`, `Help`, `Usage` |
 | `dest` | yes | Where to write it, relative to the vault root. Missing folders are created. |
-| `args` | no | Per-visualization options, such as `ForeCast.months`. |
+| `args` | no | Per-visualization options, such as `DashBoard.future-months`. |
 | `enabled` | no | `false` silences the entry without deleting it. Defaults to `true`. |
+
+A visualization renders either **one file** or **a whole folder**, and `dest` follows: a file path
+for the first kind, a folder path for the second. A folder visualization owns the tree it writes —
+`DashBoard` produces `README.md`, `Forecast.md` and a `Months/<month>/` subtree under whatever
+folder you point it at. Its `args` are what bound that expansion, so a page set never needs one
+entry per file.
+
+Three entries are what produce this whole vault: this page is not one of them, it is part of the
+`Help` tree. `Usage` also exists as a standalone file visualization, for a vault that wants the
+command reference somewhere else and none of the other guides — but it cannot be declared *and*
+have `Help` write over the same place, since destinations may not nest.
 
 ### Visualization Workflow
 
 1. Attempt to read `Visualization.yaml`.
    - If the file does not exist, create it with the default entries and use those.
 2. Validate every entry: a known `name`, a `dest` inside the vault, known `args` of the right type,
-   and no two entries writing the same `dest`.
+   and no two entries whose destinations collide or nest inside one another.
    - If any entry is invalid → [Show Error](#show-error) and [Stop Execution](#stop-execution).
      Nothing is rendered — a broken config leaves the vault as it was, never half-written.
 3. For each enabled entry, in order, render it against the current state and write it to `dest`,
    overwriting whatever was there.
-   - A `dest` carrying a placeholder (`{month}`, `{account}`) renders once per matching item.
+   - A folder `dest` is written into, never emptied: files the visualization no longer produces are
+     left untouched rather than deleted.
 
-Files removed from the list simply stop being refreshed; they are not deleted. Rendered files are
+Entries removed from the list simply stop being refreshed; nothing is deleted. Rendered files are
 generated output — a hand edit is overwritten on the next tick.
 
-The full list of visualizations and their `args` is in [`Visualization.md`](Visualization.md).
+The full catalog of visualizations, the tree each one writes and their `args` is in
+[`Visualization.md`](Visualization.md).
 
 ## Procedures
 

@@ -1,7 +1,4 @@
-- name: Usage
-  dest:  Usage.md 
-
-- name: DashBoard 
+- name: DashBoard
   args:
     prev-months: 3
     future-months: 8
@@ -10,5 +7,5 @@
 - name: Task-List
   dest: Tasks
 
-- name: Help 
-  dest: help
+- name: Help
+  dest: Help

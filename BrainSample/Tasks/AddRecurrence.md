@@ -34,7 +34,7 @@ spills into the next month.
 ### `to_account` — recurring transfers
 
 A one-off transfer is two `AddTransaction`s sharing a transfer category (see
-[`Task-help.md` §3](../Task-help.md)). A recurring one is a single `AddRecurrence` with
+[`Help/Task.md` §3](../Help/Task.md)). A recurring one is a single `AddRecurrence` with
 `to_account` filled in: the forecast expands it into both legs, `-amount` on `account` and
 `+amount` on `to_account`, so the pair nets to zero and is counted as neither income nor expense.
 
