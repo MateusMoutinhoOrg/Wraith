@@ -1,0 +1,10 @@
+- name: Usage
+  dest:  Usage.md 
+
+- name: DashBoard 
+  dest: DashBoard/README.md
+
+- name: ForeCast
+  args:
+    months: 8
+  dest: DashBoard/Forecast.md
