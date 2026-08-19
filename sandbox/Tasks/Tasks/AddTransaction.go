@@ -19,6 +19,46 @@ const (
 	MaxInstallments = 72
 )
 
+// addTransactionFields declares what the task accepts.
+func addTransactionFields() []api.Field {
+	return []api.Field{
+		{Name: AccountField, Type: api.TextField, Required: true,
+			Description: "The account the movement happened on"},
+		{Name: CategoryField, Type: api.TextField, Required: true,
+			Description: "The category it is classified under"},
+		{Name: AmountField, Type: api.NumberField, Required: true,
+			Description: "Positive for money in, negative for money out"},
+		{Name: DateField, Type: api.TextField, Required: true,
+			Description: "The date it counts on, written as YYYY-MM-DD"},
+		{Name: DescriptionField, Type: api.TextField,
+			Description: "What it was"},
+		{Name: PaymentDateField, Type: api.TextField,
+			Description: "When the money actually moves, if not on `date`"},
+		{Name: InstallmentsField, Type: api.NumberField,
+			Description: "Split the amount into this many monthly parts (2-72)"},
+	}
+}
+
+// addTransactionAction runs the task against the database it is handed.
+func addTransactionAction(args api.HandleActionArgs) error {
+	transaction, parts, err := readTransaction(args)
+	if err != nil {
+		return err
+	}
+	instance, err := schema(args, config.TransactionSchema)
+	if err != nil {
+		return err
+	}
+	for index, part := range spread(transaction, parts) {
+		subject := "transaction " + strconv.Itoa(index+1)
+		if err := insert(args, config.TransactionSchema, subject,
+			movementFields(nextKey(instance), part)); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // AddTransaction returns the task that records a movement: money in, money
 // out, or one leg of a transfer between two of your own accounts. It is the
 // task you will run most, and the only one that writes to the ledger.
@@ -28,42 +68,10 @@ const (
 // its own month, each adding back up to the total exactly.
 func AddTransaction() api.Task {
 	return api.Task{
-		Name:        "AddTransaction",
-		Description: "Record an income, an expense, or one leg of a transfer",
-		Fields: []api.Field{
-			{Name: AccountField, Type: api.TextField, Required: true,
-				Description: "The account the movement happened on"},
-			{Name: CategoryField, Type: api.TextField, Required: true,
-				Description: "The category it is classified under"},
-			{Name: AmountField, Type: api.NumberField, Required: true,
-				Description: "Positive for money in, negative for money out"},
-			{Name: DateField, Type: api.TextField, Required: true,
-				Description: "The date it counts on, written as YYYY-MM-DD"},
-			{Name: DescriptionField, Type: api.TextField,
-				Description: "What it was"},
-			{Name: PaymentDateField, Type: api.TextField,
-				Description: "When the money actually moves, if not on `date`"},
-			{Name: InstallmentsField, Type: api.NumberField,
-				Description: "Split the amount into this many monthly parts (2-72)"},
-		},
-		HandleAction: func(args api.HandleActionArgs) error {
-			transaction, parts, err := readTransaction(args)
-			if err != nil {
-				return err
-			}
-			instance, err := schema(args, config.TransactionSchema)
-			if err != nil {
-				return err
-			}
-			for index, part := range spread(transaction, parts) {
-				subject := "transaction " + strconv.Itoa(index+1)
-				if err := insert(args, config.TransactionSchema, subject,
-					movementFields(nextKey(instance), part)); err != nil {
-					return err
-				}
-			}
-			return nil
-		},
+		Name:         "AddTransaction",
+		Description:  "Record an income, an expense, or one leg of a transfer",
+		Fields:       addTransactionFields(),
+		HandleAction: addTransactionAction,
 	}
 }
 

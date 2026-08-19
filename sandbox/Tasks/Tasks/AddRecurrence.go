@@ -9,6 +9,46 @@ import (
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
+// addRecurrenceFields declares what the task accepts.
+func addRecurrenceFields() []api.Field {
+	return []api.Field{
+		{Name: DescriptionField, Type: api.TextField, Required: true,
+			Description: "Identifies the recurrence — it is how RemoveRecurrence finds it"},
+		{Name: AccountField, Type: api.TextField, Required: true,
+			Description: "The account the money leaves from or arrives in"},
+		{Name: CategoryField, Type: api.TextField, Required: true,
+			Description: "The category it is classified under"},
+		{Name: AmountField, Type: api.NumberField, Required: true,
+			Description: "Amount per occurrence, positive for income"},
+		{Name: DayField, Type: api.NumberField, Required: true,
+			Description: "Day of the month it falls on (1-31)"},
+		{Name: StartField, Type: api.TextField, Required: true,
+			Description: "First month it applies, written as YYYY-MM"},
+		{Name: EndField, Type: api.TextField,
+			Description: "Last month it applies, as YYYY-MM. Omitted means open-ended"},
+		{Name: ToAccountField, Type: api.TextField,
+			Description: "Destination account, for a recurring transfer"},
+	}
+}
+
+// addRecurrenceAction runs the task against the database it is handed.
+func addRecurrenceAction(args api.HandleActionArgs) error {
+	recurrence, err := readRecurrence(args)
+	if err != nil {
+		return err
+	}
+	return insert(args, config.RecurrenceSchema,
+		"recurrence "+recurrence.Description, map[string]any{
+			config.NameField: recurrence.Description,
+			config.DetailField: utils.Pack(recurrence.Description, recurrence.Account,
+				recurrence.ToAccount, recurrence.Category),
+			config.AmountField: recurrence.Amount,
+			config.DayField:    recurrence.Day,
+			config.StartField:  recurrence.Start,
+			config.EndField:    recurrence.End,
+		})
+}
+
 // AddRecurrence returns the task that declares a commitment repeating every
 // month — a salary, rent, a subscription, a standing transfer into savings.
 //
@@ -18,42 +58,10 @@ import (
 // AddTransaction, with the real amount.
 func AddRecurrence() api.Task {
 	return api.Task{
-		Name:        "AddRecurrence",
-		Description: "Declare a commitment that repeats every month",
-		Fields: []api.Field{
-			{Name: DescriptionField, Type: api.TextField, Required: true,
-				Description: "Identifies the recurrence — it is how RemoveRecurrence finds it"},
-			{Name: AccountField, Type: api.TextField, Required: true,
-				Description: "The account the money leaves from or arrives in"},
-			{Name: CategoryField, Type: api.TextField, Required: true,
-				Description: "The category it is classified under"},
-			{Name: AmountField, Type: api.NumberField, Required: true,
-				Description: "Amount per occurrence, positive for income"},
-			{Name: DayField, Type: api.NumberField, Required: true,
-				Description: "Day of the month it falls on (1-31)"},
-			{Name: StartField, Type: api.TextField, Required: true,
-				Description: "First month it applies, written as YYYY-MM"},
-			{Name: EndField, Type: api.TextField,
-				Description: "Last month it applies, as YYYY-MM. Omitted means open-ended"},
-			{Name: ToAccountField, Type: api.TextField,
-				Description: "Destination account, for a recurring transfer"},
-		},
-		HandleAction: func(args api.HandleActionArgs) error {
-			recurrence, err := readRecurrence(args)
-			if err != nil {
-				return err
-			}
-			return insert(args, config.RecurrenceSchema,
-				"recurrence "+recurrence.Description, map[string]any{
-					config.NameField: recurrence.Description,
-					config.DetailField: utils.Pack(recurrence.Description, recurrence.Account,
-						recurrence.ToAccount, recurrence.Category),
-					config.AmountField: recurrence.Amount,
-					config.DayField:    recurrence.Day,
-					config.StartField:  recurrence.Start,
-					config.EndField:    recurrence.End,
-				})
-		},
+		Name:         "AddRecurrence",
+		Description:  "Declare a commitment that repeats every month",
+		Fields:       addRecurrenceFields(),
+		HandleAction: addRecurrenceAction,
 	}
 }
 

@@ -10,6 +10,50 @@ import (
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
 )
 
+// modifyTransactionFields declares what the task accepts.
+func modifyTransactionFields() []api.Field {
+	return []api.Field{
+		{Name: IdField, Type: api.NumberField, Required: true,
+			Description: "The id of the transaction, as the statement shows it"},
+		{Name: AccountField, Type: api.TextField,
+			Description: "Move it to another account"},
+		{Name: CategoryField, Type: api.TextField,
+			Description: "Classify it under another category"},
+		{Name: DescriptionField, Type: api.TextField,
+			Description: "Rewrite what it was"},
+		{Name: AmountField, Type: api.NumberField,
+			Description: "Correct the amount"},
+		{Name: DateField, Type: api.TextField,
+			Description: "Correct the date it counts on, as YYYY-MM-DD"},
+		{Name: PaymentDateField, Type: api.TextField,
+			Description: "Correct when the money actually moves, as YYYY-MM-DD"},
+	}
+}
+
+// modifyTransactionAction runs the task against the database it is handed.
+func modifyTransactionAction(args api.HandleActionArgs) error {
+	id, err := entries.Whole(args.Entries, IdField)
+	if err != nil {
+		return err
+	}
+	record, found := findTransaction(args, id)
+	if !found {
+		return errors.New("transaction not found: " + strconv.FormatInt(id, 10))
+	}
+	current := readMovement(record)
+	updated, err := applyChanges(args, current)
+	if err != nil {
+		return err
+	}
+	for field, value := range movementFields(current.Key, updated) {
+		if err := record.Update(field, value); err != nil {
+			return errors.New("transaction " + strconv.FormatInt(id, 10) +
+				" could not be updated: " + err.Message)
+		}
+	}
+	return nil
+}
+
 // ModifyTransaction returns the task that corrects a movement already in the
 // ledger. Every field but `id` is optional: what you give is overwritten,
 // what you leave out stays as it is. The id is the one a statement shows
@@ -19,46 +63,10 @@ import (
 // this is how a single part is corrected — the other parts are untouched.
 func ModifyTransaction() api.Task {
 	return api.Task{
-		Name:        "ModifyTransaction",
-		Description: "Correct a transaction already in the ledger",
-		Fields: []api.Field{
-			{Name: IdField, Type: api.NumberField, Required: true,
-				Description: "The id of the transaction, as the statement shows it"},
-			{Name: AccountField, Type: api.TextField,
-				Description: "Move it to another account"},
-			{Name: CategoryField, Type: api.TextField,
-				Description: "Classify it under another category"},
-			{Name: DescriptionField, Type: api.TextField,
-				Description: "Rewrite what it was"},
-			{Name: AmountField, Type: api.NumberField,
-				Description: "Correct the amount"},
-			{Name: DateField, Type: api.TextField,
-				Description: "Correct the date it counts on, as YYYY-MM-DD"},
-			{Name: PaymentDateField, Type: api.TextField,
-				Description: "Correct when the money actually moves, as YYYY-MM-DD"},
-		},
-		HandleAction: func(args api.HandleActionArgs) error {
-			id, err := entries.Whole(args.Entries, IdField)
-			if err != nil {
-				return err
-			}
-			record, found := findTransaction(args, id)
-			if !found {
-				return errors.New("transaction not found: " + strconv.FormatInt(id, 10))
-			}
-			current := readMovement(record)
-			updated, err := applyChanges(args, current)
-			if err != nil {
-				return err
-			}
-			for field, value := range movementFields(current.Key, updated) {
-				if err := record.Update(field, value); err != nil {
-					return errors.New("transaction " + strconv.FormatInt(id, 10) +
-						" could not be updated: " + err.Message)
-				}
-			}
-			return nil
-		},
+		Name:         "ModifyTransaction",
+		Description:  "Correct a transaction already in the ledger",
+		Fields:       modifyTransactionFields(),
+		HandleAction: modifyTransactionAction,
 	}
 }
 
