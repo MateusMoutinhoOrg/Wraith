@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // The keys every task carries whatever it declares: the task's own name, and
@@ -98,6 +99,33 @@ func Whole(values map[string]any, key string) (int64, error) {
 		return 0, errors.New(key + " must be a whole number")
 	}
 	return whole, nil
+}
+
+// Amount reads a value as a monetary amount, accepting text or a whole number,
+// and returning the exact whole number of cents it stands for. It rejects
+// amounts outside the +/- 10^14 cents range to prevent overflow, and refuses
+// any value with precision below the cent.
+func Amount(values map[string]any, key string) (int64, error) {
+	value, found := values[key]
+	if !found || value == nil {
+		return 0, nil
+	}
+	var text string
+	switch typed := value.(type) {
+	case int64:
+		text = strconv.FormatInt(typed, 10)
+	case int:
+		text = strconv.Itoa(typed)
+	case float64:
+		text = strconv.FormatFloat(typed, 'f', -1, 64)
+	case string:
+		text = strings.TrimSpace(typed)
+	default:
+		return 0, errors.New(key + " must be a number")
+	}
+	
+	// We use utils.ParseCents to parse the text safely.
+	return utils.ParseCents(text)
 }
 
 // Bool reads a value as true or false, accepting the words a person types

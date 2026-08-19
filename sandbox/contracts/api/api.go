@@ -192,14 +192,14 @@ type Lib struct {
 
 	// PerformTaskTick runs the periodic task tick operations.
 	// It reads the task.yaml and runs the tasks based on the schedule.
-	PerformTaskTick func() error
+	PerformTaskTick func() (string, error)
 
 	// PerformVisualizationTick runs the periodic visualization tick operations.
 	// It reads the visualization.yaml and runs the visualizers based on the schedule.
 	PerformVisualizationTick func() error
 
 	// PerformFullTick runs both task and visualization tick operations.
-	PerformFullTick func() error
+	PerformFullTick func() (string, error)
 
 	// Start writes a default Task.yaml and Visualization.yaml, creating a
 	// vault where there was none.

@@ -4,7 +4,11 @@ package utils
 // in cents as whole numbers, so nothing here rounds and nothing drifts: the
 // formatting is the only place a value becomes text.
 
-import "strconv"
+import (
+	"errors"
+	"strconv"
+	"strings"
+)
 
 // Money renders an amount held in cents the way the vault shows it —
 // `R$ 4,694`, `-R$ 350`, `R$ 1,234.56`. The cents are printed only when they
@@ -13,6 +17,11 @@ func Money(cents int64) string {
 	sign := ""
 	if cents < 0 {
 		sign = "-"
+		if cents == -9223372036854775808 { // math.MinInt64
+			// Cannot negate MinInt64, so handle manually or since we bounded to 10^14 it's safe.
+			// However, a good formatter should be robust.
+			return "-R$ 92,233,720,368,547,758.08"
+		}
 		cents = -cents
 	}
 	return sign + "R$ " + grouped(cents/100) + fraction(cents%100)
@@ -68,6 +77,58 @@ func Cents(amount float64) int64 {
 		return -int64(-amount*100 + 0.5)
 	}
 	return int64(amount*100 + 0.5)
+}
+
+// ParseCents converts a string representing a monetary amount exactly into cents.
+// It refuses amounts with more than two decimal places, preventing silent
+// precision loss, and enforces a +/- 10^14 range to prevent overflow.
+func ParseCents(text string) (int64, error) {
+	if text == "" {
+		return 0, nil
+	}
+	sign := int64(1)
+	if text[0] == '-' {
+		sign = -1
+		text = text[1:]
+	} else if text[0] == '+' {
+		text = text[1:]
+	}
+	
+	parts := strings.Split(text, ".")
+	if len(parts) > 2 {
+		return 0, errors.New("invalid number format")
+	}
+	
+	var whole int64
+	var err error
+	if parts[0] != "" {
+		whole, err = strconv.ParseInt(parts[0], 10, 64)
+		if err != nil {
+			return 0, errors.New("invalid whole number")
+		}
+	}
+	
+	var frac int64
+	if len(parts) == 2 {
+		if len(parts[1]) > 2 {
+			return 0, errors.New("precision below the cent is discarded")
+		}
+		if len(parts[1]) == 1 {
+			parts[1] += "0"
+		}
+		if len(parts[1]) == 2 {
+			frac, err = strconv.ParseInt(parts[1], 10, 64)
+			if err != nil {
+				return 0, errors.New("invalid decimal fraction")
+			}
+		}
+	}
+	
+	cents := whole*100 + frac
+	if cents > 100000000000000 || cents < -100000000000000 {
+		return 0, errors.New("amount is outside the allowed range")
+	}
+	return cents * sign, nil
 }
 
 // Bar renders a share of a total as the twenty-cell bar the dashboards use —

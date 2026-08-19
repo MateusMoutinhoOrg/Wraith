@@ -96,8 +96,8 @@ func addRecurrenceRead(args api.HandleActionArgs) (addRecurrenceCommitment, erro
 	if description == "" {
 		return empty, errors.New(DescriptionField + " is required")
 	}
-	if strings.Contains(description, utils.Separator) {
-		return empty, errors.New(DescriptionField + " may not contain " + utils.Separator)
+	if strings.Contains(description, utils.Separator) || strings.Contains(description, "\n") || strings.Contains(description, "\r") {
+		return empty, errors.New(DescriptionField + " may not contain line breaks or " + utils.Separator)
 	}
 	accounts, reachable := args.DataBase.GetSchema(config.AccountSchema)
 	if !reachable {
@@ -133,11 +133,10 @@ func addRecurrenceRead(args api.HandleActionArgs) (addRecurrenceCommitment, erro
 	revenues := addRecurrenceNumber(category, config.RevenuesField)
 	expenses := addRecurrenceNumber(category, config.ExpensesField)
 	transfer := revenues != 1 && expenses != 1
-	amount, err := entries.Number(args.Entries, AmountField)
+	cents, err := entries.Amount(args.Entries, AmountField)
 	if err != nil {
 		return empty, err
 	}
-	cents := utils.Cents(amount)
 	if cents == 0 {
 		return empty, errors.New(AmountField + " may not be zero")
 	}

@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 )
 
@@ -10,11 +9,12 @@ import (
 // tick itself, so a person watching a terminal and a person watching the
 // vault see the same thing.
 func Tick(l *api.Lib, quiet bool) int {
-	if err := l.PerformFullTick(); err != nil {
+	msg, err := l.PerformFullTick()
+	if err != nil {
 		return Failure(l, err)
 	}
 	if !quiet {
-		l.Deps.Printf("%s", config.Ticked)
+		l.Deps.Printf("%s\n", msg)
 	}
 	return api.ExitOk
 }

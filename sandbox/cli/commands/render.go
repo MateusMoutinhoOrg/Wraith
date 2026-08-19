@@ -26,7 +26,10 @@ func Render(l *api.Lib, quiet bool) int {
 		return UsageError(l, config.UnknownVisualization, name)
 	}
 
-	dest, args := declaredEntry(l, declared.Name)
+	dest, args, entryErr := declaredEntry(l, declared.Name)
+	if entryErr != nil {
+		return Failure(l, entryErr)
+	}
 	if override, err := l.Deps.VerbLib.GetStringOption([]string{config.DestFlag}, 0); err == nil && override != "" {
 		dest = override
 	}
@@ -57,11 +60,11 @@ func Render(l *api.Lib, quiet bool) int {
 // writes and what its args were declared as. A name the config never mentions
 // has no destination to fall back on, which is what makes `--dest` required
 // for it.
-func declaredEntry(l *api.Lib, name string) (string, map[string]any) {
+func declaredEntry(l *api.Lib, name string) (string, map[string]any, error) {
 	args := map[string]any{}
 	entries, err := vault.ReadEntries(l.Deps, l.VisualizationPath, l.Visualizations)
 	if err != nil {
-		return "", args
+		return "", args, err
 	}
 	for _, entry := range entries {
 		if entry.Name != name {
@@ -70,7 +73,7 @@ func declaredEntry(l *api.Lib, name string) (string, map[string]any) {
 		for key, value := range entry.Args {
 			args[key] = value
 		}
-		return entry.Dest, args
+		return entry.Dest, args, nil
 	}
-	return "", args
+	return "", args, nil
 }

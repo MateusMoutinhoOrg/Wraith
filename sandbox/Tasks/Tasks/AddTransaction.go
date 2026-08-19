@@ -130,11 +130,10 @@ func addTransactionRead(args api.HandleActionArgs) (addTransactionMovement, int6
 	if !found {
 		return empty, 0, errors.New("category not found: " + categoryName)
 	}
-	amount, err := entries.Number(args.Entries, AmountField)
+	cents, err := entries.Amount(args.Entries, AmountField)
 	if err != nil {
 		return empty, 0, err
 	}
-	cents := utils.Cents(amount)
 	if cents == 0 {
 		return empty, 0, errors.New(AmountField + " may not be zero")
 	}
@@ -167,9 +166,9 @@ func addTransactionRead(args api.HandleActionArgs) (addTransactionMovement, int6
 		if err != nil {
 			return empty, 0, err
 		}
-		if strings.Contains(description, utils.Separator) {
+		if strings.Contains(description, utils.Separator) || strings.Contains(description, "\n") || strings.Contains(description, "\r") {
 			return empty, 0, errors.New(DescriptionField +
-				" may not contain " + utils.Separator)
+				" may not contain line breaks or " + utils.Separator)
 		}
 	}
 	payment := when

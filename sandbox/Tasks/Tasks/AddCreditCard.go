@@ -41,11 +41,10 @@ func addCreditCardAction(args api.HandleActionArgs) error {
 	if strings.Contains(cardName, utils.Separator) {
 		return errors.New(AccountField + " may not contain " + utils.Separator)
 	}
-	limitAmount, err := entries.Number(args.Entries, LimitField)
+	limit, err := entries.Amount(args.Entries, LimitField)
 	if err != nil {
 		return err
 	}
-	limit := utils.Cents(limitAmount)
 	if limit < 0 {
 		return errors.New(LimitField + " is a credit limit, so it may not be negative")
 	}
@@ -63,11 +62,10 @@ func addCreditCardAction(args api.HandleActionArgs) error {
 	if dueDay < 1 || dueDay > 31 {
 		return errors.New(DueDayField + " must be a day of the month, from 1 to 31")
 	}
-	openingAmount, err := entries.Number(args.Entries, OpeningField)
+	opening, err := entries.Amount(args.Entries, OpeningField)
 	if err != nil {
 		return err
 	}
-	opening := utils.Cents(openingAmount)
 	if opening > 0 {
 		return errors.New(OpeningField + " on a card is what you already owe, " +
 			"so it is written as a negative number")

@@ -27,8 +27,11 @@ func Watch(l *api.Lib, quiet bool) int {
 		l.Deps.Printf(config.Watching, interval.String())
 	}
 	for {
-		if err := l.PerformFullTick(); err != nil {
+		msg, err := l.PerformFullTick()
+		if err != nil {
 			l.Deps.Printf(config.Failed, err.Error())
+		} else if !quiet && msg != "nothing to apply" {
+			l.Deps.Printf("%s\n", msg)
 		}
 		l.Deps.Sleep(interval)
 	}

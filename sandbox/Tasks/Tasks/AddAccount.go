@@ -36,7 +36,7 @@ func addAccountAction(args api.HandleActionArgs) error {
 	if strings.Contains(accountName, utils.Separator) {
 		return errors.New(AccountField + " may not contain " + utils.Separator)
 	}
-	amount, err := entries.Number(args.Entries, OpeningField)
+	amount, err := entries.Amount(args.Entries, OpeningField)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func addAccountAction(args api.HandleActionArgs) error {
 	_, failure := accounts.NewItem(map[string]any{
 		config.NameField:    accountName,
 		config.KindField:    int64(config.KindAccount),
-		config.OpeningField: utils.Cents(amount),
+		config.OpeningField: amount,
 	})
 	if failure == nil {
 		return nil

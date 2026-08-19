@@ -30,6 +30,7 @@ func TaskArray() []api.Task {
 	return []api.Task{
 		tasks.AddTransaction(),
 		tasks.ModifyTransaction(),
+		tasks.RemoveTransaction(),
 		tasks.AddRecurrence(),
 		tasks.RemoveRecurrence(),
 		tasks.AddCategory(),

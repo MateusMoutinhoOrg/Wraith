@@ -47,8 +47,8 @@ func addCategoryAction(args api.HandleActionArgs) error {
 	if description == "" {
 		return errors.New(DescriptionField + " is required")
 	}
-	if strings.Contains(description, utils.Separator) {
-		return errors.New(DescriptionField + " may not contain " + utils.Separator)
+	if strings.Contains(description, utils.Separator) || strings.Contains(description, "\n") || strings.Contains(description, "\r") {
+		return errors.New(DescriptionField + " may not contain line breaks or " + utils.Separator)
 	}
 	revenues, err := entries.Bool(args.Entries, RevenuesField)
 	if err != nil {

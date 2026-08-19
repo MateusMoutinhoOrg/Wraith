@@ -21,25 +21,25 @@ import (
 //  3. Otherwise run it. On failure, write Error.md, disarm the file, and
 //     report — so a task that cannot work is not retried on every tick of a
 //     `watch` loop.
-func PerformTaskTickFactory(l *api.Lib) func() error {
-	return func() error {
+func PerformTaskTickFactory(l *api.Lib) func() (string, error) {
+	return func() (string, error) {
 		pending, err := vault.ReadTask(l.Deps, l.TaskPath)
 		if errors.Is(err, vault.ErrNoTask) {
-			return nil
+			return "nothing to apply", nil
 		}
 		if err != nil {
 			vault.WriteError(l.Deps, config.ErrorPath, "reading "+l.TaskPath, err)
-			return err
+			return "", err
 		}
 		if !pending.Apply {
-			return nil
+			return "nothing to apply", nil
 		}
 		if pending.Name == "" {
 			failure := errors.New(l.TaskPath + " carries no `name` — it must name one of the " +
 				"tasks `wraith tasks` lists")
 			vault.WriteError(l.Deps, config.ErrorPath, "reading "+l.TaskPath, failure)
 			vault.ResetApply(l.Deps, l.TaskPath, pending)
-			return failure
+			return "", failure
 		}
 		failure := l.PerformTask(pending.Name, pending.Fields())
 		if resetErr := vault.ResetApply(l.Deps, l.TaskPath, pending); resetErr != nil && failure == nil {
@@ -47,9 +47,9 @@ func PerformTaskTickFactory(l *api.Lib) func() error {
 		}
 		if failure != nil {
 			vault.WriteError(l.Deps, config.ErrorPath, "running "+pending.Name, failure)
-			return failure
+			return "", failure
 		}
 		vault.ClearError(l.Deps, config.ErrorPath)
-		return nil
+		return pending.Name + " done", nil
 	}
 }

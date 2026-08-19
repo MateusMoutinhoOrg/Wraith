@@ -10,11 +10,12 @@ import "github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 // before anything is rendered, so the pages on disk always describe data that
 // actually exists — the last state that was written successfully, never a
 // half-applied one.
-func PerformFullTickFactory(l *api.Lib) func() error {
-	return func() error {
-		if err := l.PerformTaskTick(); err != nil {
-			return err
+func PerformFullTickFactory(l *api.Lib) func() (string, error) {
+	return func() (string, error) {
+		msg, err := l.PerformTaskTick()
+		if err != nil {
+			return msg, err
 		}
-		return l.PerformVisualizationTick()
+		return msg, l.PerformVisualizationTick()
 	}
 }

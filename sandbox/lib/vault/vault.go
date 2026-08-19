@@ -105,31 +105,41 @@ func (t Task) Fields() map[string]any {
 // again on the next one — and it runs whether the task succeeded or failed,
 // so a broken task is not retried forever.
 func ResetApply(d deps.Deps, path string, task Task) error {
-	values := map[string]any{}
-	for key, value := range task.Values {
-		values[key] = value
+	content, err := d.IoLib.ReadFile(path)
+	if err != nil {
+		return err
 	}
-	values[entries.ApplyKey] = false
-	order := []string{entries.NameKey}
-	for key := range values {
-		if key == entries.NameKey || key == entries.ApplyKey {
-			continue
+	lines := strings.Split(string(content), "\n")
+	for i, line := range lines {
+		trimmed := strings.TrimLeft(line, " \t")
+		if strings.HasPrefix(trimmed, "apply:") {
+			colon := strings.Index(line, ":")
+			if colon != -1 {
+				before := line[:colon+1]
+				after := line[colon+1:]
+				replaced := false
+				for _, truth := range []string{"true", "yes", "on", "1", "True", "TRUE"} {
+					wordStart := -1
+					for j, c := range after {
+						if c != ' ' && c != '\t' {
+							wordStart = j
+							break
+						}
+					}
+					if wordStart != -1 && strings.HasPrefix(after[wordStart:], truth) {
+						after = after[:wordStart] + "false" + after[wordStart+len(truth):]
+						lines[i] = before + after
+						replaced = true
+						break
+					}
+				}
+				if replaced {
+					break
+				}
+			}
 		}
-		order = append(order, key)
 	}
-	sortKeys(order[1:])
-	order = append(order, entries.ApplyKey)
-	return d.IoLib.WriteFile(path, yaml.EncodeMap(values, order))
-}
-
-// sortKeys orders the middle of a task file, so rewriting it never shuffles
-// the lines a person typed into a different order each tick.
-func sortKeys(keys []string) {
-	for index := 1; index < len(keys); index++ {
-		for back := index; back > 0 && keys[back] < keys[back-1]; back-- {
-			keys[back], keys[back-1] = keys[back-1], keys[back]
-		}
-	}
+	return d.IoLib.WriteFile(path, []byte(strings.Join(lines, "\n")))
 }
 
 // ReadEntries reads the visualization config. A file that is not there is

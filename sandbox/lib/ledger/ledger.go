@@ -266,7 +266,7 @@ func (s State) RenderedMonths(previous int) []int64 {
 func (s State) CategoryTotal(name string, month int64) int64 {
 	total := int64(0)
 	for _, transaction := range s.Transactions {
-		if transaction.Category != name {
+		if !s.IsCategoryOrDescendant(transaction.Category, name) {
 			continue
 		}
 		if month != 0 && utils.MonthOf(transaction.Date) != month {
@@ -281,9 +281,26 @@ func (s State) CategoryTotal(name string, month int64) int64 {
 func (s State) CategoryCount(name string) int {
 	count := 0
 	for _, transaction := range s.Transactions {
-		if transaction.Category == name {
+		if s.IsCategoryOrDescendant(transaction.Category, name) {
 			count++
 		}
 	}
 	return count
+}
+
+// IsCategoryOrDescendant reports whether category 'child' is the same as 'parent' or a descendant of it.
+func (s State) IsCategoryOrDescendant(child string, parent string) bool {
+	if child == parent {
+		return true
+	}
+	for {
+		cat, found := s.Category(child)
+		if !found || cat.Parent == "" {
+			return false
+		}
+		if cat.Parent == parent {
+			return true
+		}
+		child = cat.Parent
+	}
 }

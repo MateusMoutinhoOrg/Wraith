@@ -212,9 +212,14 @@ func cardsPage(state ledger.State) api.VisualizationRender {
 	p.table("Card", ">Limit", ">Outstanding", ">Available", "Closes", "Due")
 	for _, card := range state.Cards() {
 		owed := state.Owed(card)
+		closeMonth := state.OpenMonth()
+		dueMonth := closeMonth
+		if card.DueDay < card.ClosingDay {
+			dueMonth = utils.AddMonths(closeMonth, 1)
+		}
 		p.row(card.Name, money(card.Limit), money(owed), money(card.Limit-owed),
-			"day "+strconv.FormatInt(card.ClosingDay, 10),
-			"day "+strconv.FormatInt(card.DueDay, 10))
+			utils.PrettyDate(utils.DateIn(closeMonth, card.ClosingDay)),
+			utils.PrettyDate(utils.DateIn(dueMonth, card.DueDay)))
 	}
 	p.blank()
 	p.line("A purchase counts on the day it happens. The money leaves your account when you " +

@@ -160,17 +160,16 @@ func modifyTransactionApply(args api.HandleActionArgs,
 		if err != nil {
 			return updated, err
 		}
-		if strings.Contains(description, utils.Separator) {
-			return updated, errors.New(DescriptionField + " may not contain " + utils.Separator)
+		if strings.Contains(description, utils.Separator) || strings.Contains(description, "\n") || strings.Contains(description, "\r") {
+			return updated, errors.New(DescriptionField + " may not contain line breaks or " + utils.Separator)
 		}
 		updated.Description = description
 	}
 	if entries.Present(args.Entries, AmountField) {
-		amount, err := entries.Number(args.Entries, AmountField)
+		cents, err := entries.Amount(args.Entries, AmountField)
 		if err != nil {
 			return updated, err
 		}
-		cents := utils.Cents(amount)
 		if cents == 0 {
 			return updated, errors.New(AmountField + " may not be zero")
 		}
