@@ -202,7 +202,7 @@ type Lib struct {
 	PerformFullTick func() (string, error)
 
 	// Start writes a default Task.yaml and Visualization.yaml, creating a
-	// vault where there was none.
+	// vault where there was none, and immediately runs a tick to render it.
 	// It is filled by lib.StartFactory.
 	Start func() error
 

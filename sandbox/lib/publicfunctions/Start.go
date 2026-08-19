@@ -7,7 +7,7 @@ import (
 
 // StartFactory fills api.Lib.Start with a closure that creates a vault: a
 // task file and a visualization config, copied from the defaults compiled
-// into the binary.
+// into the binary. It then runs a tick to render the initial state.
 //
 // It never overwrites. A file already on disk is left exactly as it is, so
 // running `wraith start` in a vault that is already going is harmless rather
@@ -15,10 +15,18 @@ import (
 // runs and the easiest one to run twice.
 func StartFactory(l *api.Lib) func() error {
 	return func() error {
-		if _, err := vault.WriteAsset(l.Deps, vault.StartTaskAsset, l.TaskPath); err != nil {
+		wroteTask, err := vault.WriteAsset(l.Deps, vault.StartTaskAsset, l.TaskPath)
+		if err != nil {
 			return err
 		}
-		_, err := vault.WriteAsset(l.Deps, vault.StartVisualizationAsset, l.VisualizationPath)
-		return err
+		wroteVis, err := vault.WriteAsset(l.Deps, vault.StartVisualizationAsset, l.VisualizationPath)
+		if err != nil {
+			return err
+		}
+		if wroteTask || wroteVis {
+			_, err = l.PerformFullTick()
+			return err
+		}
+		return nil
 	}
 }

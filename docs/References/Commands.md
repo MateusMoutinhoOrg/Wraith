@@ -17,7 +17,7 @@ Arguments are positional and required unless the table says otherwise; flags are
 
 | Command | Arguments | Writes | Purpose |
 | --- | --- | --- | --- |
-| `start` | — | `Task.yaml`, `Visualization.yaml` | Create a vault where there was none |
+| `start` | — | `Task.yaml`, `Visualization.yaml`, every `dest` | Create a vault where there was none, then render it |
 | `tick` | — | the data, every `dest` | Run the pending task, then render everything |
 | `watch` | — | the data, every `dest` | Run a tick on an interval, until interrupted |
 | `run` | `<task-name>` | the data, every `dest` | Run one task from the command line |
@@ -29,7 +29,7 @@ Arguments are positional and required unless the table says otherwise; flags are
 
 ### `start`
 
-Writes the two files a brain is driven by, copied from the defaults compiled into the binary. It **never overwrites**: a file already on disk is reported and left as it is.
+Writes the two files a brain is driven by, copied from the defaults compiled into the binary, and immediately runs a tick to render them. It **never overwrites**: a file already on disk is reported and left as it is, and a tick is not performed if the files already existed.
 
 ### `tick`
 

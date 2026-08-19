@@ -18,21 +18,15 @@ mkdir my-brain
 cd my-brain
 ```
 
-2. Create the two files the brain is driven by.
+2. Create the two files the brain is driven by, and render the first pages.
 
 ```bash
 wraith start
 ```
 
-You now have `Task.yaml` — the one action waiting to run — and `Visualization.yaml` — the list of pages you want written.
+You now have `Task.yaml` — the one action waiting to run — and `Visualization.yaml` — the list of pages you want written. Because `start` also performs an immediate tick, those pages are already on disk.
 
-3. Run the first tick. There is nothing to apply yet, so this only renders.
-
-```bash
-wraith tick
-```
-
-4. Look at what appeared:
+3. Look at what appeared:
 
 ```bash
 ls
@@ -47,15 +41,15 @@ ls
 
 Every one of those folders exists because a line in `Visualization.yaml` asked for it. Delete the line and the folder stops being refreshed; see [ChooseVisualizations.md](/docs/Tutorials/ChooseVisualizations.md).
 
-5. Record something, so the pages have something to show.
+4. Record something, so the pages have something to show.
 
 ```bash
 wraith run AddAccount --account Bank --opening 3000
 ```
 
-6. Open `DashBoard/README.md`. Your account is on it.
+5. Open `DashBoard/README.md`. Your account is on it.
 
-7. Leave a watcher running while you work, so saving `Task.yaml` in an editor is all it takes to apply an action.
+6. Leave a watcher running while you work, so saving `Task.yaml` in an editor is all it takes to apply an action.
 
 ```bash
 wraith watch --time 1s
