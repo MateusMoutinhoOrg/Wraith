@@ -1,8 +1,14 @@
 package tasks
 
 import (
+	"errors"
+	"strings"
+
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // addAccountFields declares what the task accepts.
@@ -15,21 +21,41 @@ func addAccountFields() []api.Field {
 	}
 }
 
-// addAccountAction runs the task against the database it is handed.
+// addAccountAction reads the two fields, then writes one record into the
+// account registry of the database it was handed.
 func addAccountAction(args api.HandleActionArgs) error {
-	accountName, err := name(args.Entries, AccountField)
+	accountName, err := entries.Text(args.Entries, AccountField)
 	if err != nil {
 		return err
 	}
-	opening, err := cents(args.Entries, OpeningField)
+	if accountName == "" {
+		return errors.New(AccountField + " is required")
+	}
+	// The storage keys are packed with this one character, so a name may not
+	// carry it — a name can then always be read back the way it was written.
+	if strings.Contains(accountName, utils.Separator) {
+		return errors.New(AccountField + " may not contain " + utils.Separator)
+	}
+	amount, err := entries.Number(args.Entries, OpeningField)
 	if err != nil {
 		return err
 	}
-	return insert(args, config.AccountSchema, "account "+accountName, map[string]any{
+	accounts, reachable := args.DataBase.GetSchema(config.AccountSchema)
+	if !reachable {
+		return errors.New("the " + config.AccountSchema + " registry is unreachable")
+	}
+	_, failure := accounts.NewItem(map[string]any{
 		config.NameField:    accountName,
 		config.KindField:    int64(config.KindAccount),
-		config.OpeningField: opening,
+		config.OpeningField: utils.Cents(amount),
 	})
+	if failure == nil {
+		return nil
+	}
+	if failure.Type == keepdeps.KeyConflict {
+		return errors.New("account " + accountName + " already exists")
+	}
+	return errors.New("account " + accountName + " could not be stored: " + failure.Message)
 }
 
 // AddAccount returns the task that adds an account to the registry — a bank,

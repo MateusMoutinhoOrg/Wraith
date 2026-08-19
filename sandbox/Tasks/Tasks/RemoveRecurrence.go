@@ -1,8 +1,11 @@
 package tasks
 
 import (
+	"errors"
+
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
 )
 
 // removeRecurrenceFields declares what the task accepts.
@@ -13,13 +16,28 @@ func removeRecurrenceFields() []api.Field {
 	}
 }
 
-// removeRecurrenceAction runs the task against the database it is handed.
+// removeRecurrenceAction deletes one recurrence, addressed by the description
+// it was declared with.
 func removeRecurrenceAction(args api.HandleActionArgs) error {
-	description, err := name(args.Entries, RecurrenceField)
+	description, err := entries.Text(args.Entries, RecurrenceField)
 	if err != nil {
 		return err
 	}
-	return remove(args, config.RecurrenceSchema, "recurrence", description)
+	if description == "" {
+		return errors.New(RecurrenceField + " is required")
+	}
+	recurrences, reachable := args.DataBase.GetSchema(config.RecurrenceSchema)
+	if !reachable {
+		return errors.New("the " + config.RecurrenceSchema + " registry is unreachable")
+	}
+	record, found := recurrences.FindByKey(config.NameField, description)
+	if !found {
+		return errors.New("recurrence not found: " + description)
+	}
+	if failure := record.Remove(); failure != nil {
+		return errors.New("recurrence could not be removed: " + failure.Message)
+	}
+	return nil
 }
 
 // RemoveRecurrence returns the task that stops a recurring commitment,

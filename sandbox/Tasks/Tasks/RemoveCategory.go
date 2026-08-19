@@ -5,6 +5,9 @@ import (
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // removeCategoryFields declares what the task accepts.
@@ -15,31 +18,81 @@ func removeCategoryFields() []api.Field {
 	}
 }
 
-// removeCategoryAction runs the task against the database it is handed.
+// removeCategoryAction refuses a category anything still points at, and
+// otherwise deletes the record.
 func removeCategoryAction(args api.HandleActionArgs) error {
-	categoryName, err := name(args.Entries, CategoryField)
+	categoryName, err := entries.Text(args.Entries, CategoryField)
 	if err != nil {
 		return err
 	}
-	for _, transaction := range records(args, config.TransactionSchema) {
-		if detail(transaction, config.TransactionParts, config.TransactionCategory) == categoryName {
+	if categoryName == "" {
+		return errors.New(CategoryField + " is required")
+	}
+	// A category still classifying transactions, still named by a recurrence,
+	// or still standing as another category's parent would leave a rendered
+	// page pointing at something that is no longer there.
+	for _, transaction := range removeCategoryRecords(args, config.TransactionSchema) {
+		detail := removeCategoryText(transaction, config.DetailField)
+		if utils.Part(detail, config.TransactionParts, config.TransactionCategory) == categoryName {
 			return errors.New(categoryName + " still classifies transactions — " +
 				"move them to another category first")
 		}
 	}
-	for _, recurrence := range records(args, config.RecurrenceSchema) {
-		if detail(recurrence, config.RecurrenceParts, config.RecurrenceCategory) == categoryName {
+	for _, recurrence := range removeCategoryRecords(args, config.RecurrenceSchema) {
+		detail := removeCategoryText(recurrence, config.DetailField)
+		if utils.Part(detail, config.RecurrenceParts, config.RecurrenceCategory) == categoryName {
 			return errors.New(categoryName + " is still named by the recurrence " +
-				text(recurrence, config.NameField) + " — remove it first")
+				removeCategoryText(recurrence, config.NameField) + " — remove it first")
 		}
 	}
-	for _, category := range records(args, config.CategorySchema) {
-		if detail(category, config.CategoryParts, config.CategoryParent) == categoryName {
+	for _, category := range removeCategoryRecords(args, config.CategorySchema) {
+		detail := removeCategoryText(category, config.DetailField)
+		if utils.Part(detail, config.CategoryParts, config.CategoryParent) == categoryName {
 			return errors.New(categoryName + " is still the parent of " +
-				text(category, config.NameField) + " — remove the child first")
+				removeCategoryText(category, config.NameField) + " — remove the child first")
 		}
 	}
-	return remove(args, config.CategorySchema, "category", categoryName)
+	categories, reachable := args.DataBase.GetSchema(config.CategorySchema)
+	if !reachable {
+		return errors.New("the " + config.CategorySchema + " registry is unreachable")
+	}
+	record, found := categories.FindByKey(config.NameField, categoryName)
+	if !found {
+		return errors.New("category not found: " + categoryName)
+	}
+	if failure := record.Remove(); failure != nil {
+		return errors.New("category could not be removed: " + failure.Message)
+	}
+	return nil
+}
+
+// removeCategoryRecords returns every record of one registry. An unreachable
+// registry reads as no records: a task that cannot see one has nothing to
+// refuse over.
+func removeCategoryRecords(args api.HandleActionArgs, schemaName string) []keepdeps.SchemaItem {
+	instance, reachable := args.DataBase.GetSchema(schemaName)
+	if !reachable {
+		return nil
+	}
+	stored, failure := instance.ListAll()
+	if failure != nil {
+		return nil
+	}
+	return stored
+}
+
+// removeCategoryText reads a text field of a stored record, as "" when the
+// field is absent or holds something else.
+func removeCategoryText(record keepdeps.SchemaItem, field string) string {
+	value, err := record.Get(field)
+	if err != nil {
+		return ""
+	}
+	stored, ok := value.(string)
+	if !ok {
+		return ""
+	}
+	return stored
 }
 
 // RemoveCategory returns the task that removes a category from the registry.

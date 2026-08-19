@@ -2,9 +2,11 @@ package tasks
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
@@ -25,15 +27,28 @@ func addCategoryFields() []api.Field {
 	}
 }
 
-// addCategoryAction runs the task against the database it is handed.
+// addCategoryAction reads every field, checks the parent it was given exists,
+// and writes one record into the category registry.
 func addCategoryAction(args api.HandleActionArgs) error {
-	categoryName, err := name(args.Entries, CategoryField)
+	categoryName, err := entries.Text(args.Entries, CategoryField)
 	if err != nil {
 		return err
 	}
-	description, err := name(args.Entries, DescriptionField)
+	if categoryName == "" {
+		return errors.New(CategoryField + " is required")
+	}
+	if strings.Contains(categoryName, utils.Separator) {
+		return errors.New(CategoryField + " may not contain " + utils.Separator)
+	}
+	description, err := entries.Text(args.Entries, DescriptionField)
 	if err != nil {
 		return err
+	}
+	if description == "" {
+		return errors.New(DescriptionField + " is required")
+	}
+	if strings.Contains(description, utils.Separator) {
+		return errors.New(DescriptionField + " may not contain " + utils.Separator)
 	}
 	revenues, err := entries.Bool(args.Entries, RevenuesField)
 	if err != nil {
@@ -43,24 +58,50 @@ func addCategoryAction(args api.HandleActionArgs) error {
 	if err != nil {
 		return err
 	}
-	parent, err := optionalText(args.Entries, ParentField)
-	if err != nil {
-		return err
+	parent := ""
+	if entries.Present(args.Entries, ParentField) {
+		parent, err = entries.Text(args.Entries, ParentField)
+		if err != nil {
+			return err
+		}
+		if strings.Contains(parent, utils.Separator) {
+			return errors.New(ParentField + " may not contain " + utils.Separator)
+		}
+	}
+	categories, reachable := args.DataBase.GetSchema(config.CategorySchema)
+	if !reachable {
+		return errors.New("the " + config.CategorySchema + " registry is unreachable")
 	}
 	if parent != "" {
-		if _, err := requireCategory(args, parent); err != nil {
-			return errors.New("parent " + err.Error())
+		if _, found := categories.FindByKey(config.NameField, parent); !found {
+			return errors.New("parent category not found: " + parent)
 		}
 		if parent == categoryName {
 			return errors.New("a category cannot be its own parent")
 		}
 	}
-	return insert(args, config.CategorySchema, "category "+categoryName, map[string]any{
+	// The registries hold a yes-or-no as a whole number.
+	revenuesFlag := int64(0)
+	if revenues {
+		revenuesFlag = 1
+	}
+	expensesFlag := int64(0)
+	if expenses {
+		expensesFlag = 1
+	}
+	_, failure := categories.NewItem(map[string]any{
 		config.NameField:     categoryName,
 		config.DetailField:   utils.Pack(categoryName, parent, description),
-		config.RevenuesField: flag(revenues),
-		config.ExpensesField: flag(expenses),
+		config.RevenuesField: revenuesFlag,
+		config.ExpensesField: expensesFlag,
 	})
+	if failure == nil {
+		return nil
+	}
+	if failure.Type == keepdeps.KeyConflict {
+		return errors.New("category " + categoryName + " already exists")
+	}
+	return errors.New("category " + categoryName + " could not be stored: " + failure.Message)
 }
 
 // AddCategory returns the task that adds a category — what a transaction is
@@ -80,12 +121,4 @@ func AddCategory() api.Task {
 		Fields:       addCategoryFields(),
 		HandleAction: addCategoryAction,
 	}
-}
-
-// flag stores a yes-or-no as the whole number the registries hold it as.
-func flag(value bool) int64 {
-	if value {
-		return 1
-	}
-	return 0
 }

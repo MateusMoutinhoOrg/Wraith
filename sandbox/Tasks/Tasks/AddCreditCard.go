@@ -2,9 +2,13 @@ package tasks
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // addCreditCardFields declares what the task accepts.
@@ -24,36 +28,55 @@ func addCreditCardFields() []api.Field {
 	}
 }
 
-// addCreditCardAction runs the task against the database it is handed.
+// addCreditCardAction reads every field, checks the limit and the billing
+// days make sense, and writes one record into the account registry.
 func addCreditCardAction(args api.HandleActionArgs) error {
-	cardName, err := name(args.Entries, AccountField)
+	cardName, err := entries.Text(args.Entries, AccountField)
 	if err != nil {
 		return err
 	}
-	limit, err := cents(args.Entries, LimitField)
+	if cardName == "" {
+		return errors.New(AccountField + " is required")
+	}
+	if strings.Contains(cardName, utils.Separator) {
+		return errors.New(AccountField + " may not contain " + utils.Separator)
+	}
+	limitAmount, err := entries.Number(args.Entries, LimitField)
 	if err != nil {
 		return err
 	}
+	limit := utils.Cents(limitAmount)
 	if limit < 0 {
 		return errors.New(LimitField + " is a credit limit, so it may not be negative")
 	}
-	closingDay, err := dayOfMonth(args.Entries, ClosingDayField)
+	closingDay, err := entries.Whole(args.Entries, ClosingDayField)
 	if err != nil {
 		return err
 	}
-	dueDay, err := dayOfMonth(args.Entries, DueDayField)
+	if closingDay < 1 || closingDay > 31 {
+		return errors.New(ClosingDayField + " must be a day of the month, from 1 to 31")
+	}
+	dueDay, err := entries.Whole(args.Entries, DueDayField)
 	if err != nil {
 		return err
 	}
-	opening, err := cents(args.Entries, OpeningField)
+	if dueDay < 1 || dueDay > 31 {
+		return errors.New(DueDayField + " must be a day of the month, from 1 to 31")
+	}
+	openingAmount, err := entries.Number(args.Entries, OpeningField)
 	if err != nil {
 		return err
 	}
+	opening := utils.Cents(openingAmount)
 	if opening > 0 {
 		return errors.New(OpeningField + " on a card is what you already owe, " +
 			"so it is written as a negative number")
 	}
-	return insert(args, config.AccountSchema, "credit card "+cardName, map[string]any{
+	accounts, reachable := args.DataBase.GetSchema(config.AccountSchema)
+	if !reachable {
+		return errors.New("the " + config.AccountSchema + " registry is unreachable")
+	}
+	_, failure := accounts.NewItem(map[string]any{
 		config.NameField:       cardName,
 		config.KindField:       int64(config.KindCard),
 		config.OpeningField:    opening,
@@ -61,6 +84,13 @@ func addCreditCardAction(args api.HandleActionArgs) error {
 		config.ClosingDayField: closingDay,
 		config.DueDayField:     dueDay,
 	})
+	if failure == nil {
+		return nil
+	}
+	if failure.Type == keepdeps.KeyConflict {
+		return errors.New("credit card " + cardName + " already exists")
+	}
+	return errors.New("credit card " + cardName + " could not be stored: " + failure.Message)
 }
 
 // AddCreditCard returns the task that adds a credit card to the registry. A
