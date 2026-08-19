@@ -2,10 +2,12 @@ package tasks
 
 import (
 	"errors"
+	"strconv"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // ModifyTransaction returns the task that corrects a movement already in the
@@ -40,18 +42,18 @@ func ModifyTransaction() api.Task {
 			if err != nil {
 				return err
 			}
-			record, found := store.FindTransaction(args.DataBase, id)
+			record, found := findTransaction(args, id)
 			if !found {
-				return errors.New("transaction not found: " + store.IdText(id))
+				return errors.New("transaction not found: " + strconv.FormatInt(id, 10))
 			}
-			current := store.ReadTransaction(record)
+			current := readMovement(record)
 			updated, err := applyChanges(args, current)
 			if err != nil {
 				return err
 			}
-			for field, value := range store.TransactionFields(current.Key, updated) {
+			for field, value := range movementFields(current.Key, updated) {
 				if err := record.Update(field, value); err != nil {
-					return errors.New("transaction " + store.IdText(id) +
+					return errors.New("transaction " + strconv.FormatInt(id, 10) +
 						" could not be updated: " + err.Message)
 				}
 			}
@@ -62,7 +64,7 @@ func ModifyTransaction() api.Task {
 
 // applyChanges overlays the fields the task was given onto the stored
 // movement, checking each one the same way AddTransaction checks it.
-func applyChanges(args api.HandleActionArgs, current store.Transaction) (store.Transaction, error) {
+func applyChanges(args api.HandleActionArgs, current movement) (movement, error) {
 	updated := current
 	if entries.Present(args.Entries, AccountField) {
 		accountName, err := name(args.Entries, AccountField)
@@ -126,4 +128,16 @@ func applyChanges(args api.HandleActionArgs, current store.Transaction) (store.T
 		return updated, err
 	}
 	return updated, nil
+}
+
+// findTransaction returns the stored record of one movement by its permanent
+// identifier — the id a statement shows beside each line. The record itself is
+// what the task needs, because correcting a movement is writing back to it.
+func findTransaction(args api.HandleActionArgs, id int64) (keepdeps.SchemaItem, bool) {
+	for _, record := range records(args, config.TransactionSchema) {
+		if record.Id == id {
+			return record, true
+		}
+	}
+	return keepdeps.SchemaItem{}, false
 }

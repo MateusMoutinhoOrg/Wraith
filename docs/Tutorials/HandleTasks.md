@@ -25,8 +25,9 @@ touch sandbox/Tasks/Tasks/AddNote.go
 package tasks
 
 import (
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // AddNote returns the task that files one note under a title.
@@ -49,18 +50,18 @@ func AddNote() api.Task {
 			if err != nil {
 				return err
 			}
-			return insert(args, store.NoteSchema, "note "+title, map[string]any{
-				store.NameField:   title,
-				store.DetailField: store.Pack(title, body),
+			return insert(args, config.NoteSchema, "note "+title, map[string]any{
+				config.NameField:   title,
+				config.DetailField: utils.Pack(title, body),
 			})
 		},
 	}
 }
 ```
 
-The helpers — `name`, `optionalText`, `insert`, `remove`, `requireAccount` — live in [`shared.go`](/sandbox/Tasks/Tasks/shared.go) beside the tasks, so every task reports a missing field or a name already taken in the same words.
+The helpers — `name`, `optionalText`, `schema`, `find`, `records`, `insert`, `remove`, `requireAccount` — live in [`shared.go`](/sandbox/Tasks/Tasks/shared.go) beside the tasks, so every task reaches the injected database the same way and reports a missing field or a name already taken in the same words.
 
-3. If the task writes something the registries do not hold yet, add its schema in [`store.go`](/sandbox/lib/store/store.go) — a name field, plus whatever it carries. Keep stores in mind: the injected database holds unique string keys and whole numbers, so money goes in as cents, dates go in as `20260818`, and free text travels packed into one key with `store.Pack`.
+3. If the task writes something the registries do not hold yet, add its schema in [`database.go`](/sandbox/config/database.go) — a name field, plus whatever it carries. Keep the injected database in mind: it holds unique string keys and whole numbers, so money goes in as cents, dates go in as `20260818`, and free text travels packed into one key with `utils.Pack`.
 
 4. Register the task in [`sandbox/Tasks/run.go`](/sandbox/Tasks/run.go). This is the only registration there is:
 

@@ -3,9 +3,10 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // AddRecurrence returns the task that declares a commitment repeating every
@@ -42,88 +43,109 @@ func AddRecurrence() api.Task {
 			if err != nil {
 				return err
 			}
-			return insert(args, store.RecurrenceSchema,
+			return insert(args, config.RecurrenceSchema,
 				"recurrence "+recurrence.Description, map[string]any{
-					store.NameField: recurrence.Description,
-					store.DetailField: store.Pack(recurrence.Description, recurrence.Account,
+					config.NameField: recurrence.Description,
+					config.DetailField: utils.Pack(recurrence.Description, recurrence.Account,
 						recurrence.ToAccount, recurrence.Category),
-					store.AmountField: recurrence.Amount,
-					store.DayField:    recurrence.Day,
-					store.StartField:  recurrence.Start,
-					store.EndField:    recurrence.End,
+					config.AmountField: recurrence.Amount,
+					config.DayField:    recurrence.Day,
+					config.StartField:  recurrence.Start,
+					config.EndField:    recurrence.End,
 				})
 		},
 	}
 }
 
+// commitment is one recurrence as the task reads it, before it is stored.
+type commitment struct {
+	// Description identifies the recurrence, and is how RemoveRecurrence
+	// addresses it.
+	Description string
+	// Account is the account the money leaves from or arrives in.
+	Account string
+	// ToAccount is the destination account of a recurring transfer, or "".
+	ToAccount string
+	// Category is the category it is classified under.
+	Category string
+	// Amount is the value per occurrence, in cents.
+	Amount int64
+	// Day is the day of the month it falls on.
+	Day int64
+	// Start is the first month it applies, as yyyymm.
+	Start int64
+	// End is the last month it applies, as yyyymm, or 0 when open-ended.
+	End int64
+}
+
 // readRecurrence validates every field of the task and hands back the
 // commitment it declares.
-func readRecurrence(args api.HandleActionArgs) (store.Recurrence, error) {
+func readRecurrence(args api.HandleActionArgs) (commitment, error) {
 	description, err := name(args.Entries, DescriptionField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	accountName, err := name(args.Entries, AccountField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	if _, err := requireAccount(args, accountName); err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	categoryName, err := name(args.Entries, CategoryField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	category, err := requireCategory(args, categoryName)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	amount, err := cents(args.Entries, AmountField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	if amount == 0 {
-		return store.Recurrence{}, errors.New(AmountField + " may not be zero")
+		return commitment{}, errors.New(AmountField + " may not be zero")
 	}
 	if err := checkSign(category, amount); err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	day, err := dayOfMonth(args.Entries, DayField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	start, err := month(args.Entries, StartField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	end := int64(0)
 	if entries.Present(args.Entries, EndField) {
 		end, err = month(args.Entries, EndField)
 		if err != nil {
-			return store.Recurrence{}, err
+			return commitment{}, err
 		}
 		if end < start {
-			return store.Recurrence{}, errors.New(EndField + " comes before " + StartField)
+			return commitment{}, errors.New(EndField + " comes before " + StartField)
 		}
 	}
 	toAccount, err := optionalText(args.Entries, ToAccountField)
 	if err != nil {
-		return store.Recurrence{}, err
+		return commitment{}, err
 	}
 	if toAccount != "" {
-		if !category.IsTransfer() {
-			return store.Recurrence{}, errors.New(ToAccountField +
+		if !isTransfer(category) {
+			return commitment{}, errors.New(ToAccountField +
 				" only belongs on a transfer category — one with revenues: false and expenses: false")
 		}
 		if _, err := requireAccount(args, toAccount); err != nil {
-			return store.Recurrence{}, err
+			return commitment{}, err
 		}
 		if toAccount == accountName {
-			return store.Recurrence{}, errors.New(ToAccountField +
+			return commitment{}, errors.New(ToAccountField +
 				" is the same account the money leaves from")
 		}
 	}
-	return store.Recurrence{
+	return commitment{
 		Description: description,
 		Account:     accountName,
 		ToAccount:   toAccount,

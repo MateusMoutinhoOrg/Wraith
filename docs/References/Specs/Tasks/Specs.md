@@ -16,7 +16,7 @@ Defines the required shape of a task file in `sandbox/Tasks/Tasks/<Name>.go` —
 
 ## Structure
 1. **Package clause**: `package tasks`.
-2. **Imports**: `sandbox/contracts/api`, plus the internal packages the action needs — usually `sandbox/lib/store`, and `sandbox/lib/entries` when a field is optional.
+2. **Imports**: `sandbox/contracts/api`, plus the packages the action needs — usually `sandbox/config` for the registry and field names, `sandbox/lib/utils` for amounts, dates and packed keys, and `sandbox/lib/entries` when a field is optional.
 3. **Doc comment**: what the task is for, in the words its user would use, and any rule that is not obvious from the fields.
 4. **Constructor**: `func <Name>() api.Task` returning the value, with `Fields` listed in the order the guide documents them and `HandleAction` last.
 5. **Helpers** *(optional)*: unexported functions this task alone needs, below the constructor.

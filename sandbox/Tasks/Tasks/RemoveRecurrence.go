@@ -1,8 +1,8 @@
 package tasks
 
 import (
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // RemoveRecurrence returns the task that stops a recurring commitment,
@@ -26,7 +26,7 @@ func RemoveRecurrence() api.Task {
 			if err != nil {
 				return err
 			}
-			return remove(args, store.RecurrenceSchema, "recurrence", description)
+			return remove(args, config.RecurrenceSchema, "recurrence", description)
 		},
 	}
 }

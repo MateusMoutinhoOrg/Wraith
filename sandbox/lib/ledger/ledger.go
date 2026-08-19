@@ -18,7 +18,7 @@ import (
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // State is the whole registry, read once, plus the day it is being read on.
@@ -28,33 +28,33 @@ type State struct {
 	// Today is the date the render happens on, taken from Deps.Now.
 	Today int64
 	// Accounts is every account and card, ordered by name.
-	Accounts []store.Account
+	Accounts []Account
 	// Categories is every category, ordered by name.
-	Categories []store.Category
+	Categories []Category
 	// Transactions is every recorded movement, oldest first.
-	Transactions []store.Transaction
+	Transactions []Transaction
 	// Recurrences is every declared commitment, ordered by description.
-	Recurrences []store.Recurrence
+	Recurrences []Recurrence
 }
 
 // Load reads the whole registry into a State.
 func Load(d deps.Deps, database keepdeps.KeepDatabase) State {
 	return State{
-		Today:        store.DateOf(d.Now()),
-		Accounts:     store.Accounts(database),
-		Categories:   store.Categories(database),
-		Transactions: store.Transactions(database),
-		Recurrences:  store.Recurrences(database),
+		Today:        utils.DateOf(d.Now()),
+		Accounts:     Accounts(database),
+		Categories:   Categories(database),
+		Transactions: Transactions(database),
+		Recurrences:  Recurrences(database),
 	}
 }
 
 // OpenMonth is the month today falls in — the one the vault is currently
 // writing into.
-func (s State) OpenMonth() int64 { return store.MonthOf(s.Today) }
+func (s State) OpenMonth() int64 { return utils.MonthOf(s.Today) }
 
 // Cards returns every credit card of the registry.
-func (s State) Cards() []store.Account {
-	cards := []store.Account{}
+func (s State) Cards() []Account {
+	cards := []Account{}
 	for _, account := range s.Accounts {
 		if account.IsCard() {
 			cards = append(cards, account)
@@ -65,8 +65,8 @@ func (s State) Cards() []store.Account {
 
 // PlainAccounts returns every account that is not a credit card — the ones
 // money actually sits in.
-func (s State) PlainAccounts() []store.Account {
-	accounts := []store.Account{}
+func (s State) PlainAccounts() []Account {
+	accounts := []Account{}
 	for _, account := range s.Accounts {
 		if !account.IsCard() {
 			accounts = append(accounts, account)
@@ -80,7 +80,7 @@ func (s State) PlainAccounts() []store.Account {
 // whose payment_date is still ahead counts in its month's result but not yet
 // in the balance, which is exactly the difference between what a month cost
 // and what has left the account.
-func (s State) BalanceOn(account store.Account, date int64) int64 {
+func (s State) BalanceOn(account Account, date int64) int64 {
 	balance := account.Opening
 	for _, transaction := range s.Transactions {
 		if transaction.Account != account.Name {
@@ -95,13 +95,13 @@ func (s State) BalanceOn(account store.Account, date int64) int64 {
 }
 
 // Balance returns what an account holds today.
-func (s State) Balance(account store.Account) int64 {
+func (s State) Balance(account Account) int64 {
 	return s.BalanceOn(account, s.Today)
 }
 
 // Owed returns what is outstanding on a credit card today, as a positive
 // figure — a card's balance is negative when money is owed on it.
-func (s State) Owed(card store.Account) int64 {
+func (s State) Owed(card Account) int64 {
 	balance := s.Balance(card)
 	if balance > 0 {
 		return 0
@@ -176,10 +176,10 @@ func (s State) MonthResult(month int64) Result {
 }
 
 // In returns every movement dated in one month.
-func (s State) In(month int64) []store.Transaction {
-	found := []store.Transaction{}
+func (s State) In(month int64) []Transaction {
+	found := []Transaction{}
 	for _, transaction := range s.Transactions {
-		if store.MonthOf(transaction.Date) == month {
+		if utils.MonthOf(transaction.Date) == month {
 			found = append(found, transaction)
 		}
 	}
@@ -187,8 +187,8 @@ func (s State) In(month int64) []store.Transaction {
 }
 
 // OfAccount narrows a list of movements down to one account.
-func OfAccount(transactions []store.Transaction, account string) []store.Transaction {
-	found := []store.Transaction{}
+func OfAccount(transactions []Transaction, account string) []Transaction {
+	found := []Transaction{}
 	for _, transaction := range transactions {
 		if transaction.Account == account {
 			found = append(found, transaction)
@@ -199,29 +199,29 @@ func OfAccount(transactions []store.Transaction, account string) []store.Transac
 
 // IsTransfer reports whether a movement is a leg of a transfer between your
 // own accounts, and therefore counts as neither income nor expense.
-func (s State) IsTransfer(transaction store.Transaction) bool {
+func (s State) IsTransfer(transaction Transaction) bool {
 	category, found := s.Category(transaction.Category)
 	return found && category.IsTransfer()
 }
 
 // Category returns one category by name.
-func (s State) Category(name string) (store.Category, bool) {
+func (s State) Category(name string) (Category, bool) {
 	for _, category := range s.Categories {
 		if category.Name == name {
 			return category, true
 		}
 	}
-	return store.Category{}, false
+	return Category{}, false
 }
 
 // Account returns one account by name.
-func (s State) Account(name string) (store.Account, bool) {
+func (s State) Account(name string) (Account, bool) {
 	for _, account := range s.Accounts {
 		if account.Name == name {
 			return account, true
 		}
 	}
-	return store.Account{}, false
+	return Account{}, false
 }
 
 // Months returns every month holding at least one movement, oldest first. A
@@ -231,7 +231,7 @@ func (s State) Months() []int64 {
 	seen := map[int64]bool{}
 	months := []int64{}
 	for _, transaction := range s.Transactions {
-		month := store.MonthOf(transaction.Date)
+		month := utils.MonthOf(transaction.Date)
 		if seen[month] {
 			continue
 		}
@@ -250,7 +250,7 @@ func (s State) RenderedMonths(previous int) []int64 {
 	if previous < 0 {
 		previous = 0
 	}
-	earliest := store.AddMonths(s.OpenMonth(), -previous)
+	earliest := utils.AddMonths(s.OpenMonth(), -previous)
 	months := []int64{}
 	for _, month := range s.Months() {
 		if month < earliest {
@@ -269,7 +269,7 @@ func (s State) CategoryTotal(name string, month int64) int64 {
 		if transaction.Category != name {
 			continue
 		}
-		if month != 0 && store.MonthOf(transaction.Date) != month {
+		if month != 0 && utils.MonthOf(transaction.Date) != month {
 			continue
 		}
 		total += transaction.Amount

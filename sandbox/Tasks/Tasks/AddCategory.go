@@ -3,9 +3,10 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // AddCategory returns the task that adds a category — what a transaction is
@@ -63,11 +64,11 @@ func AddCategory() api.Task {
 					return errors.New("a category cannot be its own parent")
 				}
 			}
-			return insert(args, store.CategorySchema, "category "+categoryName, map[string]any{
-				store.NameField:     categoryName,
-				store.DetailField:   store.Pack(categoryName, parent, description),
-				store.RevenuesField: flag(revenues),
-				store.ExpensesField: flag(expenses),
+			return insert(args, config.CategorySchema, "category "+categoryName, map[string]any{
+				config.NameField:     categoryName,
+				config.DetailField:   utils.Pack(categoryName, parent, description),
+				config.RevenuesField: flag(revenues),
+				config.ExpensesField: flag(expenses),
 			})
 		},
 	}

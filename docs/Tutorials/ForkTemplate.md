@@ -5,7 +5,7 @@ Covers using this repository as a GitHub template to build a **brain of your own
 
 ### Rules
 - Read [Structure.md](/docs/References/Structure.md) before starting.
-- The financial brain in this repository is a **worked example of the shape**, not the point of it. Tasks, visualizations and the store are yours to replace; the state machine around them is not.
+- The financial brain in this repository is a **worked example of the shape**, not the point of it. Tasks, visualizations and the registries are yours to replace; the state machine around them is not.
 - Keep the separation defined in [Structure.md](/docs/References/Structure.md): contract structs in `sandbox/contracts/`, actions in `sandbox/Tasks/`, renderers in `sandbox/Visualization/`, concrete dependencies in `adapters/`, the installed binary in `cmd/main/`. The command line belongs to the library, as the `Sandboxmain` field of `api.Lib`, never to the binary. Contracts are structs of function fields, never interfaces — see [StructContracts.md](/docs/References/StructContracts.md).
 - Every file created or rewritten — code and `.md` alike — must follow its specification, located through [Specs.md](/docs/References/Specs.md).
 - The fork is not complete until the final checklist in the last workflow step passes.
@@ -21,7 +21,7 @@ Covers using this repository as a GitHub template to build a **brain of your own
 4. Leave every **[Copy](/docs/References/TemplateFileActions.md#copy)** file untouched — they describe the structure, not the brain.
 
 ### Phase 2 — Decide what your brain holds
-5. Rewrite the registries in [sandbox/lib/store/store.go](/sandbox/lib/store/store.go): one schema per kind of record your brain keeps, replacing accounts, categories, transactions and recurrences. Remember what the injected database offers — unique string keys and whole numbers — so amounts go in scaled to integers, dates go in as `20260818`, and free text travels packed into one key with `store.Pack`.
+5. Rewrite the registries in [sandbox/config/database.go](/sandbox/config/database.go): one schema per kind of record your brain keeps, replacing accounts, categories, transactions and recurrences. Remember what the injected database offers — unique string keys and whole numbers — so amounts go in scaled to integers, dates go in as `20260818`, and free text travels packed into one key with `utils.Pack`.
 6. Rewrite the derived figures in [sandbox/lib/ledger/](/sandbox/lib/ledger/), or delete the package if your brain has no arithmetic. Everything a page shows is computed here, so a visualization stays about layout.
 
 ### Phase 3 — Write the actions and the pages

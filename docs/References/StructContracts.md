@@ -41,7 +41,8 @@ Callers use both exactly as they would an interface — `l.PerformFullTick()` re
 func PerformTaskFactory(l *api.Lib) func(taskName string, entries map[string]any) error {
 	return func(taskName string, entries map[string]any) error {
 		// l.Deps and l.DatabasePath are read at call time
-		return task.Run(l.Deps, store.Database(l.Deps, l.DatabasePath), taskName, entries)
+		return task.Run(l.Deps, l.Deps.KeepLib.NewDatabase(config.DatabaseProps(l.DatabasePath)),
+			taskName, entries)
 	}
 }
 

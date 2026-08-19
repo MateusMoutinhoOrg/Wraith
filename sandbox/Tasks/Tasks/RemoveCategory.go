@@ -3,8 +3,8 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // RemoveCategory returns the task that removes a category from the registry.
@@ -24,25 +24,25 @@ func RemoveCategory() api.Task {
 			if err != nil {
 				return err
 			}
-			for _, transaction := range store.Transactions(args.DataBase) {
-				if transaction.Category == categoryName {
+			for _, transaction := range records(args, config.TransactionSchema) {
+				if detail(transaction, config.TransactionParts, config.TransactionCategory) == categoryName {
 					return errors.New(categoryName + " still classifies transactions — " +
 						"move them to another category first")
 				}
 			}
-			for _, recurrence := range store.Recurrences(args.DataBase) {
-				if recurrence.Category == categoryName {
+			for _, recurrence := range records(args, config.RecurrenceSchema) {
+				if detail(recurrence, config.RecurrenceParts, config.RecurrenceCategory) == categoryName {
 					return errors.New(categoryName + " is still named by the recurrence " +
-						recurrence.Description + " — remove it first")
+						text(recurrence, config.NameField) + " — remove it first")
 				}
 			}
-			for _, category := range store.Categories(args.DataBase) {
-				if category.Parent == categoryName {
+			for _, category := range records(args, config.CategorySchema) {
+				if detail(category, config.CategoryParts, config.CategoryParent) == categoryName {
 					return errors.New(categoryName + " is still the parent of " +
-						category.Name + " — remove the child first")
+						text(category, config.NameField) + " — remove the child first")
 				}
 			}
-			return remove(args, store.CategorySchema, "category", categoryName)
+			return remove(args, config.CategorySchema, "category", categoryName)
 		},
 	}
 }

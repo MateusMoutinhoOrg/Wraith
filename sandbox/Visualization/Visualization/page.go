@@ -21,7 +21,7 @@ import (
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // page accumulates one rendered markdown file.
@@ -136,7 +136,11 @@ func wholeArg(values map[string]any, key string, fallback int) int {
 }
 
 // money renders an amount the way every page shows it.
-func money(cents int64) string { return store.Money(cents) }
+func money(cents int64) string { return utils.Money(cents) }
 
 // signed renders an amount with an explicit sign.
-func signed(cents int64) string { return store.Signed(cents) }
+func signed(cents int64) string { return utils.Signed(cents) }
+
+// idText renders a transaction's permanent identifier, which is what a
+// ModifyTransaction task addresses it by.
+func idText(id int64) string { return strconv.FormatInt(id, 10) }

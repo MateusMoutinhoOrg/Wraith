@@ -1,8 +1,8 @@
 package tasks
 
 import (
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // AddAccount returns the task that adds an account to the registry — a bank,
@@ -28,10 +28,10 @@ func AddAccount() api.Task {
 			if err != nil {
 				return err
 			}
-			return insert(args, store.AccountSchema, "account "+accountName, map[string]any{
-				store.NameField:    accountName,
-				store.KindField:    int64(store.KindAccount),
-				store.OpeningField: opening,
+			return insert(args, config.AccountSchema, "account "+accountName, map[string]any{
+				config.NameField:    accountName,
+				config.KindField:    int64(config.KindAccount),
+				config.OpeningField: opening,
 			})
 		},
 	}

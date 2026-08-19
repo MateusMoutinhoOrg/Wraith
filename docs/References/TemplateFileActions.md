@@ -88,7 +88,7 @@ The template's example content — the financial brain. Removed once your own ta
 |------|-------------|
 | `sandbox/Tasks/Tasks/*` | The financial tasks — replaced by **[Create](#create)**, following [HandleTasks.md](/docs/Tutorials/HandleTasks.md) |
 | `sandbox/Visualization/Visualization/*` | The financial visualizations — replaced by **[Create](#create)**, following [HandleVisualizations.md](/docs/Tutorials/HandleVisualizations.md) |
-| `sandbox/lib/store/*`, `sandbox/lib/ledger/*` | The registries and the arithmetic over them — replaced by **[Create](#create)** |
+| `sandbox/config/database.go`, `sandbox/lib/ledger/*` | The registries and the arithmetic over them — replaced by **[Create](#create)** |
 | `sandbox/contracts/deps/verbdeps/`, `sandbox/contracts/deps/keepdeps/` | The sandbox copies of the embedded Verb and Keep libraries — keep one only if the new library embeds the same library |
 | `examples/libraryExamples/*` | The financial brain's Go samples |
 | `examples/cliExamples/*` | The financial brain's shell scripts |

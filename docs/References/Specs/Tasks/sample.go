@@ -6,9 +6,10 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // AddNote returns the task that files one note under a title. The title is
@@ -42,16 +43,16 @@ func AddNote() api.Task {
 			if err != nil {
 				return err
 			}
-			if store.Exists(args.DataBase, store.NoteSchema, title) {
+			if _, taken := find(args, config.NoteSchema, title); taken {
 				return errors.New("a note called " + title + " already exists")
 			}
 
 			// 2. Write, through the database and nothing else. Free text
 			//    travels packed beside the unique key it belongs to.
-			return insert(args, store.NoteSchema, "note "+title, map[string]any{
-				store.NameField:   title,
-				store.DetailField: store.Pack(title, body),
-				store.PinnedField: flag(pinned),
+			return insert(args, config.NoteSchema, "note "+title, map[string]any{
+				config.NameField:   title,
+				config.DetailField: utils.Pack(title, body),
+				config.PinnedField: flag(pinned),
 			})
 		},
 	}

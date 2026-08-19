@@ -3,8 +3,8 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // RemoveAccount returns the task that removes an account from the registry.
@@ -25,14 +25,14 @@ func RemoveAccount() api.Task {
 			if err != nil {
 				return err
 			}
-			account, found := store.FindAccount(args.DataBase, accountName)
-			if found && account.IsCard() {
+			account, found := find(args, config.AccountSchema, accountName)
+			if found && isCard(account) {
 				return errors.New(accountName + " is a credit card — remove it with RemoveCreditCard")
 			}
 			if err := refuseWhenInUse(args, accountName); err != nil {
 				return err
 			}
-			return remove(args, store.AccountSchema, "account", accountName)
+			return remove(args, config.AccountSchema, "account", accountName)
 		},
 	}
 }
@@ -40,16 +40,18 @@ func RemoveAccount() api.Task {
 // refuseWhenInUse reports the transactions and recurrences still naming an
 // account, so removing one never orphans a movement.
 func refuseWhenInUse(args api.HandleActionArgs, accountName string) error {
-	for _, transaction := range store.Transactions(args.DataBase) {
-		if transaction.Account == accountName {
+	for _, transaction := range records(args, config.TransactionSchema) {
+		if detail(transaction, config.TransactionParts, config.TransactionAccount) == accountName {
 			return errors.New(accountName + " still holds transactions — " +
 				"remove them before removing the account")
 		}
 	}
-	for _, recurrence := range store.Recurrences(args.DataBase) {
-		if recurrence.Account == accountName || recurrence.ToAccount == accountName {
+	for _, recurrence := range records(args, config.RecurrenceSchema) {
+		named := detail(recurrence, config.RecurrenceParts, config.RecurrenceAccount) == accountName ||
+			detail(recurrence, config.RecurrenceParts, config.RecurrenceToAccount) == accountName
+		if named {
 			return errors.New(accountName + " is still named by the recurrence " +
-				recurrence.Description + " — remove it first")
+				text(recurrence, config.NameField) + " — remove it first")
 		}
 	}
 	return nil

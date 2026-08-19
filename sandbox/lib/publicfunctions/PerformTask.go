@@ -2,8 +2,8 @@ package publicfunctions
 
 import (
 	task "github.com/MateusMoutinhoOrg/Wraith/sandbox/Tasks"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // PerformTaskFactory fills api.Lib.PerformTask with a closure that runs one
@@ -15,6 +15,6 @@ import (
 // a caller that wants both — a tick — asks for both.
 func PerformTaskFactory(l *api.Lib) func(taskName string, entries map[string]any) error {
 	return func(taskName string, entries map[string]any) error {
-		return task.Run(l.Deps, store.Database(l.Deps, l.DatabasePath), taskName, entries)
+		return task.Run(l.Deps, l.Deps.KeepLib.NewDatabase(config.DatabaseProps(l.DatabasePath)), taskName, entries)
 	}
 }

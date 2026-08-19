@@ -2,8 +2,8 @@ package publicfunctions
 
 import (
 	visualization "github.com/MateusMoutinhoOrg/Wraith/sandbox/Visualization"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // PerformVisualizationFactory fills api.Lib.PerformVisualization with a
@@ -16,6 +16,6 @@ import (
 // the bytes.
 func PerformVisualizationFactory(l *api.Lib) func(name string, entries map[string]any) ([]api.VisualizationRender, error) {
 	return func(name string, entries map[string]any) ([]api.VisualizationRender, error) {
-		return visualization.Run(l.Deps, store.Database(l.Deps, l.DatabasePath), name, entries)
+		return visualization.Run(l.Deps, l.Deps.KeepLib.NewDatabase(config.DatabaseProps(l.DatabasePath)), name, entries)
 	}
 }

@@ -113,11 +113,12 @@ The structs the library hands back to callers.
 | `api.go` | The `Lib` entry-point struct, the `Task` and `Visualizer` declarations, the `Field` they are described with, and the argument structs a task and a visualization are handed | Outputs |
 
 ### `/sandbox/config/`
-Static configuration the sandbox reads at compile time: the text every command prints, the flag spellings the interface understands, and the version string. Holding them as Go constants rather than as files keeps every reference under the compiler's eye — a renamed constant is a build failure rather than a blank line at runtime — and costs no read at all. Text long enough to be edited as a document, or shaped as a template, belongs in [`/assets/`](#assets) instead. Nothing outside the sandbox imports this package.
+Static configuration the sandbox reads at compile time: the text every command prints, the flag spellings the interface understands, the version string, and the shape of the database — the registries every task writes and every visualization reads, and the fields each one carries. Holding them as Go constants rather than as files keeps every reference under the compiler's eye — a renamed constant is a build failure rather than a blank line at runtime — and costs no read at all. Text long enough to be edited as a document, or shaped as a template, belongs in [`/assets/`](#assets) instead. Nothing outside the sandbox imports this package.
 
 | File | Description | Spec |
 |------|-------------|------|
 | `cli.go` | The `Usages` help screen, every message constant the interface prints, the default `Task.yaml` / `Visualization.yaml` / `data` paths, and the flag spellings | |
+| `database.go` | The registries and their fields as constants, and the `DatabaseProps` the injected Keep library opens them from | |
 | `version.go` | The `Version` constant reported by `wraith version` and `--version` | |
 
 ### `/sandbox/lib/`
@@ -134,21 +135,21 @@ One file per public function field of `api.Lib`. Each file holds its `<Field>Fac
 |------|-------------|------|
 | `<Function>.go` | One file per lib function, holding its `<Field>Factory(l *api.Lib)` that returns a closure | LibFunctions |
 
-#### `/sandbox/lib/store/`
-The registries and the helpers everything reaches them with: the schema each kind of record is persisted under, the typed views a record is read back as, and the encodings the injected database forces — money in cents, dates as whole numbers, free text packed into a unique key. It declares no factories, so no specification governs it.
+#### `/sandbox/lib/utils/`
+The small computations the rest of the sandbox is written with, none of which knows what a registry is: rendering an amount held in cents, doing arithmetic on a calendar, and packing several strings into one storage key. A task, a visualization and the ledger all reach for the same one, which is what makes a figure render the same way wherever it appears. It declares no types and no factories, so no specification governs it.
 
 | File | Description | Spec |
 |------|-------------|------|
-| `store.go` | The database `Props`, the field-name constants, and the readers that reach a stored record through `deps.Deps.KeepLib` | |
-| `records.go` | One typed view per registry, the ordered listings, and the lookups over them | |
+| `utils.go` | `Pack`, `Unpack` and `Part` — the packed keys the injected database's unique-key rule forces | |
 | `dates.go` | Dates and months as whole numbers, and the calendar arithmetic every month page and the forecast are built from | |
 | `money.go` | Rendering an amount held in cents, and the bars and percentages the dashboards show a share with | |
 
 #### `/sandbox/lib/ledger/`
-Every figure the vault shows, derived from the registries and nothing else. Keeping the arithmetic here is what lets a visualization be about layout. Declares no factories.
+The registries read back as typed values, and every figure the vault shows derived from them and nothing else. Keeping the arithmetic here is what lets a visualization be about layout. Records are read straight through `deps.Deps.KeepLib` — a schema is asked of the database, the schema lists its records, and a record hands back one field at a time. Declares no factories.
 
 | File | Description | Spec |
 |------|-------------|------|
+| `records.go` | One typed view per registry, and the ordered listings that read them off the injected database | |
 | `ledger.go` | The `State` read once per render, and the balances, month results and totals over it | |
 | `forecast.go` | Today's position rolled forward through the declared commitments | |
 
@@ -205,7 +206,7 @@ One visualization per file, each returning an `api.Visualizer`. A visualization 
 | `page.go` | The markdown builder every page is written with, and the naming rules its links follow | |
 
 ### `/sandbox/cli/`
-The command-line interface itself: the command dispatch `Sandboxmain` delegates to. It reads the command line through `deps.Deps.VerbLib`, takes the text it prints from `sandbox/config`, and writes every line through `deps.Deps.Printf`, so the whole interface stays inside the closed sandbox. Like `store/`, it is neither an object nor the entry point, so no specification governs it, and it declares **no types and no factories**.
+The command-line interface itself: the command dispatch `Sandboxmain` delegates to. It reads the command line through `deps.Deps.VerbLib`, takes the text it prints from `sandbox/config`, and writes every line through `deps.Deps.Printf`, so the whole interface stays inside the closed sandbox. Like `utils/`, it is neither an object nor the entry point, so no specification governs it, and it declares **no types and no factories**.
 
 | File | Description | Spec |
 |------|-------------|------|

@@ -11,10 +11,10 @@ Covers adding new functions to the library's internal logic and its public API. 
 
 ## AddLibFunction
 
-Internal library functions reside in packages within [sandbox/lib/](/sandbox/lib/) — `store` for the registries, `ledger` for the figures derived from them, `vault` for the files a tick reads and writes, `yaml` and `entries` for what those files decode to. They are meant for internal domain logic and are not exposed to external consumers.
+Internal library functions reside in packages within [sandbox/lib/](/sandbox/lib/) — `ledger` for the registries and the figures derived from them, `utils` for amounts, dates and packed keys, `vault` for the files a tick reads and writes, `yaml` and `entries` for what those files decode to. They are meant for internal domain logic and are not exposed to external consumers.
 
 ### Workflow
-1. Create or open the relevant domain package in [sandbox/lib/](/sandbox/lib/) (e.g., [sandbox/lib/store/store.go](/sandbox/lib/store/store.go)).
+1. Create or open the relevant domain package in [sandbox/lib/](/sandbox/lib/) (e.g., [sandbox/lib/ledger/records.go](/sandbox/lib/ledger/records.go)).
 2. Write the standard Go function. If it requires dependencies, pass them as arguments (typically `deps.Deps` or specific values):
    ```go
    func TotalHeld(database keepdeps.KeepDatabase) int64 {

@@ -13,7 +13,7 @@ package ledger
 // is what leaves your accounts on its due day. That is a projection, and the
 // pages that show it say so.
 
-import "github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+import "github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 
 // Projection is one future month of the forecast.
 type Projection struct {
@@ -46,13 +46,13 @@ func (s State) Forecast(months int) []Projection {
 
 	projections := []Projection{}
 	for step := 1; step <= months; step++ {
-		month := store.AddMonths(s.OpenMonth(), step)
+		month := utils.AddMonths(s.OpenMonth(), step)
 		projection := Projection{Month: month}
 
 		// Movements already recorded and dated into this month settle first:
 		// they are facts, not projections.
 		for _, transaction := range s.Transactions {
-			if store.MonthOf(transaction.PaymentDate) != month {
+			if utils.MonthOf(transaction.PaymentDate) != month {
 				continue
 			}
 			if transaction.PaymentDate <= s.Today {
@@ -147,7 +147,7 @@ func (s State) DueIn(month int64) []Due {
 			continue
 		}
 		due = append(due, Due{
-			Date:        store.DateIn(month, recurrence.Day),
+			Date:        utils.DateIn(month, recurrence.Day),
 			Description: recurrence.Description,
 			Account:     recurrence.Account,
 			Amount:      recurrence.Amount,

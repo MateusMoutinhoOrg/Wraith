@@ -4,9 +4,10 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // The bounds a purchase may be split over, as the guide states them.
@@ -50,11 +51,14 @@ func AddTransaction() api.Task {
 			if err != nil {
 				return err
 			}
+			instance, err := schema(args, config.TransactionSchema)
+			if err != nil {
+				return err
+			}
 			for index, part := range spread(transaction, parts) {
-				key := store.NextKey(args.DataBase, store.TransactionSchema)
 				subject := "transaction " + strconv.Itoa(index+1)
-				if err := insert(args, store.TransactionSchema, subject,
-					store.TransactionFields(key, part)); err != nil {
+				if err := insert(args, config.TransactionSchema, subject,
+					movementFields(nextKey(instance), part)); err != nil {
 					return err
 				}
 			}
@@ -66,64 +70,64 @@ func AddTransaction() api.Task {
 // readTransaction validates every field of the task and hands back the
 // movement it describes, together with how many monthly parts it is split
 // over.
-func readTransaction(args api.HandleActionArgs) (store.Transaction, int64, error) {
+func readTransaction(args api.HandleActionArgs) (movement, int64, error) {
 	accountName, err := name(args.Entries, AccountField)
 	if err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	if _, err := requireAccount(args, accountName); err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	categoryName, err := name(args.Entries, CategoryField)
 	if err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	category, err := requireCategory(args, categoryName)
 	if err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	amount, err := cents(args.Entries, AmountField)
 	if err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	if amount == 0 {
-		return store.Transaction{}, 0, errors.New(AmountField + " may not be zero")
+		return movement{}, 0, errors.New(AmountField + " may not be zero")
 	}
 	if err := checkSign(category, amount); err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	when, err := date(args.Entries, DateField)
 	if err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	description, err := optionalText(args.Entries, DescriptionField)
 	if err != nil {
-		return store.Transaction{}, 0, err
+		return movement{}, 0, err
 	}
 	payment := when
 	if entries.Present(args.Entries, PaymentDateField) {
 		payment, err = date(args.Entries, PaymentDateField)
 		if err != nil {
-			return store.Transaction{}, 0, err
+			return movement{}, 0, err
 		}
 	}
 	parts := int64(1)
 	if entries.Present(args.Entries, InstallmentsField) {
 		parts, err = entries.Whole(args.Entries, InstallmentsField)
 		if err != nil {
-			return store.Transaction{}, 0, err
+			return movement{}, 0, err
 		}
 		if parts < MinInstallments || parts > MaxInstallments {
-			return store.Transaction{}, 0, errors.New(InstallmentsField +
+			return movement{}, 0, errors.New(InstallmentsField +
 				" must be a whole number from " + strconv.Itoa(MinInstallments) +
 				" to " + strconv.Itoa(MaxInstallments))
 		}
 		if entries.Present(args.Entries, PaymentDateField) {
-			return store.Transaction{}, 0, errors.New(InstallmentsField + " and " +
+			return movement{}, 0, errors.New(InstallmentsField + " and " +
 				PaymentDateField + " cannot be combined — each part settles on its own date")
 		}
 	}
-	return store.Transaction{
+	return movement{
 		Account:     accountName,
 		Category:    categoryName,
 		Description: description,
@@ -138,21 +142,21 @@ func readTransaction(args api.HandleActionArgs) (store.Transaction, int64, error
 // following month, clamped to that month's last day. Each part gets the
 // amount divided by the count, and any remainder goes to the first part, so
 // the parts always add back up to the total exactly.
-func spread(transaction store.Transaction, parts int64) []store.Transaction {
+func spread(transaction movement, parts int64) []movement {
 	if parts < MinInstallments {
-		return []store.Transaction{transaction}
+		return []movement{transaction}
 	}
 	each := transaction.Amount / parts
 	remainder := transaction.Amount - each*parts
-	spread := make([]store.Transaction, 0, parts)
-	day := store.DayOf(transaction.Date)
+	spread := make([]movement, 0, parts)
+	day := utils.DayOf(transaction.Date)
 	for index := int64(0); index < parts; index++ {
 		part := transaction
 		part.Amount = each
 		if index == 0 {
 			part.Amount += remainder
 		}
-		part.Date = store.DateIn(store.AddMonths(store.MonthOf(transaction.Date), int(index)), day)
+		part.Date = utils.DateIn(utils.AddMonths(utils.MonthOf(transaction.Date), int(index)), day)
 		part.PaymentDate = part.Date
 		part.Description = label(transaction.Description, index+1, parts)
 		spread = append(spread, part)

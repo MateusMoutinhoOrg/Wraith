@@ -10,7 +10,7 @@ import (
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/ledger"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // The args the DashBoard declares, and what they default to.
@@ -92,7 +92,7 @@ func navigation() string {
 func overview(state ledger.State, months []int64, ahead int) api.VisualizationRender {
 	p := &page{}
 	p.heading(1, "Dashboard")
-	p.line("> **Updated:** " + store.PrettyDate(state.Today) + " · **Registry:** " +
+	p.line("> **Updated:** " + utils.PrettyDate(state.Today) + " · **Registry:** " +
 		count(len(state.PlainAccounts()), "account", "accounts") + ", " +
 		count(len(state.Cards()), "credit card", "credit cards") + ", " +
 		count(len(state.Categories), "category", "categories") + ", " +
@@ -103,7 +103,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.blank()
 	p.rule()
 
-	p.heading(2, "1. Position on "+store.PrettyDate(state.Today))
+	p.heading(2, "1. Position on "+utils.PrettyDate(state.Today))
 	p.table("Indicator", ">Value", "Where it comes from")
 	p.row("Balance in accounts", "**"+money(state.Held())+"**",
 		"opening balances + every settled movement")
@@ -120,7 +120,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 		for _, account := range state.PlainAccounts() {
 			balance := state.Balance(account)
 			p.row("["+account.Name+"](Accounts.md)", money(balance),
-				"`"+store.Bar(balance, held)+"` "+store.Percent(balance, held))
+				"`"+utils.Bar(balance, held)+"` "+utils.Percent(balance, held))
 		}
 		p.blank()
 	}
@@ -128,8 +128,8 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 
 	open := state.OpenMonth()
 	result := state.MonthResult(open)
-	before := state.MonthResult(store.AddMonths(open, -1))
-	p.heading(2, "2. "+store.PrettyMonth(open)+" so far")
+	before := state.MonthResult(utils.AddMonths(open, -1))
+	p.heading(2, "2. "+utils.PrettyMonth(open)+" so far")
 	p.table("Line", ">This month", ">Previous month", ">Change")
 	p.row("Income", signed(result.Income), signed(before.Income),
 		signed(result.Income-before.Income))
@@ -141,7 +141,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 		strconv.Itoa(result.Count-before.Count))
 	p.blank()
 	if containsMonth(months, open) {
-		folder := "Months/" + store.MonthText(open)
+		folder := "Months/" + utils.MonthText(open)
 		p.line("Full month: [`" + folder + "/DashBoard.md`](" + folder + "/DashBoard.md) · " +
 			"ledger: [`" + folder + "/Statement.md`](" + folder + "/Statement.md)")
 		p.blank()
@@ -155,7 +155,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.blank()
 	p.table("Month", ">Held in accounts", ">Net position")
 	for _, projection := range state.Forecast(ahead) {
-		p.row(store.PrettyMonth(projection.Month), money(projection.Held), money(projection.Net()))
+		p.row(utils.PrettyMonth(projection.Month), money(projection.Held), money(projection.Net()))
 	}
 	p.blank()
 	p.line("The whole projection, month by month: [Forecast.md](Forecast.md)")
@@ -190,7 +190,7 @@ func accountsPage(state ledger.State) api.VisualizationRender {
 		balance := state.Balance(account)
 		p.row(account.Name, money(account.Opening), money(balance),
 			strconv.Itoa(len(ledger.OfAccount(state.Transactions, account.Name))),
-			"`"+store.Bar(balance, held)+"` "+store.Percent(balance, held))
+			"`"+utils.Bar(balance, held)+"` "+utils.Percent(balance, held))
 	}
 	p.blank()
 	p.line("**Total held:** " + money(held))
@@ -252,7 +252,7 @@ func categoriesPage(state ledger.State) api.VisualizationRender {
 }
 
 // accepts renders in words what a category is allowed to classify.
-func accepts(category store.Category) string {
+func accepts(category ledger.Category) string {
 	if category.IsTransfer() {
 		return "transfers"
 	}
@@ -277,7 +277,7 @@ func forecastPage(state ledger.State, ahead int) api.VisualizationRender {
 	p.heading(2, "1. The next "+strconv.Itoa(ahead)+" months")
 	p.table("Month", ">Income", ">Expenses", ">Card bills", ">Held", ">Net position")
 	for _, projection := range state.Forecast(ahead) {
-		p.row(store.PrettyMonth(projection.Month), signed(projection.Income),
+		p.row(utils.PrettyMonth(projection.Month), signed(projection.Income),
 			signed(projection.Expenses), money(projection.Bills),
 			money(projection.Held), money(projection.Net()))
 	}
@@ -302,11 +302,11 @@ func forecastPage(state ledger.State, ahead int) api.VisualizationRender {
 		}
 		until := "open-ended"
 		if recurrence.End != 0 {
-			until = store.MonthText(recurrence.End)
+			until = utils.MonthText(recurrence.End)
 		}
 		p.row(recurrence.Description, destination, recurrence.Category,
 			signed(recurrence.Amount), strconv.FormatInt(recurrence.Day, 10),
-			store.MonthText(recurrence.Start), until)
+			utils.MonthText(recurrence.Start), until)
 	}
 	p.blank()
 	p.line("A recurrence never becomes a transaction on its own. When the day arrives you " +

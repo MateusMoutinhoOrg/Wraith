@@ -3,8 +3,8 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // RemoveCreditCard returns the task that removes a credit card from the
@@ -24,18 +24,18 @@ func RemoveCreditCard() api.Task {
 			if err != nil {
 				return err
 			}
-			card, found := store.FindAccount(args.DataBase, cardName)
+			card, found := find(args, config.AccountSchema, cardName)
 			if !found {
 				return errors.New("credit card not found: " + cardName)
 			}
-			if !card.IsCard() {
+			if !isCard(card) {
 				return errors.New(cardName + " is an account, not a credit card — " +
 					"remove it with RemoveAccount")
 			}
 			if err := refuseWhenInUse(args, cardName); err != nil {
 				return err
 			}
-			return remove(args, store.AccountSchema, "credit card", cardName)
+			return remove(args, config.AccountSchema, "credit card", cardName)
 		},
 	}
 }

@@ -12,7 +12,7 @@ import (
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/ledger"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
 // monthsIndex writes Months/README.md: one row per rendered month, with what
@@ -34,8 +34,8 @@ func monthsIndex(state ledger.State, months []int64) api.VisualizationRender {
 	for index := len(months) - 1; index >= 0; index-- {
 		month := months[index]
 		result := state.MonthResult(month)
-		folder := store.MonthText(month)
-		p.row(store.PrettyMonth(month), signed(result.Income), signed(result.Expenses),
+		folder := utils.MonthText(month)
+		p.row(utils.PrettyMonth(month), signed(result.Income), signed(result.Expenses),
 			"**"+signed(result.Total())+"**", strconv.Itoa(result.Count),
 			"[month]("+folder+"/DashBoard.md) · [statement]("+folder+"/Statement.md)")
 	}
@@ -46,9 +46,9 @@ func monthsIndex(state ledger.State, months []int64) api.VisualizationRender {
 // it landed, and what it is still waiting on.
 func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	p := &page{}
-	folder := store.MonthText(month)
+	folder := utils.MonthText(month)
 	result := state.MonthResult(month)
-	p.heading(1, store.PrettyMonth(month))
+	p.heading(1, utils.PrettyMonth(month))
 	p.line("[Months](../README.md) · [Statement](Statement.md) · [Dashboard](../../README.md)")
 	p.blank()
 	p.rule()
@@ -75,7 +75,7 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 			moved += transaction.Amount
 		}
 		p.row(account.Name, signed(moved),
-			money(state.BalanceOn(account, store.DateIn(month, 31))),
+			money(state.BalanceOn(account, utils.DateIn(month, 31))),
 			"[Accounts/"+slug(account.Name)+".md](Accounts/"+slug(account.Name)+".md)")
 	}
 	p.blank()
@@ -101,7 +101,7 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	}
 	p.table("Date", "Commitment", "Account", ">Amount")
 	for _, entry := range due {
-		p.row(store.PrettyDate(entry.Date), entry.Description, entry.Account,
+		p.row(utils.PrettyDate(entry.Date), entry.Description, entry.Account,
 			signed(entry.Amount))
 	}
 	p.blank()
@@ -114,8 +114,8 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 // the month, in order.
 func statementPage(state ledger.State, month int64) api.VisualizationRender {
 	p := &page{}
-	folder := store.MonthText(month)
-	p.heading(1, "Statement — "+store.PrettyMonth(month))
+	folder := utils.MonthText(month)
+	p.heading(1, "Statement — "+utils.PrettyMonth(month))
 	p.line("[Month](DashBoard.md) · [Months](../README.md) · [Dashboard](../../README.md)")
 	p.blank()
 	p.rule()
@@ -130,9 +130,9 @@ func statementPage(state ledger.State, month int64) api.VisualizationRender {
 		running += transaction.Amount
 		settles := "on the date"
 		if transaction.PaymentDate != transaction.Date {
-			settles = store.PrettyDate(transaction.PaymentDate)
+			settles = utils.PrettyDate(transaction.PaymentDate)
 		}
-		p.row(store.PrettyDate(transaction.Date), store.IdText(transaction.Id),
+		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
 			transaction.Account, transaction.Category, dash(transaction.Description),
 			signed(transaction.Amount), settles)
 	}
@@ -146,17 +146,17 @@ func statementPage(state ledger.State, month int64) api.VisualizationRender {
 
 // accountMonthPage writes Months/<month>/Accounts/<account>.md: one account's
 // movements inside one month, with a running balance.
-func accountMonthPage(state ledger.State, month int64, account store.Account) api.VisualizationRender {
+func accountMonthPage(state ledger.State, month int64, account ledger.Account) api.VisualizationRender {
 	p := &page{}
-	folder := store.MonthText(month)
-	p.heading(1, account.Name+" — "+store.PrettyMonth(month))
+	folder := utils.MonthText(month)
+	p.heading(1, account.Name+" — "+utils.PrettyMonth(month))
 	p.line("[Month](../DashBoard.md) · [Statement](../Statement.md) · " +
 		"[Dashboard](../../../README.md)")
 	p.blank()
 	p.rule()
 
 	movements := ledger.OfAccount(state.In(month), account.Name)
-	opening := state.BalanceOn(account, store.DateIn(store.AddMonths(month, -1), 31))
+	opening := state.BalanceOn(account, utils.DateIn(utils.AddMonths(month, -1), 31))
 	p.table("Line", ">Value")
 	p.row("Balance carried in", money(opening))
 	if account.IsCard() {
@@ -174,7 +174,7 @@ func accountMonthPage(state ledger.State, month int64, account store.Account) ap
 	running := opening
 	for _, transaction := range movements {
 		running += transaction.Amount
-		p.row(store.PrettyDate(transaction.Date), store.IdText(transaction.Id),
+		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
 			transaction.Category, dash(transaction.Description),
 			signed(transaction.Amount), money(running))
 	}

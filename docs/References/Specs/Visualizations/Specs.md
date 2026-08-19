@@ -11,13 +11,13 @@ Defines the required shape of a visualization file in `sandbox/Visualization/Vis
 - It reads `args.DataBase` and never writes to it.
 - `Folder: true` returns one render per file, each with a `Path` relative to the entry's `dest`. `Folder: false` returns exactly **one** render with an empty `Path`, because `dest` is the file itself.
 - Every option is declared in `Args` with a `Default`. A visualization never fails over an arg — the config was validated before it was called — so an unreadable value falls back to the default rather than returning an error.
-- No arithmetic. Every figure comes from `sandbox/lib/ledger` or the registry views in `sandbox/lib/store`, so a visualization is about layout and can be changed without touching what the numbers mean.
+- No arithmetic. Every figure comes from `sandbox/lib/ledger`, whose views read the registries, so a visualization is about layout and can be changed without touching what the numbers mean.
 - Markdown is built with the `page` helper in [page.go](/sandbox/Visualization/Visualization/page.go), never with raw string concatenation of table syntax.
 - Adding, renaming, or deleting a visualization requires updating `Catalog` in [catalog.go](/sandbox/Visualization/Visualization/catalog.go) in the same commit. Nothing else has to learn about it: the switcher, the command line and the generated `Help` catalog all read that list.
 
 ## Structure
 1. **Package clause**: `package visualizations`.
-2. **Imports**: `sandbox/contracts/api`, plus the internal packages the pages read — usually `sandbox/lib/ledger` and `sandbox/lib/store`.
+2. **Imports**: `sandbox/contracts/api`, plus the internal packages the pages read — usually `sandbox/lib/ledger` and `sandbox/lib/utils`.
 3. **Arg constants** *(optional)*: the arg names and their defaults, when the visualization declares any.
 4. **Doc comment**: what the visualization shows, and — for a folder — the tree it writes, drawn out.
 5. **Constructor**: `func <Name>() api.Visualizer` returning the value, with `HandleVisualizer` last.

@@ -3,8 +3,8 @@ package tasks
 import (
 	"errors"
 
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/store"
 )
 
 // AddCreditCard returns the task that adds a credit card to the registry. A
@@ -56,13 +56,13 @@ func AddCreditCard() api.Task {
 				return errors.New(OpeningField + " on a card is what you already owe, " +
 					"so it is written as a negative number")
 			}
-			return insert(args, store.AccountSchema, "credit card "+cardName, map[string]any{
-				store.NameField:       cardName,
-				store.KindField:       int64(store.KindCard),
-				store.OpeningField:    opening,
-				store.LimitField:      limit,
-				store.ClosingDayField: closingDay,
-				store.DueDayField:     dueDay,
+			return insert(args, config.AccountSchema, "credit card "+cardName, map[string]any{
+				config.NameField:       cardName,
+				config.KindField:       int64(config.KindCard),
+				config.OpeningField:    opening,
+				config.LimitField:      limit,
+				config.ClosingDayField: closingDay,
+				config.DueDayField:     dueDay,
 			})
 		},
 	}
