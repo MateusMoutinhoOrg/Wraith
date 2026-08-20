@@ -99,36 +99,71 @@ func (s State) Balance(account Account) int64 {
 	return s.BalanceOn(account, s.Today)
 }
 
-// Owed returns what is outstanding on a credit card today, as a positive
-// figure — a card's balance is negative when money is owed on it.
-func (s State) Owed(card Account) int64 {
-	balance := s.Balance(card)
+// OwedOn returns what is outstanding on a credit card on a given date, as a
+// positive figure — a card's balance is negative when money is owed on it.
+func (s State) OwedOn(card Account, date int64) int64 {
+	balance := s.BalanceOn(card, date)
 	if balance > 0 {
 		return 0
 	}
 	return -balance
 }
 
-// Held is the total of every plain account — the money you actually hold.
-func (s State) Held() int64 {
+// Owed returns what is outstanding on a credit card today.
+func (s State) Owed(card Account) int64 { return s.OwedOn(card, s.Today) }
+
+// HeldOn is the total of every plain account on a given date.
+func (s State) HeldOn(date int64) int64 {
 	total := int64(0)
 	for _, account := range s.PlainAccounts() {
-		total += s.Balance(account)
+		total += s.BalanceOn(account, date)
 	}
 	return total
 }
 
-// TotalOwed is the total outstanding across every credit card.
-func (s State) TotalOwed() int64 {
+// Held is the total of every plain account — the money you actually hold.
+func (s State) Held() int64 { return s.HeldOn(s.Today) }
+
+// TotalOwedOn is the total outstanding across every credit card on a date.
+func (s State) TotalOwedOn(date int64) int64 {
 	total := int64(0)
 	for _, card := range s.Cards() {
-		total += s.Owed(card)
+		total += s.OwedOn(card, date)
 	}
 	return total
 }
 
+// TotalOwed is the total outstanding across every credit card today.
+func (s State) TotalOwed() int64 { return s.TotalOwedOn(s.Today) }
+
+// NetOn is what you hold minus what you owe on a given date.
+func (s State) NetOn(date int64) int64 { return s.HeldOn(date) - s.TotalOwedOn(date) }
+
 // Net is what you hold minus what you owe.
-func (s State) Net() int64 { return s.Held() - s.TotalOwed() }
+func (s State) Net() int64 { return s.NetOn(s.Today) }
+
+// Horizon is the last date the registry settles anything on: the payment date
+// of the furthest movement already recorded, or today when nothing is dated
+// ahead. It is where a purchase in 12x stops costing you.
+func (s State) Horizon() int64 {
+	horizon := s.Today
+	for _, transaction := range s.Transactions {
+		if transaction.PaymentDate > horizon {
+			horizon = transaction.PaymentDate
+		}
+	}
+	return horizon
+}
+
+// NetWorth is everything you have minus everything you owe, once every
+// movement already recorded has settled — the last future entry included. It
+// differs from Net by exactly what is still pending: Net is where you stand
+// today, NetWorth is where what you have already committed to leaves you.
+//
+// Recurrences are left out of it on purpose. A recurrence is a rule, not a
+// movement: it is the forecast that projects it, and this figure only counts
+// what the ledger already holds.
+func (s State) NetWorth() int64 { return s.NetOn(s.Horizon()) }
 
 // Pending is the sum of movements recorded but not yet settled — everything
 // whose payment_date is still ahead of today.

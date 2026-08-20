@@ -121,6 +121,9 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.row("**Net position**", "**"+money(state.Net())+"**", "what you hold − what you owe")
 	p.row("Pending settlement", signed(state.Pending()),
 		"movements with a payment date still ahead")
+	p.row("**Net worth**", "**"+money(state.NetWorth())+"**",
+		"net position once everything recorded has settled, up to "+
+			utils.PrettyDate(state.Horizon()))
 	p.blank()
 
 	if len(state.PlainAccounts()) > 0 {
