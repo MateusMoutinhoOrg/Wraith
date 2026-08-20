@@ -44,9 +44,6 @@ echo
 echo "== paying the bill: one task, both legs, no amount means everything the closed statements ask for"
 wraith run PayCreditCardBill --card "Nubank Card" --account Bank --category "Card Payment" --date 2026-08-18
 
-echo
-echo "== a partial payment is an amount of its own"
-wraith run PayCreditCardBill --card "Nubank Card" --account Bank --category "Card Payment" --date 2026-08-19 --amount 50
 
 echo
 echo "== what has been paid, and which statement each payment answered"
