@@ -82,7 +82,7 @@ The whole picture, as a folder tree:
 ```
 DashBoard/
 ├── README.md                 current position, the open month, the index of every other page
-├── Accounts.md               every account, its balance and its share of the money you hold
+├── Accounts/                 one page per account and card, with its month-by-month menu
 ├── Credit-Cards.md           every card: limit, outstanding, closing day, due day
 ├── Categories.md             every category, what it classifies and what it has cost
 ├── Forecast.md               one row per future month: what each account holds and the net position

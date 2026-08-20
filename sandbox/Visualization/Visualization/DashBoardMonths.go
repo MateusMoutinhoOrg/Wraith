@@ -20,9 +20,7 @@ import (
 func monthsIndex(state ledger.State, months []int64) api.VisualizationRender {
 	p := &page{}
 	p.heading(1, "Months")
-	p.line("[Dashboard](../README.md) · [Accounts](../Accounts.md) · " +
-		"[Credit Cards](../Credit-Cards.md) · [Categories](../Categories.md) · " +
-		"[Forecast](../Forecast.md)")
+	p.line(navigationAt("../"))
 	p.blank()
 	p.rule()
 	if len(months) == 0 {
@@ -63,20 +61,15 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	p.rule()
 
 	p.heading(2, "2. Accounts")
-	movements := state.In(month)
-	p.table("Account", ">Moved this month", ">Balance at month end", "Statement")
+	p.table("Account", ">Moved this month", ">Balance at month end", "Movements")
 	for _, account := range state.Accounts {
-		inMonth := ledger.OfAccount(movements, account.Name)
-		if len(inMonth) == 0 {
+		flow := state.AccountFlow(account.Name, month)
+		if flow.Count == 0 {
 			continue
 		}
-		moved := int64(0)
-		for _, transaction := range inMonth {
-			moved += transaction.Amount
-		}
-		p.row(account.Name, signed(moved),
+		p.row("["+account.Name+"](../../"+accountPath(account)+")", signed(flow.Net()),
 			money(state.BalanceOn(account, utils.DateIn(month, 31))),
-			"[Accounts/"+slug(account.Name)+".md](Accounts/"+slug(account.Name)+".md)")
+			"[this month](Accounts/"+slug(account.Name)+".md)")
 	}
 	p.blank()
 	p.rule()
@@ -128,13 +121,10 @@ func statementPage(state ledger.State, month int64) api.VisualizationRender {
 	running := int64(0)
 	for _, transaction := range movements {
 		running += transaction.Amount
-		settles := "on the date"
-		if transaction.PaymentDate != transaction.Date {
-			settles = utils.PrettyDate(transaction.PaymentDate)
-		}
 		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
-			transaction.Account, transaction.Category, dash(transaction.Description),
-			signed(transaction.Amount), settles)
+			"["+transaction.Account+"](../../"+accountPathOf(state, transaction.Account)+")",
+			transaction.Category, dash(transaction.Description),
+			signed(transaction.Amount), settlement(transaction))
 	}
 	p.blank()
 	p.line("**Movements:** " + strconv.Itoa(len(movements)) + " · **Net movement:** " +
@@ -150,7 +140,8 @@ func accountMonthPage(state ledger.State, month int64, account ledger.Account) a
 	p := &page{}
 	folder := utils.MonthText(month)
 	p.heading(1, account.Name+" — "+utils.PrettyMonth(month))
-	p.line("[Month](../DashBoard.md) · [Statement](../Statement.md) · " +
+	p.line("[" + account.Name + "](../../../" + accountPath(account) + ") · " +
+		"[Month](../DashBoard.md) · [Statement](../Statement.md) · " +
 		"[Dashboard](../../../README.md)")
 	p.blank()
 	p.rule()
@@ -170,17 +161,6 @@ func accountMonthPage(state ledger.State, month int64, account ledger.Account) a
 		p.line("No movement on this account in this month.")
 		return p.render("Months/" + folder + "/Accounts/" + slug(account.Name) + ".md")
 	}
-	p.table("Date", ">Id", "Category", "Description", ">Amount", ">Balance")
-	running := opening
-	for _, transaction := range movements {
-		running += transaction.Amount
-		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
-			transaction.Category, dash(transaction.Description),
-			signed(transaction.Amount), money(running))
-	}
-	p.blank()
-	p.line("The balance column follows the movements in date order. What a movement settles " +
-		"on — its `payment_date` — is what decides when it reaches the balance on the " +
-		"dashboard.")
+	accountMovements(p, movements, opening)
 	return p.render("Months/" + folder + "/Accounts/" + slug(account.Name) + ".md")
 }

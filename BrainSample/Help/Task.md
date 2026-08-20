@@ -127,7 +127,7 @@ and `future-months` args; see [`Visualization.md`](Visualization.md).
 | Dashboard file | Rendered from |
 | -------------- | ------------- |
 | [`DashBoard/README.md`](../DashBoard/README.md) | Everything — balances, the open month, and the index of every other page |
-| [`DashBoard/Accounts.md`](../DashBoard/Accounts.md) | AddAccount, RemoveAccount, AddTransaction |
+| [`DashBoard/Accounts/<name>.md`](../DashBoard/Accounts/Bank.md) | AddAccount, AddCreditCard, RemoveAccount, AddTransaction |
 | [`DashBoard/Credit-Cards.md`](../DashBoard/Credit-Cards.md) | AddCreditCard, RemoveCreditCard, AddTransaction |
 | [`DashBoard/Categories.md`](../DashBoard/Categories.md) | AddCategory, RemoveCategory, AddTransaction |
 | [`DashBoard/Forecast.md`](../DashBoard/Forecast.md) | AddRecurrence, RemoveRecurrence, AddCreditCard, and any transaction dated ahead of today |

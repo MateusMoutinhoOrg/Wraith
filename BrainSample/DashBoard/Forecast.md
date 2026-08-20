@@ -2,7 +2,7 @@
 
 > **Updated:** 18-aug-2026 · Horizon **sep-2026 → apr-2027** (8 months) · 6 recurrences · 0 installments in flight
 
-[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
+[Dashboard](README.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
 
 Everything below is today's balance rolled forward through commitments **you declared** — the
 recurrences in §3, the installments and future-dated transactions in §4, and the card bills §5
@@ -70,9 +70,9 @@ projection; see §4.
 
 | Recurrence | Account | Category | Amount | Day | From | Until | Occurrences left |
 | ---------- | ------- | -------- | -----: | --: | ---- | ----- | ---------------: |
-| `Client A retainer` | [`Bank`](Accounts.md) | [`Freelance`](Categories.md) | +R$ 2,000 | 11 | sep-2026 | — | open-ended |
+| `Client A retainer` | [`Bank`](Accounts/Bank.md) | [`Freelance`](Categories.md) | +R$ 2,000 | 11 | sep-2026 | — | open-ended |
 | `Rent` | [`Nubank Card`](Credit-Cards.md) | [`Home`](Categories.md) | -R$ 900 | 1 | sep-2026 | — | open-ended |
-| `Internet` | [`Bank`](Accounts.md) | [`Home`](Categories.md) | -R$ 120 | 17 | sep-2026 | — | open-ended |
+| `Internet` | [`Bank`](Accounts/Bank.md) | [`Home`](Categories.md) | -R$ 120 | 17 | sep-2026 | — | open-ended |
 | `Cloud hosting` | [`Nubank Card`](Credit-Cards.md) | [`Business`](Categories.md) | -R$ 120 | 5 | sep-2026 | — | open-ended |
 | `Streaming` | [`Nubank Card`](Credit-Cards.md) | [`Leisure`](Categories.md) | -R$ 55 | 30 | sep-2026 | — | open-ended |
 | `Emergency reserve` | `Bank` → `Emergency Savings` | [`Reserve`](Categories.md) | R$ 500 | 6 | sep-2026 | feb-2027 | 6 |

@@ -81,6 +81,7 @@ wraith run ModifyTransaction --id 2 --amount -40 --description "Market, correcte
 | Page | What it answers |
 |------|-----------------|
 | `DashBoard/README.md` | Where you stand today |
+| `DashBoard/Accounts/Bank.md` | One account: what it holds, how the open month is going on it, and the menu of every month it has moved in |
 | `DashBoard/Months/2026-08/Statement.md` | Every movement dated in August, with its id |
 | `DashBoard/Credit-Cards.md` | What is outstanding, and how much limit is left |
 | `DashBoard/Forecast.md` | What the declared commitments add up to |

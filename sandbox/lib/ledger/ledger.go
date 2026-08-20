@@ -197,6 +197,75 @@ func OfAccount(transactions []Transaction, account string) []Transaction {
 	return found
 }
 
+// Flow is what a set of movements moved: what came in, what went out, and how
+// many movements it took. It is what a Result is to a month, for one account —
+// with the difference that a transfer counts on both sides here, because money
+// leaving one of your own accounts for another has still left that account.
+type Flow struct {
+	// In is the total of every positive amount.
+	In int64
+	// Out is the total of every negative amount, kept negative.
+	Out int64
+	// Count is how many movements the flow holds.
+	Count int
+}
+
+// Net is what came in and what went out added together.
+func (f Flow) Net() int64 { return f.In + f.Out }
+
+// FlowOf returns what a list of movements moved.
+func FlowOf(transactions []Transaction) Flow {
+	flow := Flow{}
+	for _, transaction := range transactions {
+		flow.Count++
+		if transaction.Amount > 0 {
+			flow.In += transaction.Amount
+			continue
+		}
+		flow.Out += transaction.Amount
+	}
+	return flow
+}
+
+// AccountFlow returns what one account moved in one month, or across the whole
+// ledger when month is zero.
+func (s State) AccountFlow(name string, month int64) Flow {
+	if month == 0 {
+		return FlowOf(OfAccount(s.Transactions, name))
+	}
+	return FlowOf(OfAccount(s.In(month), name))
+}
+
+// AccountMonths returns every month holding at least one movement on one
+// account, oldest first. Like Months, a month is never created by hand: it
+// exists as soon as a movement on that account carries a date inside it.
+func (s State) AccountMonths(name string) []int64 {
+	seen := map[int64]bool{}
+	months := []int64{}
+	for _, transaction := range OfAccount(s.Transactions, name) {
+		month := utils.MonthOf(transaction.Date)
+		if seen[month] {
+			continue
+		}
+		seen[month] = true
+		months = append(months, month)
+	}
+	sort.Slice(months, func(i int, j int) bool { return months[i] < months[j] })
+	return months
+}
+
+// PendingOf returns what is recorded on one account but has not settled yet —
+// everything on it whose payment_date is still ahead of today.
+func (s State) PendingOf(account Account) int64 {
+	total := int64(0)
+	for _, transaction := range OfAccount(s.Transactions, account.Name) {
+		if transaction.PaymentDate > s.Today {
+			total += transaction.Amount
+		}
+	}
+	return total
+}
+
 // IsTransfer reports whether a movement is a leg of a transfer between your
 // own accounts, and therefore counts as neither income nor expense.
 func (s State) IsTransfer(transaction Transaction) bool {

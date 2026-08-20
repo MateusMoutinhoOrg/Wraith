@@ -2,7 +2,7 @@
 
 > **Updated:** 18-aug-2026 · 1 card · Owed **R$ 1,185** · Available limit **R$ 3,815**
 
-[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
+[Dashboard](README.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Card | Limit | Owed | Available | Used | Closes | Due | Statement |
 | ---- | ----: | ----------: | --------: | ---- | -----: | --: | --------- |
-| `Nubank Card` | R$ 5,000 | R$ 1,185 | R$ 3,815 | `██░░░░░░░░` 24% | day 28 | day 5 | [aug-2026](Months/2026-08/Accounts/Nubank-Card.md) |
+| [`Nubank Card`](Accounts/Nubank-Card.md) | R$ 5,000 | R$ 1,185 | R$ 3,815 | `██░░░░░░░░` 24% | day 28 | day 5 | [aug-2026](Months/2026-08/Accounts/Nubank-Card.md) |
 
 `Limit`, `closing_day` and `due_day` come from `AddCreditCard`. The outstanding amount is the card's `opening` plus every purchase, minus every bill payment recorded against it.
 

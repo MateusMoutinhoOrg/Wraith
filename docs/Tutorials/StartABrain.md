@@ -35,7 +35,7 @@ ls
 
 | Folder | Written by | What it holds |
 |--------|-----------|---------------|
-| `DashBoard/` | the `DashBoard` visualization | Your position, your registries, one folder per month, the forecast |
+| `DashBoard/` | the `DashBoard` visualization | Your position, one page per account and card, one folder per month, the forecast |
 | `Tasks/` | the `Task-List` visualization | One reference page per action the binary carries |
 | `Help/` | the `Help` visualization | The command reference, the task guide, the visualization guide |
 
@@ -47,7 +47,7 @@ Every one of those folders exists because a line in `Visualization.yaml` asked f
 wraith run AddAccount --account Bank --opening 3000
 ```
 
-5. Open `DashBoard/README.md`. Your account is on it.
+5. Open `DashBoard/README.md`. Your account is on it, and the row that names it opens `DashBoard/Accounts/Bank.md` — that account's own page.
 
 6. Leave a watcher running while you work, so saving `Task.yaml` in an editor is all it takes to apply an action.
 

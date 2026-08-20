@@ -2,7 +2,7 @@
 
 > Opening **R$ 420** · closing **R$ 75** · 14 transactions
 
-[Dashboard](../../../README.md) · [Accounts](../../../Accounts.md) · [Credit Cards](../../../Credit-Cards.md) · [Categories](../../../Categories.md) · [Months](../../../Months/README.md) · [Forecast](../../../Forecast.md)
+[Dashboard](../../../README.md) · [Credit Cards](../../../Credit-Cards.md) · [Categories](../../../Categories.md) · [Months](../../../Months/README.md) · [Forecast](../../../Forecast.md)
 
 Month: **August 2026** · [July 2026](../../2026-07/Accounts/Cash.md) · [Overview](../DashBoard.md) · [Full ledger](../Statement.md)
 

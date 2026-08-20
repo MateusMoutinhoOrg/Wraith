@@ -2,7 +2,7 @@
 
 > **Updated:** 18-aug-2026 · **Currency:** BRL (R$) · **Registry:** 3 accounts, 1 credit card, 14 categories, 63 transactions, 6 recurrences
 
-[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
+[Dashboard](README.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
 
 ---
 
@@ -18,9 +18,11 @@
 
 | Account                                                           |  Balance | Share of the money you hold |
 | ----------------------------------------------------------------- | -------: | --------------------------- |
-| [Emergency Savings](Months/2026-08/Accounts/Emergency-Savings.md) | R$ 2,500 | `███████████░░░░░░░░░` 53%  |
-| [Bank](Months/2026-08/Accounts/Bank.md)                           | R$ 2,119 | `█████████░░░░░░░░░░░` 45%  |
-| [Cash](Months/2026-08/Accounts/Cash.md)                           |    R$ 75 | `█░░░░░░░░░░░░░░░░░░░` 2%   |
+| [Emergency Savings](Accounts/Emergency-Savings.md)                | R$ 2,500 | `███████████░░░░░░░░░` 53%  |
+| [Bank](Accounts/Bank.md)                                          | R$ 2,119 | `█████████░░░░░░░░░░░` 45%  |
+| [Cash](Accounts/Cash.md)                                          |    R$ 75 | `█░░░░░░░░░░░░░░░░░░░` 2%   |
+
+Every account is a link: the row that names one opens that account's own page, where its month-by-month menu is.
 
 ---
 
@@ -62,7 +64,7 @@ Full projection: [`Forecast.md`](Forecast.md)
 
 | Document | Answers | Fed by |
 | -------- | ------- | ------ |
-| [`Accounts.md`](Accounts.md) | Which accounts exist and what each one holds | `AddAccount`, `RemoveAccount`, `AddTransaction` |
+| [`Accounts/<name>.md`](Accounts/Bank.md) | One account or card: what it holds, how the open month is going on it, and the menu of every month it has moved in | `AddAccount`, `AddCreditCard`, `RemoveAccount`, `AddTransaction` |
 | [`Credit-Cards.md`](Credit-Cards.md) | Limit, outstanding, when each bill closes and is due | `AddCreditCard`, `RemoveCreditCard`, `AddTransaction` |
 | [`Categories.md`](Categories.md) | How spending is classified and what each category costs | `AddCategory`, `RemoveCategory`, `AddTransaction` |
 | [`Months/README.md`](Months/README.md) | Every closed and open month | `AddTransaction` |
@@ -71,10 +73,14 @@ Full projection: [`Forecast.md`](Forecast.md)
 ```
 DashBoard/
 ├── README.md              ← you are here
-├── Accounts.md
 ├── Credit-Cards.md
 ├── Categories.md
 ├── Forecast.md            ← the next 8 months
+├── Accounts/              ← one page per account and card
+│   ├── Bank.md
+│   ├── Cash.md
+│   ├── Emergency-Savings.md
+│   └── Nubank-Card.md
 └── Months/
     ├── README.md
     ├── 2026-08/   ← current month

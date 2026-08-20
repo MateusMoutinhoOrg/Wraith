@@ -2,7 +2,7 @@
 
 > **Updated:** 18-aug-2026 · 14 categories · every transaction carries exactly one
 
-[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
+[Dashboard](README.md) · [Credit Cards](Credit-Cards.md) · [Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)
 
 ---
 

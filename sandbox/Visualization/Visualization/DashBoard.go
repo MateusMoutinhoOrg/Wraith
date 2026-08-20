@@ -29,10 +29,10 @@ const (
 //
 //	DashBoard/
 //	├── README.md          where you stand today
-//	├── Accounts.md        every account and what it holds
 //	├── Credit-Cards.md    every card, its limit and its bill
 //	├── Categories.md      every category and what it has cost
 //	├── Forecast.md        what the declared commitments add up to
+//	├── Accounts/          one page per account and card, with its month menu
 //	└── Months/            one folder per month that holds a movement
 //
 // Every figure on those pages is computed from the five registries the tasks
@@ -60,11 +60,13 @@ func DashBoard() api.Visualizer {
 
 			renders := []api.VisualizationRender{
 				overview(state, months, ahead),
-				accountsPage(state),
 				cardsPage(state),
 				categoriesPage(state),
 				forecastPage(state, ahead),
 				monthsIndex(state, months),
+			}
+			for _, account := range state.Accounts {
+				renders = append(renders, accountPage(state, account, months))
 			}
 			for _, month := range months {
 				renders = append(renders, monthPage(state, month), statementPage(state, month))
@@ -81,10 +83,17 @@ func DashBoard() api.Visualizer {
 }
 
 // navigation is the line of links every top-level page of the tree carries,
-// so no page is more than one click from any other.
-func navigation() string {
-	return "[Dashboard](README.md) · [Accounts](Accounts.md) · [Credit Cards](Credit-Cards.md) · " +
-		"[Categories](Categories.md) · [Months](Months/README.md) · [Forecast](Forecast.md)"
+// so no page is more than one click from any other. There is no `Accounts`
+// link on it: an account is reached from the row that names it on the
+// dashboard, which is the only place the list of them is written.
+func navigation() string { return navigationAt("") }
+
+// navigationAt is that same line, written from a page sitting `prefix` away
+// from the root of the tree — `../` one folder down, `../../` two.
+func navigationAt(prefix string) string {
+	return "[Dashboard](" + prefix + "README.md) · [Credit Cards](" + prefix +
+		"Credit-Cards.md) · [Categories](" + prefix + "Categories.md) · [Months](" + prefix +
+		"Months/README.md) · [Forecast](" + prefix + "Forecast.md)"
 }
 
 // overview writes README.md: where you stand today, how the open month is
@@ -119,7 +128,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 		held := state.Held()
 		for _, account := range state.PlainAccounts() {
 			balance := state.Balance(account)
-			p.row("["+account.Name+"](Accounts.md)", money(balance),
+			p.row("["+account.Name+"]("+accountPath(account)+")", money(balance),
 				"`"+utils.Bar(balance, held)+"` "+utils.Percent(balance, held))
 		}
 		p.blank()
@@ -172,31 +181,6 @@ func containsMonth(months []int64, month int64) bool {
 	return false
 }
 
-// accountsPage writes Accounts.md: every account, what it holds, and what
-// share of your money sits in it.
-func accountsPage(state ledger.State) api.VisualizationRender {
-	p := &page{}
-	p.heading(1, "Accounts")
-	p.line(navigation())
-	p.blank()
-	p.rule()
-	if len(state.PlainAccounts()) == 0 {
-		p.line("No account yet. Add one with the `AddAccount` task.")
-		return p.render("Accounts.md")
-	}
-	held := state.Held()
-	p.table("Account", ">Opening", ">Balance", ">Movements", "Share")
-	for _, account := range state.PlainAccounts() {
-		balance := state.Balance(account)
-		p.row(account.Name, money(account.Opening), money(balance),
-			strconv.Itoa(len(ledger.OfAccount(state.Transactions, account.Name))),
-			"`"+utils.Bar(balance, held)+"` "+utils.Percent(balance, held))
-	}
-	p.blank()
-	p.line("**Total held:** " + money(held))
-	return p.render("Accounts.md")
-}
-
 // cardsPage writes Credit-Cards.md: every card, what is outstanding on it,
 // and how much of its limit is still available.
 func cardsPage(state ledger.State) api.VisualizationRender {
@@ -217,7 +201,8 @@ func cardsPage(state ledger.State) api.VisualizationRender {
 		if card.DueDay < card.ClosingDay {
 			dueMonth = utils.AddMonths(closeMonth, 1)
 		}
-		p.row(card.Name, money(card.Limit), money(owed), money(card.Limit-owed),
+		p.row("["+card.Name+"]("+accountPath(card)+")", money(card.Limit), money(owed),
+			money(card.Limit-owed),
 			utils.PrettyDate(utils.DateIn(closeMonth, card.ClosingDay)),
 			utils.PrettyDate(utils.DateIn(dueMonth, card.DueDay)))
 	}
