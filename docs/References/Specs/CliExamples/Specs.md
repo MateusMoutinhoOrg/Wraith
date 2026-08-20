@@ -4,7 +4,7 @@
 Defines the required shape of a runnable command-line example in `examples/cliExamples/<Name>.sh`. A CLI example is a self-contained shell script that builds the binary in [cmd/main](/cmd/main/) and drives it the way a user would from a terminal — one script per goal a person actually has. Its Go counterpart, which wires the library from code instead, is governed by [LibraryExamples](/docs/References/Specs/LibraryExamples/Specs.md).
 
 ### Rules
-- Each CLI example is a single `.sh` file directly under `examples/cliExamples/`, named with a descriptive PascalCase name matching the goal it demonstrates — e.g. `StartAVault.sh`, `DriveItWithTaskFile.sh`.
+- Each CLI example is a single `.sh` file directly under `examples/cliExamples/`, named with a descriptive PascalCase name matching the goal it demonstrates — e.g. `BasicVault.sh`, `DriveItWithTaskFile.sh`.
 - The script opens with a shebang (`#!/usr/bin/env bash`), a comment block naming the goal it demonstrates, and the command that runs it from the project root.
 - It must be runnable with no arguments and no prior setup, from the project root: `bash ./examples/cliExamples/<Name>.sh`.
 - It builds the binary itself with `go build -o "$workdir/wraith" ./cmd/main` into a `mktemp -d` directory removed by a `trap` on exit, then `cd`s into a vault created inside that directory. A CLI example never writes to a vault of the reader's and never requires the binary to be installed first.

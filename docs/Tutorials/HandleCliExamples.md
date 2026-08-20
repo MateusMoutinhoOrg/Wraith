@@ -12,10 +12,10 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
 - It writes to a scratch directory it removes on exit, so running one never touches the records in your home directory.
 
 ### Workflow
-1. Browse [examples/cliExamples/](/examples/cliExamples/) and pick a script — each is named after the goal it demonstrates, so `StartAVault.sh` is a good starting point.
+1. Browse [examples/cliExamples/](/examples/cliExamples/) and pick a script — each is named after the goal it demonstrates, so `BasicVault.sh` is a good starting point.
 2. Run it from the project root:
    ```bash
-   bash ./examples/cliExamples/StartAVault.sh
+   bash ./examples/cliExamples/BasicVault.sh
    ```
 3. Read the transcript alongside the script: each `== …` line in the output is the comment above the commands that produced what follows it.
 4. Run the rest in order to see the whole interface:
@@ -34,7 +34,7 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
 - Adding one requires updating [SamplesList.md](/docs/References/SamplesList.md) and [Structure.md](/docs/References/Structure.md).
 
 ### Workflow
-1. Create the script under [examples/cliExamples/](/examples/cliExamples/), named with a descriptive PascalCase name matching the goal it demonstrates — e.g. `StartAVault.sh`, `DriveItWithTaskFile.sh`.
+1. Create the script under [examples/cliExamples/](/examples/cliExamples/), named with a descriptive PascalCase name matching the goal it demonstrates — e.g. `BasicVault.sh`, `DriveItWithTaskFile.sh`.
 2. Open it with the shebang, a comment naming the goal, how to run it, and the shell options:
    ```bash
    #!/usr/bin/env bash

@@ -1,54 +1,82 @@
 #!/usr/bin/env bash
-#
-# DriveItWithTaskFile.sh — the state machine, driven the way a person drives it.
-#
-# Everything here happens through `Task.yaml`: write an action, arm it with
-# `apply: true`, run a tick. It also shows what a failure looks like — an
-# `Error.md` in the vault, and nothing changed.
+# DriveItWithTaskFile.sh — drives the state machine through Task.yaml instead of
+# the command line, including what an armed action that fails looks like.
 #
 # Run it from the project root:
 #   bash ./examples/cliExamples/DriveItWithTaskFile.sh
-
 set -uo pipefail
 
+# Build the binary into a scratch directory and run it in a vault of its own,
+# so the example never touches a brain of yours.
 workdir="$(mktemp -d)"
 trap 'rm -rf "$workdir"' EXIT
 
 go build -o "$workdir/wraith" ./cmd/main
 mkdir -p "$workdir/vault"
 cd "$workdir/vault"
-
 wraith() { "$workdir/wraith" "$@"; }
 
-wraith start > /dev/null
+echo "== start writes the two files a brain is driven by"
+wraith start
+ls
 
-echo "== One action per tick, written into Task.yaml"
-cat > Task.yaml <<'TASK'
-name: AddAccount
-account: Bank
-opening: 1500
-apply: true
-TASK
+echo
+echo "== the task file arrives disarmed, so nothing runs until you say so"
+cat Task.yaml
 wraith tick
 
 echo
-echo "== The tick disarms the file, so the same action never runs twice"
-cat Task.yaml
+echo "== write an action into it and arm it"
+cat > Task.yaml <<'YAML'
+name: AddAccount
+account: Bank
+opening: 1200
+apply: true
+YAML
+wraith tick
 
 echo
-echo "== A task that cannot work changes nothing, and says why"
-cat > Task.yaml <<'TASK'
+echo "== the tick disarmed it again, so the same action never runs twice"
+grep '^apply:' Task.yaml
+wraith tick
+
+echo
+echo "== arm the next action against the account the first one created"
+cat > Task.yaml <<'YAML'
+name: AddCategory
+category: Food
+description: Groceries and eating out
+revenues: false
+expenses: true
+apply: true
+YAML
+wraith tick
+
+cat > Task.yaml <<'YAML'
 name: AddTransaction
-account: Ghost
+account: Bank
+category: Food
+amount: -84.20
+date: 2026-08-18
+description: Grocery store
+apply: true
+YAML
+wraith tick
+
+echo
+echo "== an armed action that fails writes Error.md and changes nothing"
+cat > Task.yaml <<'YAML'
+name: AddTransaction
+account: Savings
 category: Food
 amount: -10
-date: 2026-08-18
+date: 2026-08-19
 apply: true
-TASK
+YAML
 wraith tick
 echo "exit code: $?"
 cat Error.md
 
 echo
-echo "== The account that does exist is still exactly as it was"
-sed -n '1,14p' DashBoard/Accounts/Bank.md
+echo "== the ledger still holds only the movement that succeeded"
+sed -n '1,20p' DashBoard/Accounts/Bank.md

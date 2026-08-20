@@ -11,10 +11,10 @@ CLI examples are shell scripts that demonstrate how to use the `wraith` command-
 
 ### Workflow
 
-1. Browse the `/examples/cliExamples/` directory for a script that matches the workflow you want to learn (e.g., `StartAVault.sh`).
+1. Browse the `/examples/cliExamples/` directory for a script that matches the workflow you want to learn (e.g., `BasicVault.sh`).
 2. Run the script from the project root:
    ```bash
-   bash ./examples/cliExamples/StartAVault.sh
+   bash ./examples/cliExamples/BasicVault.sh
    ```
 3. Read the output. The script will output comments indicating what it's doing before executing the CLI commands.
 4. To run all CLI examples sequentially:

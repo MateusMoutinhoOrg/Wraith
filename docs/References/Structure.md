@@ -278,7 +278,7 @@ Outside the sandbox. Shell scripts driving the built binary the way a user would
 
 **Run a CLI example:**
 ```sh
-bash ./examples/cliExamples/StartAVault.sh
+bash ./examples/cliExamples/BasicVault.sh
 ```
 
 ---
