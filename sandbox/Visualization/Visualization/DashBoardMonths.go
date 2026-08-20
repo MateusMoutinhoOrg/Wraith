@@ -32,7 +32,7 @@ func monthsIndex(state ledger.State, months []int64, ahead int) api.Visualizatio
 	p.blank()
 	p.rule()
 
-	p.heading(2, "1. Months before this one")
+	p.heading(2, "1. Months before "+utils.PrettyMonth(open))
 	if !writeMonthRows(p, state, months, func(month int64) bool { return month < open }) {
 		p.line("No earlier month holds a movement. Only the months from `prev-months` back " +
 			"are written.")
