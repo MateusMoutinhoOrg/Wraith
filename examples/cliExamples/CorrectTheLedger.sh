@@ -17,9 +17,14 @@ set -uo pipefail
 workdir="$(mktemp -d)"
 trap 'rm -rf "$workdir"' EXIT
 
-go build -o "$workdir/wraith" ./cmd/main
-mkdir -p "$workdir/vault"
-cd "$workdir/vault"
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+go build -o "$workdir/wraith" "$PROJECT_ROOT/cmd/main"
+
+VAULT_DIR="$PROJECT_ROOT/WraithSample"
+rm -rf "$VAULT_DIR"
+mkdir -p "$VAULT_DIR"
+cd "$VAULT_DIR"
+
 wraith() { "$workdir/wraith" "$@"; }
 
 echo "== a ledger with three months in it, the last one typed in a hurry"
