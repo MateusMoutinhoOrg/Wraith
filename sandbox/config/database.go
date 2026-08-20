@@ -53,6 +53,11 @@ const (
 	AmountField = "amount"
 	// DateField is a date as yyyymmdd.
 	DateField = "date"
+
+	TransactionsDB = "transactions"
+	CategoryID     = "Category"
+	AccountID      = "AccountID"
+	TransactionId  = "TransactionID"
 )
 
 // The parts a packed DetailField is composed of, one pair per registry: how
@@ -89,6 +94,15 @@ func DatabaseProps(path string) keepdeps.Props {
 				Name: AccountSchema,
 				Itens: []keepdeps.Item{
 					{Name: NameField, Type: keepdeps.Key, Required: true},
+
+					//when ever a transaction happen  with these account it stores here its id
+					{
+						Name: TransactionsDB,
+						Type: keepdeps.Database,
+						Itens: []keepdeps.Item{
+							{Name: TransactionId, Type: keepdeps.Int, Required: true},
+						},
+					},
 				},
 			},
 			{
@@ -98,6 +112,15 @@ func DatabaseProps(path string) keepdeps.Props {
 					{Name: DetailField, Type: keepdeps.Key, Required: true},
 					{Name: RevenuesField, Type: keepdeps.Int, Required: true},
 					{Name: ExpensesField, Type: keepdeps.Int, Required: true},
+
+					//when ever a transaction happen  with these category it stores here its id
+					{
+						Name: TransactionsDB,
+						Type: keepdeps.Database,
+						Itens: []keepdeps.Item{
+							{Name: TransactionId, Type: keepdeps.Int, Required: true},
+						},
+					},
 				},
 			},
 			{
@@ -107,6 +130,8 @@ func DatabaseProps(path string) keepdeps.Props {
 					{Name: DetailField, Type: keepdeps.Key, Required: true},
 					{Name: AmountField, Type: keepdeps.Int, Required: true},
 					{Name: DateField, Type: keepdeps.Int, Required: true},
+					{Name: AccountID, Type: keepdeps.Int, Required: true},
+					{Name: CategoryID, Type: keepdeps.Int, Required: true},
 				},
 			},
 		},
