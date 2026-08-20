@@ -6,6 +6,7 @@ package visualizations
 // what it changes.
 
 import (
+	"sort"
 	"strconv"
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
@@ -212,13 +213,31 @@ func categoriesPage(state ledger.State) api.VisualizationRender {
 		}
 	}
 
+	abs := func(x int64) int64 {
+		if x < 0 {
+			return -x
+		}
+		return x
+	}
+
+	sort.Slice(incomeCategories, func(i, j int) bool {
+		return abs(state.CategoryTotal(incomeCategories[i].Name, open)) > abs(state.CategoryTotal(incomeCategories[j].Name, open))
+	})
+	sort.Slice(expenseCategories, func(i, j int) bool {
+		return abs(state.CategoryTotal(expenseCategories[i].Name, open)) > abs(state.CategoryTotal(expenseCategories[j].Name, open))
+	})
+	sort.Slice(volatileCategories, func(i, j int) bool {
+		return abs(state.CategoryTotal(volatileCategories[i].Name, open)) > abs(state.CategoryTotal(volatileCategories[j].Name, open))
+	})
+
 	if len(incomeCategories) > 0 {
 		p.heading(2, "Income")
-		p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time", ">Movements")
+		p.table("Category", "Parent", "What it is", ">This month", ">Prev-Month", ">All time", ">Movements")
 		for _, category := range incomeCategories {
-			p.row(category.Name, accepts(category), dash(category.Parent),
+			p.row(category.Name, dash(category.Parent),
 				dash(category.Description),
 				signed(state.CategoryTotal(category.Name, open)),
+				signed(state.CategoryTotal(category.Name, utils.AddMonths(open, -1))),
 				signed(state.CategoryTotal(category.Name, 0)),
 				strconv.Itoa(state.CategoryCount(category.Name)))
 		}
@@ -227,11 +246,12 @@ func categoriesPage(state ledger.State) api.VisualizationRender {
 
 	if len(expenseCategories) > 0 {
 		p.heading(2, "Expenses")
-		p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time", ">Movements")
+		p.table("Category", "Parent", "What it is", ">This month", ">Prev-Month", ">All time", ">Movements")
 		for _, category := range expenseCategories {
-			p.row(category.Name, accepts(category), dash(category.Parent),
+			p.row(category.Name, dash(category.Parent),
 				dash(category.Description),
 				signed(state.CategoryTotal(category.Name, open)),
+				signed(state.CategoryTotal(category.Name, utils.AddMonths(open, -1))),
 				signed(state.CategoryTotal(category.Name, 0)),
 				strconv.Itoa(state.CategoryCount(category.Name)))
 		}
@@ -240,11 +260,12 @@ func categoriesPage(state ledger.State) api.VisualizationRender {
 
 	if len(volatileCategories) > 0 {
 		p.heading(2, "Volatile")
-		p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time", ">Movements")
+		p.table("Category", "Parent", "What it is", ">This month", ">Prev-Month", ">All time", ">Movements")
 		for _, category := range volatileCategories {
-			p.row(category.Name, accepts(category), dash(category.Parent),
+			p.row(category.Name, dash(category.Parent),
 				dash(category.Description),
 				signed(state.CategoryTotal(category.Name, open)),
+				signed(state.CategoryTotal(category.Name, utils.AddMonths(open, -1))),
 				signed(state.CategoryTotal(category.Name, 0)),
 				strconv.Itoa(state.CategoryCount(category.Name)))
 		}
@@ -257,16 +278,3 @@ func categoriesPage(state ledger.State) api.VisualizationRender {
 	return p.render("Categories.md")
 }
 
-// accepts renders in words what a category is allowed to classify.
-func accepts(category ledger.Category) string {
-	if category.IsTransfer() {
-		return "transfers"
-	}
-	if category.Revenues && category.Expenses {
-		return "both"
-	}
-	if category.Revenues {
-		return "income"
-	}
-	return "expenses"
-}
