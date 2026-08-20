@@ -10,6 +10,7 @@ package visualizations
 // accounts moved are the same set of lines, read two ways.
 
 import (
+	"sort"
 	"strconv"
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
@@ -144,14 +145,66 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	p.rule()
 
 	p.heading(2, "3. Categories")
-	p.table("Category", ">This month")
+
+	var incomeCategories, expenseCategories, volatileCategories []ledger.Category
 	for _, category := range state.Categories {
 		total := state.CategoryTotal(category.Name, month)
 		if total == 0 {
 			continue
 		}
-		p.row(category.Name, signed(total))
+		if category.IsTransfer() || (category.Revenues && category.Expenses) {
+			volatileCategories = append(volatileCategories, category)
+		} else if category.Revenues {
+			incomeCategories = append(incomeCategories, category)
+		} else {
+			expenseCategories = append(expenseCategories, category)
+		}
 	}
+
+	abs := func(x int64) int64 {
+		if x < 0 {
+			return -x
+		}
+		return x
+	}
+
+	sort.Slice(incomeCategories, func(i, j int) bool {
+		return abs(state.CategoryTotal(incomeCategories[i].Name, month)) > abs(state.CategoryTotal(incomeCategories[j].Name, month))
+	})
+	sort.Slice(expenseCategories, func(i, j int) bool {
+		return abs(state.CategoryTotal(expenseCategories[i].Name, month)) > abs(state.CategoryTotal(expenseCategories[j].Name, month))
+	})
+	sort.Slice(volatileCategories, func(i, j int) bool {
+		return abs(state.CategoryTotal(volatileCategories[i].Name, month)) > abs(state.CategoryTotal(volatileCategories[j].Name, month))
+	})
+
+	if len(incomeCategories) > 0 {
+		p.heading(3, "Income")
+		p.table("Category", ">This month")
+		for _, category := range incomeCategories {
+			p.row(category.Name, signed(state.CategoryTotal(category.Name, month)))
+		}
+		p.blank()
+	}
+
+	if len(expenseCategories) > 0 {
+		p.heading(3, "Expenses")
+		p.table("Category", ">This month")
+		for _, category := range expenseCategories {
+			p.row(category.Name, signed(state.CategoryTotal(category.Name, month)))
+		}
+		p.blank()
+	}
+
+	if len(volatileCategories) > 0 {
+		p.heading(3, "Volatile")
+		p.table("Category", ">This month")
+		for _, category := range volatileCategories {
+			p.row(category.Name, signed(state.CategoryTotal(category.Name, month)))
+		}
+		p.blank()
+	}
+
 	return p.render("Months/" + folder + "/DashBoard.md")
 }
 
