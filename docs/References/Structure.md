@@ -151,6 +151,7 @@ The registries read back as typed values, and every figure the vault shows deriv
 |------|-------------|------|
 | `records.go` | One typed view per registry, and the ordered listings that read them off the injected database | |
 | `ledger.go` | The `State` read once per render, and the balances, month results and totals over it | |
+| `bills.go` | The credit card statements a card's two days cut the ledger into, and what is still pending on them | |
 | `forecast.go` | Today's position rolled forward through the declared commitments | |
 
 #### `/sandbox/lib/vault/`

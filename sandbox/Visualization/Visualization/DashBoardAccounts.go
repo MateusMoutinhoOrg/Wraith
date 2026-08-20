@@ -80,13 +80,16 @@ func accountPosition(p *page, state ledger.State, account ledger.Account) {
 	p.table("Indicator", ">Value", "Where it comes from")
 	if account.IsCard() {
 		owed := state.Owed(account)
+		open := state.OpenBill(account)
 		p.row("Outstanding", "**"+money(owed)+"**", "every purchase − every bill payment")
+		p.row("Bills to pay", "**"+money(state.AmountDue(account))+"**",
+			"closed statements that still carry a remainder")
 		p.row("Limit", money(account.Limit), "what the card was declared with")
 		p.row("Available", money(account.Limit-owed), "limit − outstanding")
-		p.row("Closes", utils.PrettyDate(utils.DateIn(state.OpenMonth(), account.ClosingDay)),
-			"day "+strconv.FormatInt(account.ClosingDay, 10)+" of the month")
-		p.row("Due", utils.PrettyDate(utils.DateIn(cardDueMonth(state, account), account.DueDay)),
-			"day "+strconv.FormatInt(account.DueDay, 10)+" of the month")
+		p.row("Closes", utils.PrettyDate(open.Closes),
+			"day "+strconv.FormatInt(ledger.CardClosingDay(account), 10)+" of the month")
+		p.row("Due", utils.PrettyDate(open.Due),
+			"day "+strconv.FormatInt(ledger.CardDueDay(account), 10)+" of the month")
 	} else {
 		p.row("Balance", "**"+money(state.Balance(account))+"**",
 			"every settled movement on this account")
@@ -96,16 +99,12 @@ func accountPosition(p *page, state ledger.State, account ledger.Account) {
 	p.row("Movements recorded", strconv.Itoa(state.AccountFlow(account.Name, 0).Count),
 		"every movement on this account, all time")
 	p.blank()
-	p.rule()
-}
-
-// cardDueMonth is the month a card's current bill falls due in — the next one
-// when the card is due before it closes.
-func cardDueMonth(state ledger.State, card ledger.Account) int64 {
-	if card.DueDay < card.ClosingDay {
-		return utils.AddMonths(state.OpenMonth(), 1)
+	if account.IsCard() {
+		p.line("Statement by statement — what each cycle charged, what answered it, and " +
+			"what is left on it: [" + account.Name + " bills](../" + billsPath(account) + ")")
+		p.blank()
 	}
-	return state.OpenMonth()
+	p.rule()
 }
 
 // accountOpenMonth writes section 2: how the month the vault is currently

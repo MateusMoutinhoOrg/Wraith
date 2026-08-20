@@ -52,16 +52,21 @@ wraith run AddTransaction --account "Nubank Card" --category Food \
 
 Twelve transactions are written at once. The remainder goes to the first part, so the parts add back up to the total exactly.
 
-5. Pay the card bill: two transactions sharing the transfer category, netting to zero.
+5. Pay the card bill. One task writes both legs — the money leaving the account, and the same amount arriving on the card — under the transfer category, so they net to zero.
 
 ```bash
-wraith run AddTransaction --account Bank --category "Card Payment" \
-  --amount -350 --date 2026-09-05 --description "August card bill"
-wraith run AddTransaction --account "Nubank Card" --category "Card Payment" \
-  --amount 350 --date 2026-09-05 --description "August card bill"
+wraith run PayCreditCardBill --card "Nubank Card" --account Bank \
+  --category "Card Payment" --date 2026-09-05 --amount 350
 ```
 
-Paying a bill never shows up as an expense — the purchases were already counted on the day they happened.
+Leave `amount` out and it pays exactly what the card's closed statements still ask for:
+
+```bash
+wraith run PayCreditCardBill --card "Nubank Card" --account Bank \
+  --category "Card Payment" --date 2026-09-05
+```
+
+Paying a bill never shows up as an expense — the purchases were already counted on the day they happened. Money arriving on a card pays its oldest statement still asking for something, and what is left of it runs on to the next one, so one payment can settle two bills.
 
 6. Declare what repeats. A recurrence moves no money and writes no transaction: it is a rule the forecast reads.
 
@@ -83,5 +88,7 @@ wraith run ModifyTransaction --id 2 --amount -40 --description "Market, correcte
 | `DashBoard/README.md` | Where you stand today |
 | `DashBoard/Accounts/Bank.md` | One account: what it holds, how the open month is going on it, and the menu of every month it has moved in |
 | `DashBoard/Months/2026-08/Statement.md` | Every movement dated in August, with its id |
-| `DashBoard/Credit-Cards.md` | What is outstanding, and how much limit is left |
+| `DashBoard/Credit-Cards.md` | What is outstanding, how much limit is left, and what each card is asking for |
+| `DashBoard/Bills/Nubank-Card.md` | One card statement by statement: what each cycle charged, what has been paid against it, and what is left |
+| `DashBoard/Pending.md` | Everything still waiting to be paid — the bills to pay, the statements still open, and the movements dated ahead |
 | `DashBoard/Forecast.md` | What the declared commitments add up to |

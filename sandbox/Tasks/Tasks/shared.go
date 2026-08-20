@@ -32,6 +32,9 @@ package tasks
 const (
 	// AccountField names an account or a credit card.
 	AccountField = "account"
+	// CardField names a credit card, when a task also names the account
+	// paying it.
+	CardField = "card"
 	// ToAccountField names the destination account of a recurring transfer.
 	ToAccountField = "to_account"
 	// CategoryField names a category.

@@ -30,9 +30,11 @@ const (
 //	DashBoard/
 //	├── README.md          where you stand today
 //	├── Credit-Cards.md    every card, its limit and its bill
+//	├── Pending.md         everything still waiting to be paid
 //	├── Categories.md      every category and what it has cost
 //	├── Forecast.md        what the declared commitments add up to
 //	├── Accounts/          one page per account and card, with its month menu
+//	├── Bills/             one page per card, statement by statement
 //	└── Months/            one folder per month that holds a movement
 //
 // Every figure on those pages is computed from the five registries the tasks
@@ -61,12 +63,16 @@ func DashBoard() api.Visualizer {
 			renders := []api.VisualizationRender{
 				overview(state, months, ahead),
 				cardsPage(state),
+				pendingPage(state),
 				categoriesPage(state),
 				forecastPage(state, ahead),
 				monthsIndex(state, months),
 			}
 			for _, account := range state.Accounts {
 				renders = append(renders, accountPage(state, account, months))
+			}
+			for _, card := range state.Cards() {
+				renders = append(renders, billsPage(state, card))
 			}
 			for _, month := range months {
 				renders = append(renders, monthPage(state, month), statementPage(state, month))
@@ -92,8 +98,9 @@ func navigation() string { return navigationAt("") }
 // from the root of the tree — `../` one folder down, `../../` two.
 func navigationAt(prefix string) string {
 	return "[Dashboard](" + prefix + "README.md) · [Credit Cards](" + prefix +
-		"Credit-Cards.md) · [Categories](" + prefix + "Categories.md) · [Months](" + prefix +
-		"Months/README.md) · [Forecast](" + prefix + "Forecast.md)"
+		"Credit-Cards.md) · [Pending](" + prefix + "Pending.md) · [Categories](" + prefix +
+		"Categories.md) · [Months](" + prefix + "Months/README.md) · [Forecast](" + prefix +
+		"Forecast.md)"
 }
 
 // overview writes README.md: where you stand today, how the open month is
@@ -162,7 +169,23 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	}
 	p.rule()
 
-	p.heading(2, "3. The next "+strconv.Itoa(ahead)+" months")
+	p.heading(2, "3. Still to pay")
+	p.table("Line", ">Value", "Where it is broken down")
+	p.row("**Card bills to pay**", "**"+money(state.TotalAmountDue())+"**",
+		"[Pending.md](Pending.md) · [Credit-Cards.md](Credit-Cards.md)")
+	p.row("— of which overdue", money(state.TotalOverdue()), "past their due date")
+	p.row("Statements still open", money(state.TotalOpenBills()),
+		"charged since the cards last closed")
+	p.row("Expenses not settled", signed(state.PendingAccountExpenses()),
+		"movements on your accounts dated ahead")
+	p.row("**Leaving your accounts**", "**"+money(state.DueFromAccounts())+"**",
+		"the bills to pay + the expenses not settled")
+	p.blank()
+	p.line("Everything the vault knows is still waiting: [Pending.md](Pending.md)")
+	p.blank()
+	p.rule()
+
+	p.heading(2, "4. The next "+strconv.Itoa(ahead)+" months")
 	p.line("Today's position rolled forward through what you declared — " +
 		count(len(state.Recurrences), "recurrence", "recurrences") +
 		" and the card bills derived from them.")
@@ -198,22 +221,21 @@ func cardsPage(state ledger.State) api.VisualizationRender {
 		p.line("No credit card yet. Add one with the `AddCreditCard` task.")
 		return p.render("Credit-Cards.md")
 	}
-	p.table("Card", ">Limit", ">Outstanding", ">Available", "Closes", "Due")
+	p.table("Card", ">Limit", ">Outstanding", ">Available", "Closes", "Due",
+		">Bills to pay", ">Statement open", "Statements")
 	for _, card := range state.Cards() {
 		owed := state.Owed(card)
-		closeMonth := state.OpenMonth()
-		dueMonth := closeMonth
-		if card.DueDay < card.ClosingDay {
-			dueMonth = utils.AddMonths(closeMonth, 1)
-		}
+		open := state.OpenBill(card)
 		p.row("["+card.Name+"]("+accountPath(card)+")", money(card.Limit), money(owed),
-			money(card.Limit-owed),
-			utils.PrettyDate(utils.DateIn(closeMonth, card.ClosingDay)),
-			utils.PrettyDate(utils.DateIn(dueMonth, card.DueDay)))
+			money(card.Limit-owed), utils.PrettyDate(open.Closes),
+			utils.PrettyDate(open.Due), "**"+money(state.AmountDue(card))+"**",
+			money(open.Remaining()), "[bills]("+billsPath(card)+")")
 	}
 	p.blank()
 	p.line("A purchase counts on the day it happens. The money leaves your account when you " +
-		"record the bill payment — two `AddTransaction`s sharing a transfer category.")
+		"record the bill payment with the `PayCreditCardBill` task. The `bills` link of a " +
+		"card opens its statements one cycle at a time; everything still waiting to be paid, " +
+		"cards and accounts alike, is on [Pending.md](Pending.md).")
 	return p.render("Credit-Cards.md")
 }
 
