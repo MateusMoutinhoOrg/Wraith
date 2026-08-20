@@ -200,16 +200,57 @@ func categoriesPage(state ledger.State) api.VisualizationRender {
 		return p.render("Categories.md")
 	}
 	open := state.OpenMonth()
-	p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time",
-		">Movements")
+
+	var incomeCategories, expenseCategories, volatileCategories []ledger.Category
 	for _, category := range state.Categories {
-		p.row(category.Name, accepts(category), dash(category.Parent),
-			dash(category.Description),
-			signed(state.CategoryTotal(category.Name, open)),
-			signed(state.CategoryTotal(category.Name, 0)),
-			strconv.Itoa(state.CategoryCount(category.Name)))
+		if category.IsTransfer() || (category.Revenues && category.Expenses) {
+			volatileCategories = append(volatileCategories, category)
+		} else if category.Revenues {
+			incomeCategories = append(incomeCategories, category)
+		} else {
+			expenseCategories = append(expenseCategories, category)
+		}
 	}
-	p.blank()
+
+	if len(incomeCategories) > 0 {
+		p.heading(2, "Income")
+		p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time", ">Movements")
+		for _, category := range incomeCategories {
+			p.row(category.Name, accepts(category), dash(category.Parent),
+				dash(category.Description),
+				signed(state.CategoryTotal(category.Name, open)),
+				signed(state.CategoryTotal(category.Name, 0)),
+				strconv.Itoa(state.CategoryCount(category.Name)))
+		}
+		p.blank()
+	}
+
+	if len(expenseCategories) > 0 {
+		p.heading(2, "Expenses")
+		p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time", ">Movements")
+		for _, category := range expenseCategories {
+			p.row(category.Name, accepts(category), dash(category.Parent),
+				dash(category.Description),
+				signed(state.CategoryTotal(category.Name, open)),
+				signed(state.CategoryTotal(category.Name, 0)),
+				strconv.Itoa(state.CategoryCount(category.Name)))
+		}
+		p.blank()
+	}
+
+	if len(volatileCategories) > 0 {
+		p.heading(2, "Volatile")
+		p.table("Category", "Accepts", "Parent", "What it is", ">This month", ">All time", ">Movements")
+		for _, category := range volatileCategories {
+			p.row(category.Name, accepts(category), dash(category.Parent),
+				dash(category.Description),
+				signed(state.CategoryTotal(category.Name, open)),
+				signed(state.CategoryTotal(category.Name, 0)),
+				strconv.Itoa(state.CategoryCount(category.Name)))
+		}
+		p.blank()
+	}
+
 	p.line("A category accepting neither income nor expense is a **transfer category**: it is " +
 		"how money moving between two of your own accounts is recorded without counting as " +
 		"either.")
@@ -222,7 +263,7 @@ func accepts(category ledger.Category) string {
 		return "transfers"
 	}
 	if category.Revenues && category.Expenses {
-		return "income and expenses"
+		return "both"
 	}
 	if category.Revenues {
 		return "income"
