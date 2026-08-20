@@ -64,6 +64,12 @@ type Transaction struct {
 	// Date is the date it counts on, and the date it settles on, as
 	// yyyymmdd. A movement moves its whole amount that day.
 	Date int64
+	// AccountId is the id of the account record the movement points at — the
+	// account whose nested registry indexes this movement.
+	AccountId int64
+	// CategoryId is the id of the category record it points at, indexing it
+	// the same way.
+	CategoryId int64
 }
 
 // Accounts returns every account of the registry, ordered by name.
@@ -98,21 +104,79 @@ func Categories(database keepdeps.KeepDatabase) []Category {
 
 // Transactions returns every recorded movement, oldest first, ties broken by
 // the storage key so the order never depends on how the records came back.
-// Its packed detail is `key|account|category|description`.
 func Transactions(database keepdeps.KeepDatabase) []Transaction {
 	transactions := []Transaction{}
 	for _, record := range all(database, config.TransactionSchema) {
-		detail := text(record, config.DetailField)
-		transactions = append(transactions, Transaction{
-			Id:          record.Id,
-			Key:         text(record, config.NameField),
-			Account:     utils.Part(detail, config.TransactionParts, config.TransactionAccount),
-			Category:    utils.Part(detail, config.TransactionParts, config.TransactionCategory),
-			Description: utils.Part(detail, config.TransactionParts, config.TransactionDescription),
-			Amount:      number(record, config.AmountField),
-			Date:        number(record, config.DateField),
-		})
+		transactions = append(transactions, transactionOf(record))
 	}
+	return sorted(transactions)
+}
+
+// AccountTransactions returns every movement dated on one account, oldest
+// first. It is read through the account's own nested registry — the ids that
+// were written onto it as each movement was recorded — so it costs one record
+// plus the movements it names, rather than a walk through the whole ledger.
+// An account that is not there reads as no movements.
+func AccountTransactions(database keepdeps.KeepDatabase, name string) []Transaction {
+	return indexed(database, config.AccountSchema, name)
+}
+
+// CategoryTransactions returns every movement classified under one category,
+// oldest first, read through the category's own nested registry the way
+// AccountTransactions reads an account's. Only the movements naming the
+// category itself are returned: a child category indexes its own.
+func CategoryTransactions(database keepdeps.KeepDatabase, name string) []Transaction {
+	return indexed(database, config.CategorySchema, name)
+}
+
+// indexed returns the movements one record of a registry holds in its nested
+// TransactionsDB. A link pointing at a movement that is no longer there is
+// skipped rather than reported: the listing is what the ledger still holds.
+func indexed(database keepdeps.KeepDatabase, schemaName string, name string) []Transaction {
+	transactions := []Transaction{}
+	instance, ok := database.GetSchema(schemaName)
+	if !ok {
+		return transactions
+	}
+	owner, found := instance.FindByKey(config.NameField, name)
+	if !found {
+		return transactions
+	}
+	ledger, ok := database.GetSchema(config.TransactionSchema)
+	if !ok {
+		return transactions
+	}
+	for _, link := range owner.ListAll(config.TransactionsDB) {
+		record, found := ledger.FindById(number(link, config.TransactionId))
+		if !found {
+			continue
+		}
+		transactions = append(transactions, transactionOf(record))
+	}
+	return sorted(transactions)
+}
+
+// transactionOf reads one stored movement back as a value. Its packed detail
+// is `key|account|category|description`: the names are carried there so a
+// listing renders without a lookup per line, while the ids beside them are
+// what actually ties the movement to its account and its category.
+func transactionOf(record keepdeps.SchemaItem) Transaction {
+	detail := text(record, config.DetailField)
+	return Transaction{
+		Id:          record.Id,
+		Key:         text(record, config.NameField),
+		Account:     utils.Part(detail, config.TransactionParts, config.TransactionAccount),
+		Category:    utils.Part(detail, config.TransactionParts, config.TransactionCategory),
+		Description: utils.Part(detail, config.TransactionParts, config.TransactionDescription),
+		Amount:      number(record, config.AmountField),
+		Date:        number(record, config.DateField),
+		AccountId:   number(record, config.AccountID),
+		CategoryId:  number(record, config.CategoryID),
+	}
+}
+
+// sorted orders movements oldest first, ties broken by the storage key.
+func sorted(transactions []Transaction) []Transaction {
 	sort.Slice(transactions, func(i int, j int) bool {
 		if transactions[i].Date != transactions[j].Date {
 			return transactions[i].Date < transactions[j].Date

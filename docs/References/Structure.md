@@ -149,7 +149,7 @@ The registries read back as typed values, and every figure the vault shows deriv
 
 | File | Description | Spec |
 |------|-------------|------|
-| `records.go` | One typed view per registry, and the ordered listings that read them off the injected database | |
+| `records.go` | One typed view per registry, the ordered listings that read them off the injected database, and the per-account and per-category listings read through the nested transaction index | |
 | `ledger.go` | The `State` read once per render, and the balances, month results and totals over it | |
 | `forecast.go` | Today's position rolled forward through the movements already dated ahead of it | |
 
@@ -187,7 +187,7 @@ One task per file, each returning an `api.Task` carrying its name, its declared 
 | File | Description | Spec |
 |------|-------------|------|
 | `<Task>.go` | One task, named after it: its declaration and its `HandleAction` closure | |
-| `shared.go` | The checks every task repeats — required names, dates, days of the month, amounts, insert and remove — so all of them report a failure in the same words | |
+| `shared.go` | The field names every task is written with, and the reads and writes more than one repeats — reaching a registry, and linking or unlinking a movement in an account's and a category's nested transaction index — so all of them report a failure in the same words | |
 
 ### `/sandbox/Visualization/`
 Every renderer the brain carries. The mirror of `/sandbox/Tasks/`: a tick reads names out of the config, the command line takes one as an argument, and both arrive here. Adding a renderer is [HandleVisualizations.md](/docs/Tutorials/HandleVisualizations.md).

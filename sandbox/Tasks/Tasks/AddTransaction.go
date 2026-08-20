@@ -32,31 +32,61 @@ func addTransactionFields() []api.Field {
 }
 
 // addTransactionAction reads the movement the task describes and writes it
-// into the ledger.
+// into the ledger: one record in the transaction registry carrying the ids of
+// the account and the category it names, and one line in each of those two
+// records' nested transaction registries pointing back at it.
 func addTransactionAction(args api.HandleActionArgs) error {
 	transaction, err := addTransactionRead(args)
 	if err != nil {
 		return err
 	}
-	ledger, reachable := args.DataBase.GetSchema(config.TransactionSchema)
-	if !reachable {
-		return errors.New("the " + config.TransactionSchema + " registry is unreachable")
+	ledger, err := schemaOf(args, config.TransactionSchema)
+	if err != nil {
+		return err
 	}
 	key := addTransactionNextKey(ledger)
-	_, failure := ledger.NewItem(map[string]any{
+	record, failure := ledger.NewItem(map[string]any{
 		config.NameField: key,
 		config.DetailField: utils.Pack(key, transaction.Account, transaction.Category,
 			transaction.Description),
 		config.AmountField: transaction.Amount,
 		config.DateField:   transaction.Date,
+		config.AccountID:   transaction.AccountRecord.Id,
+		config.CategoryID:  transaction.CategoryRecord.Id,
 	})
-	if failure == nil {
-		return nil
+	if failure != nil {
+		if failure.Type == keepdeps.KeyConflict {
+			return errors.New("the transaction already exists")
+		}
+		return errors.New("the transaction could not be stored: " + failure.Message)
 	}
-	if failure.Type == keepdeps.KeyConflict {
-		return errors.New("the transaction already exists")
+	// The movement exists now, so both sides of its index have to exist too.
+	// A link that cannot be written takes the movement back out with it: a
+	// half-indexed ledger would hide the movement from the account it was
+	// dated on.
+	if err := addTransactionIndex(transaction, record.Id); err != nil {
+		if failure := record.Remove(); failure != nil {
+			return errors.New(err.Error() + ", and the transaction it was written for " +
+				"could not be taken back out: " + failure.Message)
+		}
+		return err
 	}
-	return errors.New("the transaction could not be stored: " + failure.Message)
+	return nil
+}
+
+// addTransactionIndex writes the movement's id into the account and the
+// category it names, undoing the first link when the second one fails.
+func addTransactionIndex(transaction addTransactionMovement, id int64) error {
+	if err := linkTransaction(transaction.AccountRecord, id); err != nil {
+		return err
+	}
+	if err := linkTransaction(transaction.CategoryRecord, id); err != nil {
+		if undo := unlinkTransaction(transaction.AccountRecord, id); undo != nil {
+			return errors.New(err.Error() + ", and " + undo.Error())
+		}
+		return err
+	}
+	return nil
 }
 
 // addTransactionMovement is one movement as the task composes it, before it
@@ -73,15 +103,21 @@ type addTransactionMovement struct {
 	Amount int64
 	// Date is the date it counts on, as yyyymmdd.
 	Date int64
+	// AccountRecord is the stored account the movement happened on, which is
+	// what its AccountID points at and where its id is indexed.
+	AccountRecord keepdeps.SchemaItem
+	// CategoryRecord is the stored category it is classified under, which is
+	// what its CategoryID points at and where its id is indexed.
+	CategoryRecord keepdeps.SchemaItem
 }
 
 // addTransactionRead validates every field of the task against the registries
 // it names, and hands back the movement it describes.
 func addTransactionRead(args api.HandleActionArgs) (addTransactionMovement, error) {
 	empty := addTransactionMovement{}
-	accounts, reachable := args.DataBase.GetSchema(config.AccountSchema)
-	if !reachable {
-		return empty, errors.New("the " + config.AccountSchema + " registry is unreachable")
+	accounts, err := schemaOf(args, config.AccountSchema)
+	if err != nil {
+		return empty, err
 	}
 	accountName, err := entries.Text(args.Entries, AccountField)
 	if err != nil {
@@ -90,12 +126,13 @@ func addTransactionRead(args api.HandleActionArgs) (addTransactionMovement, erro
 	if accountName == "" {
 		return empty, errors.New(AccountField + " is required")
 	}
-	if _, found := accounts.FindByKey(config.NameField, accountName); !found {
+	account, found := accounts.FindByKey(config.NameField, accountName)
+	if !found {
 		return empty, errors.New("account not found: " + accountName)
 	}
-	categories, reachable := args.DataBase.GetSchema(config.CategorySchema)
-	if !reachable {
-		return empty, errors.New("the " + config.CategorySchema + " registry is unreachable")
+	categories, err := schemaOf(args, config.CategorySchema)
+	if err != nil {
+		return empty, err
 	}
 	categoryName, err := entries.Text(args.Entries, CategoryField)
 	if err != nil {
@@ -118,8 +155,8 @@ func addTransactionRead(args api.HandleActionArgs) (addTransactionMovement, erro
 	// Money may only arrive in a category that accepts income, and may only
 	// leave through one that accepts expenses. A transfer category — neither
 	// revenue nor expense — accepts both, because it counts as neither.
-	revenues := addTransactionNumber(category, config.RevenuesField)
-	expenses := addTransactionNumber(category, config.ExpensesField)
+	revenues := number(category, config.RevenuesField)
+	expenses := number(category, config.ExpensesField)
 	transfer := revenues != 1 && expenses != 1
 	if !transfer && cents > 0 && revenues != 1 {
 		return empty, errors.New("a positive amount needs a category with revenues: true — " +
@@ -150,11 +187,13 @@ func addTransactionRead(args api.HandleActionArgs) (addTransactionMovement, erro
 		}
 	}
 	return addTransactionMovement{
-		Account:     accountName,
-		Category:    categoryName,
-		Description: description,
-		Amount:      cents,
-		Date:        when,
+		Account:        accountName,
+		Category:       categoryName,
+		Description:    description,
+		Amount:         cents,
+		Date:           when,
+		AccountRecord:  account,
+		CategoryRecord: category,
 	}, nil
 }
 
@@ -174,22 +213,6 @@ func addTransactionNextKey(ledger keepdeps.SchemaInstance) string {
 		}
 		candidate++
 	}
-}
-
-// addTransactionNumber reads a whole-number field of a stored record, as 0
-// when the field is absent or holds something else.
-func addTransactionNumber(record keepdeps.SchemaItem, field string) int64 {
-	value, err := record.Get(field)
-	if err != nil {
-		return 0
-	}
-	switch stored := value.(type) {
-	case int64:
-		return stored
-	case int:
-		return int64(stored)
-	}
-	return 0
 }
 
 // AddTransaction returns the task that records a movement: money in, money

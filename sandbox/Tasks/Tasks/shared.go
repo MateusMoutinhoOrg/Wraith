@@ -21,10 +21,19 @@
 // inserts, updates or removes one.
 package tasks
 
-// The only ground every task in this package shares: the words its fields are
-// named with. There is no shared behavior here on purpose — each task file
-// carries the whole of what it does, so reading one file is reading the whole
-// action, and changing one task can never change another.
+import (
+	"errors"
+
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
+	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
+)
+
+// The ground every task in this package shares: the words its fields are
+// named with, and the handful of reads and writes more than one task repeats.
+// Nothing that belongs to a single action lives here — a task file still
+// carries the whole of what it alone does, so reading one file is reading
+// that action.
 
 // The field names the task guides use. They are constants because the same
 // word names a key in Task.yaml, a `--flag` on the command line, and a column
@@ -49,3 +58,86 @@ const (
 	// ParentField hangs a category under another one.
 	ParentField = "parent"
 )
+
+// The two-way link between a movement and the registries it names, which is
+// the one piece of behavior every transaction task repeats. A transaction
+// stores the id of its account and of its category; the account and the
+// category each store the movement's id in their own nested TransactionsDB.
+// Keeping both sides of that link in one place is what makes "every
+// transaction of this account" a read of one record, and what keeps the two
+// sides from ever drifting apart.
+
+// schemaOf returns one registry of the database a task was handed, failing in
+// the same words for every task that cannot reach it.
+func schemaOf(args api.HandleActionArgs, name string) (keepdeps.SchemaInstance, error) {
+	instance, reachable := args.DataBase.GetSchema(name)
+	if !reachable {
+		return instance, errors.New("the " + name + " registry is unreachable")
+	}
+	return instance, nil
+}
+
+// linkTransaction writes a movement's id into an account's or a category's
+// nested transaction registry.
+func linkTransaction(owner keepdeps.SchemaItem, transactionId int64) error {
+	_, failure := owner.NewSubItem(config.TransactionsDB, map[string]any{
+		config.TransactionId: transactionId,
+	})
+	if failure != nil {
+		return errors.New("the transaction could not be indexed on " +
+			text(owner, config.NameField) + ": " + failure.Message)
+	}
+	return nil
+}
+
+// unlinkTransaction removes a movement's id from an account's or a category's
+// nested transaction registry. A link that is not there is not an error:
+// removing a movement is over when no registry points at it any more.
+func unlinkTransaction(owner keepdeps.SchemaItem, transactionId int64) error {
+	for _, link := range owner.ListAll(config.TransactionsDB) {
+		if number(link, config.TransactionId) != transactionId {
+			continue
+		}
+		if failure := link.Remove(); failure != nil {
+			return errors.New("the transaction could not be unindexed from " +
+				text(owner, config.NameField) + ": " + failure.Message)
+		}
+	}
+	return nil
+}
+
+// transactionCount reports how many movements an account or a category still
+// holds, read off its own nested registry rather than off the whole ledger.
+func transactionCount(owner keepdeps.SchemaItem) int {
+	return len(owner.ListAll(config.TransactionsDB))
+}
+
+// text reads a text field of a stored record, as "" when the field is absent
+// or holds something else.
+func text(record keepdeps.SchemaItem, field string) string {
+	value, err := record.Get(field)
+	if err != nil {
+		return ""
+	}
+	stored, ok := value.(string)
+	if !ok {
+		return ""
+	}
+	return stored
+}
+
+// number reads a whole-number field of a stored record, as 0 when the field
+// is absent or holds something else.
+func number(record keepdeps.SchemaItem, field string) int64 {
+	value, err := record.Get(field)
+	if err != nil {
+		return 0
+	}
+	switch stored := value.(type) {
+	case int64:
+		return stored
+	case int:
+		return int64(stored)
+	}
+	return 0
+}

@@ -7,7 +7,6 @@ import (
 
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/config"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/api"
-	"github.com/MateusMoutinhoOrg/Wraith/sandbox/contracts/deps/keepdeps"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/entries"
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
@@ -31,42 +30,35 @@ func modifyTransactionFields() []api.Field {
 }
 
 // modifyTransactionAction finds the stored movement by its id, overlays the
-// fields the task was given onto it, and writes it back.
+// fields the task was given onto it, and writes it back — moving its id
+// between the nested registries of the accounts and categories it names when
+// one of those two changes.
 func modifyTransactionAction(args api.HandleActionArgs) error {
 	id, err := entries.Whole(args.Entries, IdField)
 	if err != nil {
 		return err
 	}
-	ledger, reachable := args.DataBase.GetSchema(config.TransactionSchema)
-	if !reachable {
-		return errors.New("the " + config.TransactionSchema + " registry is unreachable")
+	ledger, err := schemaOf(args, config.TransactionSchema)
+	if err != nil {
+		return err
 	}
-	stored, failure := ledger.ListAll()
-	if failure != nil {
-		stored = nil
-	}
-	record := keepdeps.SchemaItem{}
-	found := false
-	for _, candidate := range stored {
-		if candidate.Id == id {
-			record = candidate
-			found = true
-			break
-		}
-	}
+	record, found := ledger.FindById(id)
 	if !found {
 		return errors.New("transaction not found: " + strconv.FormatInt(id, 10))
 	}
 	// The record's account, category and description are packed into one
-	// detail key beside its own storage key.
-	key := modifyTransactionText(record, config.NameField)
-	detail := modifyTransactionText(record, config.DetailField)
+	// detail key beside its own storage key; which account and which category
+	// those names stand for is held as their ids.
+	key := text(record, config.NameField)
+	detail := text(record, config.DetailField)
 	current := modifyTransactionMovement{
 		Account:     utils.Part(detail, config.TransactionParts, config.TransactionAccount),
 		Category:    utils.Part(detail, config.TransactionParts, config.TransactionCategory),
 		Description: utils.Part(detail, config.TransactionParts, config.TransactionDescription),
-		Amount:      modifyTransactionNumber(record, config.AmountField),
-		Date:        modifyTransactionNumber(record, config.DateField),
+		Amount:      number(record, config.AmountField),
+		Date:        number(record, config.DateField),
+		AccountId:   number(record, config.AccountID),
+		CategoryId:  number(record, config.CategoryID),
 	}
 	updated, err := modifyTransactionApply(args, current)
 	if err != nil {
@@ -78,11 +70,52 @@ func modifyTransactionAction(args api.HandleActionArgs) error {
 			updated.Description),
 		config.AmountField: updated.Amount,
 		config.DateField:   updated.Date,
+		config.AccountID:   updated.AccountId,
+		config.CategoryID:  updated.CategoryId,
 	}
 	for field, value := range fields {
 		if writeErr := record.Update(field, value); writeErr != nil {
 			return errors.New("transaction " + strconv.FormatInt(id, 10) +
 				" could not be updated: " + writeErr.Message)
+		}
+	}
+	return modifyTransactionReindex(args, record.Id, current, updated)
+}
+
+// modifyTransactionReindex moves the movement's id out of the account and the
+// category it used to point at and into the ones it points at now. A side
+// that did not change is left alone, so a correction that only rewrites a
+// description touches no index at all.
+func modifyTransactionReindex(args api.HandleActionArgs, id int64,
+	current modifyTransactionMovement, updated modifyTransactionMovement) error {
+	moves := []struct {
+		schemaName string
+		was        int64
+		now        int64
+	}{
+		{config.AccountSchema, current.AccountId, updated.AccountId},
+		{config.CategorySchema, current.CategoryId, updated.CategoryId},
+	}
+	for _, move := range moves {
+		if move.was == move.now {
+			continue
+		}
+		instance, err := schemaOf(args, move.schemaName)
+		if err != nil {
+			return err
+		}
+		if previous, found := instance.FindById(move.was); found {
+			if err := unlinkTransaction(previous, id); err != nil {
+				return err
+			}
+		}
+		owner, found := instance.FindById(move.now)
+		if !found {
+			return errors.New("the " + move.schemaName +
+				" the transaction was moved to is no longer there")
+		}
+		if err := linkTransaction(owner, id); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -102,6 +135,12 @@ type modifyTransactionMovement struct {
 	Amount int64
 	// Date is the date it counts on, as yyyymmdd.
 	Date int64
+	// AccountId is the id of the account record the movement points at, and
+	// the record its id is indexed in.
+	AccountId int64
+	// CategoryId is the id of the category record it points at, and the
+	// record its id is indexed in.
+	CategoryId int64
 }
 
 // modifyTransactionApply overlays the fields the task was given onto the
@@ -109,13 +148,13 @@ type modifyTransactionMovement struct {
 func modifyTransactionApply(args api.HandleActionArgs,
 	current modifyTransactionMovement) (modifyTransactionMovement, error) {
 	updated := current
-	accounts, reachable := args.DataBase.GetSchema(config.AccountSchema)
-	if !reachable {
-		return updated, errors.New("the " + config.AccountSchema + " registry is unreachable")
+	accounts, err := schemaOf(args, config.AccountSchema)
+	if err != nil {
+		return updated, err
 	}
-	categories, reachable := args.DataBase.GetSchema(config.CategorySchema)
-	if !reachable {
-		return updated, errors.New("the " + config.CategorySchema + " registry is unreachable")
+	categories, err := schemaOf(args, config.CategorySchema)
+	if err != nil {
+		return updated, err
 	}
 	if entries.Present(args.Entries, AccountField) {
 		accountName, err := entries.Text(args.Entries, AccountField)
@@ -128,10 +167,12 @@ func modifyTransactionApply(args api.HandleActionArgs,
 		if strings.Contains(accountName, utils.Separator) {
 			return updated, errors.New(AccountField + " may not contain " + utils.Separator)
 		}
-		if _, found := accounts.FindByKey(config.NameField, accountName); !found {
+		account, found := accounts.FindByKey(config.NameField, accountName)
+		if !found {
 			return updated, errors.New("account not found: " + accountName)
 		}
 		updated.Account = accountName
+		updated.AccountId = account.Id
 	}
 	if entries.Present(args.Entries, CategoryField) {
 		categoryName, err := entries.Text(args.Entries, CategoryField)
@@ -185,9 +226,10 @@ func modifyTransactionApply(args api.HandleActionArgs,
 	if !found {
 		return updated, errors.New("category not found: " + updated.Category)
 	}
+	updated.CategoryId = category.Id
 	// The corrected movement still has to obey the sign its category accepts.
-	revenues := modifyTransactionNumber(category, config.RevenuesField)
-	expenses := modifyTransactionNumber(category, config.ExpensesField)
+	revenues := number(category, config.RevenuesField)
+	expenses := number(category, config.ExpensesField)
 	transfer := revenues != 1 && expenses != 1
 	if !transfer && updated.Amount > 0 && revenues != 1 {
 		return updated, errors.New("a positive amount needs a category with revenues: true — " +
@@ -198,36 +240,6 @@ func modifyTransactionApply(args api.HandleActionArgs,
 			updated.Category + " does not accept expenses")
 	}
 	return updated, nil
-}
-
-// modifyTransactionText reads a text field of a stored record, as "" when the
-// field is absent or holds something else.
-func modifyTransactionText(record keepdeps.SchemaItem, field string) string {
-	value, err := record.Get(field)
-	if err != nil {
-		return ""
-	}
-	stored, ok := value.(string)
-	if !ok {
-		return ""
-	}
-	return stored
-}
-
-// modifyTransactionNumber reads a whole-number field of a stored record, as 0
-// when the field is absent or holds something else.
-func modifyTransactionNumber(record keepdeps.SchemaItem, field string) int64 {
-	value, err := record.Get(field)
-	if err != nil {
-		return 0
-	}
-	switch stored := value.(type) {
-	case int64:
-		return stored
-	case int:
-		return int64(stored)
-	}
-	return 0
 }
 
 // ModifyTransaction returns the task that corrects a movement already in the

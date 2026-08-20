@@ -54,10 +54,17 @@ const (
 	// DateField is a date as yyyymmdd.
 	DateField = "date"
 
+	// TransactionsDB is the nested registry an account and a category each
+	// carry: the ids of the movements that name it. It is what makes "every
+	// transaction of this account" a read of one record rather than a walk
+	// through the whole ledger.
 	TransactionsDB = "transactions"
-	CategoryID     = "Category"
-	AccountID      = "AccountID"
-	TransactionId  = "TransactionID"
+	// CategoryID is the id of the category a movement is classified under.
+	CategoryID = "Category"
+	// AccountID is the id of the account a movement happened on.
+	AccountID = "AccountID"
+	// TransactionId is the id of a movement, as one line of a TransactionsDB.
+	TransactionId = "TransactionID"
 )
 
 // The parts a packed DetailField is composed of, one pair per registry: how
