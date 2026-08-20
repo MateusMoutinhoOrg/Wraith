@@ -177,6 +177,30 @@ func (s State) Pending() int64 {
 	return total
 }
 
+// PendingIncome is the sum of positive movements not yet settled — money you
+// are still waiting to receive.
+func (s State) PendingIncome() int64 {
+	total := int64(0)
+	for _, transaction := range s.Transactions {
+		if transaction.PaymentDate > s.Today && transaction.Amount > 0 {
+			total += transaction.Amount
+		}
+	}
+	return total
+}
+
+// PendingExpenses is the sum of negative movements not yet settled — money
+// you are still going to pay. The figure is kept negative.
+func (s State) PendingExpenses() int64 {
+	total := int64(0)
+	for _, transaction := range s.Transactions {
+		if transaction.PaymentDate > s.Today && transaction.Amount < 0 {
+			total += transaction.Amount
+		}
+	}
+	return total
+}
+
 // Result is what one month came to: what came in, what went out, the two
 // added together, and how many movements it holds.
 type Result struct {

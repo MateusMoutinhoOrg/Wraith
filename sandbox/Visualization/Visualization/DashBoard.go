@@ -119,8 +119,10 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.row("Owed on credit cards", money(state.TotalOwed()),
 		"card opening + purchases − payments")
 	p.row("**Net position**", "**"+money(state.Net())+"**", "what you hold − what you owe")
-	p.row("Pending settlement", signed(state.Pending()),
-		"movements with a payment date still ahead")
+	p.row("Pending income", signed(state.PendingIncome()),
+		"movements with a payment date still ahead that will come in")
+	p.row("Pending expenses", signed(state.PendingExpenses()),
+		"movements with a payment date still ahead that you will pay")
 	p.row("**Net worth**", "**"+money(state.NetWorth())+"**",
 		"net position once everything recorded has settled, up to "+
 			utils.PrettyDate(state.Horizon()))
