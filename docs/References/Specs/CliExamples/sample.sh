@@ -3,6 +3,9 @@
 #
 # <Name>.sh — one sentence naming the goal this script demonstrates.
 #
+# The vault is pinned to a month of its own, so the transcript is the same one
+# every time it is run.
+#
 # Run it from the project root:
 #   bash ./examples/cliExamples/<Name>.sh
 set -euo pipefail
@@ -18,10 +21,10 @@ cd "$workdir/vault"
 wraith() { "$workdir/wraith" "$@"; }
 
 echo "== what the commands below show"
-wraith start
+wraith start --prev-months 3 --future-months 4 --current-month 2026-08
 wraith run AddAccount --account Bank
 
 echo
 echo "== what the next commands show"
 wraith tick
-sed -n '1,12p' DashBoard/README.md
+sed -n '/^| Indicator/,/^## 2\./p' DashBoard/README.md

@@ -10,6 +10,7 @@ Defines the required shape of a runnable command-line example in `examples/cliEx
 - It builds the binary itself with `go build -o "$workdir/wraith" ./cmd/main` into a `mktemp -d` directory removed by a `trap` on exit, then `cd`s into a vault created inside that directory. A CLI example never writes to a vault of the reader's and never requires the binary to be installed first.
 - Every command it runs goes through the built binary — the example demonstrates the interface, so it must never `go run` a library example or reach into the sandbox.
 - Sections are announced with an `echo "== …"` line saying what the commands below show, so the transcript reads on its own.
+- The transcript must be the same on any day it is run. The vault is pinned with the three dashboard flags of `wraith start` — `--prev-months`, `--future-months` and `--current-month` — every movement carries a written date, and nothing printed is read off the clock. A movement dated inside the pinned open month settles on its first day, because the day within that month is still the real one.
 - Adding, renaming, or deleting a CLI example requires updating [SamplesList.md](/docs/References/SamplesList.md) and [Structure.md](/docs/References/Structure.md) — see [HandleCliExamples.md](/docs/Tutorials/HandleCliExamples.md).
 
 ## Structure

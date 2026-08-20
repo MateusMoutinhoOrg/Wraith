@@ -31,6 +31,7 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
 ### Rules
 - The script must follow its specification — locate it in [Specs.md](/docs/References/Specs.md).
 - It must run from the project root with no arguments and no prior setup, and must never write outside its own scratch directory.
+- It must print the same transcript on any day it is run: pin the vault with `wraith start --prev-months <count> --future-months <count> --current-month <YYYY-MM>`, date every movement, and never print a figure that depends on the clock.
 - Adding one requires updating [SamplesList.md](/docs/References/SamplesList.md) and [Structure.md](/docs/References/Structure.md).
 
 ### Workflow
@@ -57,9 +58,10 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
 4. Write the demonstration as sections, each announced by an `echo` line saying what the commands below it show:
    ```bash
    echo "== record what came in and what went out"
-   wraith start > /dev/null
+   wraith start --prev-months 3 --future-months 4 --current-month 2026-08 > /dev/null
    wraith run AddAccount --account Bank
    ```
+   A movement dated inside the pinned open month settles on its **first day**: `--current-month` fixes the month, and the day inside it is still read off the real clock, so `2026-08-01` is the only date in that month that has already happened whatever day it is run on.
 5. Make it executable and run it:
    ```bash
    chmod +x ./examples/cliExamples/<Name>.sh

@@ -10,4 +10,4 @@ Every Go example shipped in [`examples/libraryExamples/`](/examples/libraryExamp
 | Sample | Description |
 | --- | --- |
 | [RunTaskSample](/examples/libraryExamples/RunTaskSample) | Runs tasks from Go with no command line in sight, and lists what the brain can do. |
-| [RenderDashBoardSample](/examples/libraryExamples/RenderDashBoardSample) | Renders a visualization to bytes rather than to disk, and prints one of the files. |
+| [RenderDashBoardSample](/examples/libraryExamples/RenderDashBoardSample) | Renders a visualization to bytes rather than to disk, over four months of movements and a clock replaced on `Deps`. |
