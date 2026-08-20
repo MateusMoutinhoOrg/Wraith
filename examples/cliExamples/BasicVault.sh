@@ -1,23 +1,12 @@
 #!/usr/bin/env bash
-# BasicVault.sh — goes from an empty folder to a rendered vault: the registries,
-# a first income, a transfer and a card purchase, then the dashboard they draw.
-#
-# Run it from the project root:
-#   bash ./examples/cliExamples/BasicVault.sh
-set -euo pipefail
 
-# Build the binary into a scratch directory and run it in a vault of its own,
-# so the example never touches a brain of yours.
-workdir="$(mktemp -d)"
-trap 'rm -rf "$workdir"' EXIT
+rm -rf WraithSample
 
-go build -o "$workdir/wraith" ./cmd/main
-mkdir -p "$workdir/vault"
-cd "$workdir/vault"
-wraith() { "$workdir/wraith" "$@"; }
+mkdir WraithSample
+cd WraithSample/
 
 echo "== an empty folder becomes a vault"
-wraith start
+wraith start 
 ls
 
 echo
