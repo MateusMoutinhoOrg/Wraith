@@ -29,7 +29,23 @@ Arguments are positional and required unless the table says otherwise; flags are
 
 ### `start`
 
+```bash
+wraith start --prev-months 6 --future-months 12 --current-month 2026-08
+```
+
 Writes the two files a brain is driven by, copied from the defaults compiled into the binary, and immediately runs a tick to render them. It **never overwrites**: a file already on disk is reported and left as it is, and a tick is not performed if the files already existed.
+
+The three flags above are written into the `args:` of the `DashBoard` entry of the `Visualization.yaml` it creates:
+
+| Flag | Default | Written as |
+| --- | --- | --- |
+| `--prev-months <count>` | `3` | `prev-months`, how many months back of `Months/` are drawn |
+| `--future-months <count>` | `12` | `future-months`, how far ahead the forecast projects |
+| `--current-month <YYYY-MM>` | the month today falls in | `current-month`, the month the dashboard renders as the open one |
+
+They are a starting point, not a setting: what they write is a line in a file you own from then on. `--current-month` in particular **pins** the dashboard to that month — delete the line for the vault to follow the calendar again. A count that is not a whole number of zero or more, and a month not written as `YYYY-MM`, are usage errors, and nothing is created.
+
+Because `start` never overwrites, the flags do nothing in a vault that already has a config: the file they would be written into is the one already there.
 
 ### `tick`
 
@@ -54,7 +70,7 @@ Runs one task without touching `Task.yaml`, then re-renders every visualization 
 ### `render`
 
 ```bash
-wraith render DashBoard --future-months 24
+wraith render DashBoard --future-months 24 --current-month 2026-03
 ```
 
 Renders one visualization and writes it to its `dest`, without executing `Task.yaml` and without touching any other entry. Where it writes and what its args default to come from the matching entry in `Visualization.yaml`; a flag given here overrides that entry for this invocation only, and the file is never edited.
@@ -72,6 +88,9 @@ Renders one visualization and writes it to its `dest`, without executing `Task.y
 | `--database <path>` | `data` | The folder inside the vault the data lives in |
 | `--dest <path>` | the entry's `dest` | Where a single `render` writes |
 | `--time <interval>` | — | How long `watch` sleeps between ticks. Required by `watch` |
+| `--prev-months <count>` | `3` | Months of history the vault `start` creates renders |
+| `--future-months <count>` | `12` | Months ahead the vault `start` creates forecasts |
+| `--current-month <YYYY-MM>` | this month | The month the vault `start` creates renders as the open one |
 | `--<field> <value>` | the declared default | One flag per field a task or a visualization declares |
 | `-h`, `--help` | — | Print the usage screen and exit |
 | `-v`, `--version` | — | Print the interface version and exit |

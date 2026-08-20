@@ -26,6 +26,7 @@ wraith visualizations
   args:
     prev-months: 3
     future-months: 8
+    current-month: 2026-08
   dest: DashBoard
 
 - name: Task-List
@@ -41,6 +42,8 @@ wraith visualizations
 | `dest` | yes | Where to write it, relative to the vault root. Missing folders are created. |
 | `args` | no | Per-visualization options. Anything omitted falls back to its default. |
 | `enabled` | no | `false` silences the entry without deleting it. Defaults to `true`. |
+
+The DashBoard's `current-month` is the month it renders as the open one, written `YYYY-MM`. It **pins** the dashboard to that month: every figure is computed as if today fell in it, so the position, the open month and the start of the forecast all move with it. [`wraith start`](/docs/References/Commands.md#start) writes the month the vault was created in; delete the line for the vault to follow the calendar again.
 
 3. Move a tree by renaming its `dest`. The whole thing appears somewhere else on the next tick:
 
@@ -77,7 +80,7 @@ The old folder is left where it is — delete it yourself.
 6. Render one entry on its own, without executing `Task.yaml` and without touching any other entry:
 
 ```bash
-wraith render DashBoard --future-months 24
+wraith render DashBoard --future-months 24 --current-month 2026-03
 ```
 
 Flags override that entry's args for this invocation only; the file is never edited. `--dest` overrides where it writes, and is **required** for a visualization your config never declared.

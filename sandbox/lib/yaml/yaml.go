@@ -18,6 +18,7 @@ package yaml
 
 import (
 	"errors"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -243,4 +244,54 @@ func EncodeMap(values map[string]any, order []string) []byte {
 		out.WriteString("\n")
 	}
 	return []byte(out.String())
+}
+
+// EncodeList renders a sequence of mappings — the shape of
+// `Visualization.yaml` — as one `- key: value` block per item, each key in
+// the order the caller gives and a key the item does not carry skipped. A
+// value that is itself a mapping is written as the nested block this subset
+// supports, its own keys in alphabetical order so the same config is always
+// written the same way. An empty nested mapping is left out rather than
+// written as a header with nothing under it.
+func EncodeList(items []map[string]any, order []string) []byte {
+	out := strings.Builder{}
+	for index, item := range items {
+		if index > 0 {
+			out.WriteString("\n")
+		}
+		// The first key of an item shares its line with the dash; every key
+		// after it is indented to the column that dash opened.
+		lead := "- "
+		for _, key := range order {
+			value, found := item[key]
+			if !found {
+				continue
+			}
+			nested, isMapping := value.(map[string]any)
+			if !isMapping {
+				out.WriteString(lead + key + ": " + EncodeScalar(value) + "\n")
+				lead = "  "
+				continue
+			}
+			if len(nested) == 0 {
+				continue
+			}
+			out.WriteString(lead + key + ":\n")
+			lead = "  "
+			for _, nestedKey := range keys(nested) {
+				out.WriteString("    " + nestedKey + ": " + EncodeScalar(nested[nestedKey]) + "\n")
+			}
+		}
+	}
+	return []byte(out.String())
+}
+
+// keys returns a mapping's keys in alphabetical order.
+func keys(values map[string]any) []string {
+	ordered := []string{}
+	for key := range values {
+		ordered = append(ordered, key)
+	}
+	sort.Strings(ordered)
+	return ordered
 }

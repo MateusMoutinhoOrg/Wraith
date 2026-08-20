@@ -326,6 +326,67 @@ func ClearError(d deps.Deps, path string) {
 	d.IoLib.WriteFile(path, []byte("# Error\n\nNothing is wrong. The last tick succeeded.\n"))
 }
 
+// EntryKeys are the keys of a visualization entry, in the order a config
+// written by the brain itself carries them.
+var EntryKeys = []string{NameKey, ArgsKey, DestKey, EnabledKey}
+
+// WriteStartVisualization creates the visualization config of a new vault
+// from the embedded default, with the args of the entries named in
+// `overrides` replaced by the choices the vault is being started with — an
+// arg the override does not name keeps the value the default carries, and an
+// entry it does not name is written exactly as it is.
+//
+// Like WriteAsset it never overwrites: a config already on disk is left
+// alone, and reported as not written.
+func WriteStartVisualization(d deps.Deps, path string, overrides map[string]map[string]any) (bool, error) {
+	if d.IoLib.Exist(path) {
+		return false, nil
+	}
+	if len(overrides) == 0 {
+		return true, writeAsset(d, StartVisualizationAsset, path)
+	}
+	content, err := d.EmbedDeps.ReadFile(StartVisualizationAsset)
+	if err != nil {
+		return false, errors.New("the default " + StartVisualizationAsset +
+			" is missing from this binary")
+	}
+	items, err := yaml.DecodeList(content)
+	if err != nil {
+		return false, errors.New("the default " + StartVisualizationAsset +
+			" is not a visualization config")
+	}
+	for _, item := range items {
+		name, err := entries.Text(item, NameKey)
+		if err != nil {
+			return false, err
+		}
+		override, found := overrides[name]
+		if !found {
+			continue
+		}
+		item[ArgsKey] = merged(item[ArgsKey], override)
+	}
+	if err := d.IoLib.WriteFile(path, yaml.EncodeList(items, EntryKeys)); err != nil {
+		return false, errors.New("could not write " + path + ": " + err.Error())
+	}
+	return true, nil
+}
+
+// merged returns an entry's args block with the overrides written over it,
+// leaving every arg the override is silent about as the default declared it.
+func merged(declared any, override map[string]any) map[string]any {
+	args := map[string]any{}
+	if nested, ok := declared.(map[string]any); ok {
+		for key, value := range nested {
+			args[key] = value
+		}
+	}
+	for key, value := range override {
+		args[key] = value
+	}
+	return args
+}
+
 // WriteAsset copies one embedded default into the vault, without overwriting
 // a file that is already there.
 func WriteAsset(d deps.Deps, asset string, path string) (bool, error) {

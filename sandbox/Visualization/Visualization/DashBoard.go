@@ -13,8 +13,12 @@ import (
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
-// The args the DashBoard declares, and what they default to.
+// The name the DashBoard is registered under, the args it declares, and what
+// they default to.
 const (
+	// DashBoardName is the name the catalog registers the DashBoard under,
+	// and the name an entry of `Visualization.yaml` asks for it by.
+	DashBoardName = "DashBoard"
 	// PrevMonthsArg is how many months back of `Months/` are written.
 	PrevMonthsArg = "prev-months"
 	// FutureMonthsArg is how far ahead the forecast looks.
@@ -23,6 +27,12 @@ const (
 	DefaultPrevMonths = 3
 	// DefaultFutureMonths is eight months of horizon.
 	DefaultFutureMonths = 8
+	// CurrentMonthArg is the month the dashboard treats as the open one,
+	// written YYYY-MM.
+	CurrentMonthArg = "current-month"
+	// DefaultCurrentMonth is empty, which is the month today falls in — the
+	// actual one, read off the injected clock.
+	DefaultCurrentMonth = ""
 )
 
 // DashBoard returns the visualization that writes the financial vault:
@@ -40,7 +50,7 @@ const (
 // truth.
 func DashBoard() api.Visualizer {
 	return api.Visualizer{
-		Name:        "DashBoard",
+		Name:        DashBoardName,
 		Description: "The full financial vault: position, registries, months and the forecast",
 		Folder:      true,
 		Args: []api.Field{
@@ -50,9 +60,14 @@ func DashBoard() api.Visualizer {
 			{Name: FutureMonthsArg, Type: api.NumberField,
 				Description: "How many months ahead the forecast projects",
 				Default:     int64(DefaultFutureMonths)},
+			{Name: CurrentMonthArg, Type: api.TextField,
+				Description: "The month to render as the open one, as YYYY-MM " +
+					"(defaults to the month today falls in)",
+				Default: DefaultCurrentMonth},
 		},
 		HandleVisualizer: func(args api.HandleVisualizationArgs) ([]api.VisualizationRender, error) {
 			state := ledger.Load(args.Deps, args.DataBase)
+			state = state.AsOf(monthArg(args.Entries, CurrentMonthArg, state.OpenMonth()))
 			previous := wholeArg(args.Entries, PrevMonthsArg, DefaultPrevMonths)
 			ahead := wholeArg(args.Entries, FutureMonthsArg, DefaultFutureMonths)
 			months := state.RenderedMonths(previous)

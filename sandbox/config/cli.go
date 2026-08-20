@@ -42,6 +42,25 @@ const (
 	DestFlag = "--dest"
 	// TimeFlag is the interval `watch` sleeps between ticks.
 	TimeFlag = "--time"
+	// PrevMonthsFlag is how many months of history the vault `start` creates
+	// renders.
+	PrevMonthsFlag = "--prev-months"
+	// FutureMonthsFlag is how far ahead the vault `start` creates forecasts.
+	FutureMonthsFlag = "--future-months"
+	// CurrentMonthFlag is the month the vault `start` creates treats as the
+	// open one.
+	CurrentMonthFlag = "--current-month"
+)
+
+// What `start` writes into the visualization config of the vault it creates
+// when its three dashboard flags are not given. They are the interface's
+// defaults rather than the DashBoard's own: a vault is created once, and the
+// numbers it is created with are the ones a person then edits by hand.
+const (
+	// StartPrevMonths is how many months back a created vault renders.
+	StartPrevMonths = 3
+	// StartFutureMonths is how far ahead a created vault forecasts.
+	StartFutureMonths = 12
 )
 
 const (
@@ -53,7 +72,7 @@ Usage:
   wraith <command> [arguments] [flags]
 
 Commands:
-  start                              create Task.yaml and Visualization.yaml
+  start [--prev-months <count>]      create Task.yaml and Visualization.yaml
   tick                               run the pending task and render everything
   watch --time <interval>            run a tick on an interval, until stopped
   run <task> [--<field> <value>]     run one task from the command line
@@ -69,6 +88,9 @@ Flags:
   --database <path>                  folder the data lives in (data)
   --dest <path>                      where a single render is written
   --time <interval>                  how long watch sleeps between ticks
+  --prev-months <count>              months of history a created vault renders (3)
+  --future-months <count>            months ahead a created vault forecasts (12)
+  --current-month <YYYY-MM>          month a created vault opens on (this one)
   -h, --help                         print this screen and exit
   -v, --version                      print the interface version and exit
   -q, --quiet                        print only listings and errors
@@ -93,6 +115,11 @@ is one entry you declared in Visualization.yaml.
 	MissingInterval = "watch needs --time, such as --time 1s\n"
 	// InvalidInterval answers a --time that is not a duration.
 	InvalidInterval = "not an interval: %s\n"
+	// InvalidCount answers a month count that is not a whole number of zero
+	// or more.
+	InvalidCount = "not a count: %s — %s takes a whole number of months\n"
+	// InvalidMonth answers a month that is not written as YYYY-MM.
+	InvalidMonth = "not a month: %s — %s takes a month written as YYYY-MM\n"
 	// MissingDest answers a render of an entry that is declared nowhere and
 	// was given no destination either.
 	MissingDest = "%s is not declared in %s — give it a --dest\n"

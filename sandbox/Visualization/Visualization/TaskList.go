@@ -149,6 +149,18 @@ func sample(field api.Field) string {
 }
 
 // scalar renders a declared default the way a task file writes it.
+// defaultCell renders a declared default for a table cell: as code, or as an
+// em dash when the declaration leaves it empty — an arg whose default is
+// "whatever today says" has no value to print, and an empty pair of backticks
+// would read as one that does.
+func defaultCell(value any) string {
+	text := scalar(value)
+	if text == "" {
+		return dash(text)
+	}
+	return "`" + text + "`"
+}
+
 func scalar(value any) string {
 	switch typed := value.(type) {
 	case bool:

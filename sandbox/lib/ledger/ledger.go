@@ -49,6 +49,16 @@ func Load(d deps.Deps, database keepdeps.KeepDatabase) State {
 // writing into.
 func (s State) OpenMonth() int64 { return utils.MonthOf(s.Today) }
 
+// AsOf returns the same registry read as if today fell in another month: the
+// same day of the month, clamped to one that month actually has. Nothing
+// about the data changes — only the day every figure is computed against, and
+// therefore which month is the open one, what the accounts are shown holding,
+// and where the forecast starts from.
+func (s State) AsOf(month int64) State {
+	s.Today = utils.DateIn(month, utils.DayOf(s.Today))
+	return s
+}
+
 // BalanceOn returns what an account holds on a given date: every movement
 // dated on or before then, added together. An account starts at nothing, so
 // the money it already held is a movement like any other. A movement settles

@@ -17,7 +17,7 @@ type Lib struct {
 	PerformTaskTick          func() error
 	PerformVisualizationTick func() error
 	PerformFullTick          func() error
-	Start                    func() error
+	Start                    func(options StartOptions) error
 	Sandboxmain              func(args []string) int
 }
 ```
@@ -49,5 +49,5 @@ The three path fields are writable, and are what the interface's `--task`, `--vi
 | [`PerformTaskTick func() error`](/docs/References/PublicApi/api.PerformTaskTick.md) | Runs the task half of a tick, reading and disarming the task file. |
 | [`PerformVisualizationTick func() error`](/docs/References/PublicApi/api.PerformVisualizationTick.md) | Renders every enabled entry of the config and writes each to its `dest`. |
 | [`PerformFullTick func() error`](/docs/References/PublicApi/api.PerformFullTick.md) | Runs one whole tick: the task first, then every visualization. |
-| [`Start func() error`](/docs/References/PublicApi/api.Start.md) | Writes a default task file and config, without overwriting. |
+| [`Start func(options StartOptions) error`](/docs/References/PublicApi/api.Start.md) | Writes a default task file and config, without overwriting. |
 | [`Sandboxmain func(args []string) int`](/docs/References/PublicApi/api.Sandboxmain.md) | The command-line interface; returns the exit code. |

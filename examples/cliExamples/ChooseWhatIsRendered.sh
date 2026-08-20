@@ -18,7 +18,8 @@ wraith visualizations
 
 echo
 echo "== a vault with something in it to look at"
-wraith start > /dev/null
+echo "== the three dashboard flags of start are written into the config it creates"
+wraith start --prev-months 6 --future-months 12 --current-month 2026-08 > /dev/null
 wraith run AddAccount --account Bank --quiet
 wraith run AddCategory --category Food --description "Groceries" --revenues false --expenses true --quiet
 wraith run AddCategory --category "Opening balance" --description "What an account already held when it was added" --revenues false --expenses false --quiet
@@ -53,6 +54,7 @@ cat > Visualization.yaml <<'YAML'
   args:
     prev-months: 3
     future-months: 8
+    current-month: 2026-08
   dest: DashBoard
 
 - name: Task-List

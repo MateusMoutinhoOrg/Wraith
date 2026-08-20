@@ -158,7 +158,7 @@ func visualizationGuide() api.VisualizationRender {
 		p.heading(3, "`"+declared.Name+"` args")
 		p.table("Arg", ">Default", "Description")
 		for _, arg := range declared.Args {
-			p.row("`"+arg.Name+"`", "`"+scalar(arg.Default)+"`", arg.Description)
+			p.row("`"+arg.Name+"`", defaultCell(arg.Default), arg.Description)
 		}
 		p.blank()
 	}

@@ -156,6 +156,17 @@ type VisualizationEntry struct {
 	Enabled bool
 }
 
+// StartOptions are the choices a caller creating a vault makes about the
+// vault it creates. Every field is optional: the zero value writes the
+// defaults compiled into the binary, exactly as they are.
+type StartOptions struct {
+	// VisualizationArgs overrides the `args:` block of the entries of the
+	// Visualization.yaml being created, keyed by the visualization each entry
+	// asks for. An arg the map does not name keeps the value the default
+	// config carries; an entry it does not name is written untouched.
+	VisualizationArgs map[string]map[string]any
+}
+
 // Lib is the entry point handed back by lib.New. Every object it
 // creates carries the same deps it was built with.
 type Lib struct {
@@ -203,8 +214,9 @@ type Lib struct {
 
 	// Start writes a default Task.yaml and Visualization.yaml, creating a
 	// vault where there was none, and immediately runs a tick to render it.
+	// The options carry the choices the created config is written with.
 	// It is filled by lib.StartFactory.
-	Start func() error
+	Start func(options StartOptions) error
 
 	// Sandboxmain is the CLI entry point.
 	// It is filled by lib.SandboxmainFactory.

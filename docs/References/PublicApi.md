@@ -66,6 +66,9 @@ One file a visualization produced: where it goes, and what it holds.
 ### [api.VisualizationEntry](/docs/References/PublicApi/api.VisualizationEntry.md)
 One line of `Visualization.yaml`, decoded.
 
+### [api.StartOptions](/docs/References/PublicApi/api.StartOptions.md)
+The choices a created vault is written with — the argument `api.Lib.Start` takes.
+
 ---
 
 ## Dependency Contracts

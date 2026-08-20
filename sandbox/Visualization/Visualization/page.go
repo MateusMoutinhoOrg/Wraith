@@ -135,6 +135,25 @@ func wholeArg(values map[string]any, key string, fallback int) int {
 	return int(number)
 }
 
+// monthArg reads one of a visualization's args as a month written YYYY-MM,
+// falling back to the given month when it is missing or unreadable. Like
+// wholeArg it never fails: an arg is a preference, not an instruction the
+// render can break over.
+func monthArg(values map[string]any, key string, fallback int64) int64 {
+	if !entries.Present(values, key) {
+		return fallback
+	}
+	text, err := entries.Text(values, key)
+	if err != nil || text == "" {
+		return fallback
+	}
+	month, err := utils.ParseMonth(text)
+	if err != nil {
+		return fallback
+	}
+	return month
+}
+
 // money renders an amount the way every page shows it.
 func money(cents int64) string { return utils.Money(cents) }
 
