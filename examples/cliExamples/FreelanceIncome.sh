@@ -7,15 +7,10 @@
 #   bash ./examples/cliExamples/FreelanceIncome.sh
 set -euo pipefail
 
-# Build the binary into a scratch directory and run it in a vault of its own,
-# so the example never touches a brain of yours.
-workdir="$(mktemp -d)"
-trap 'rm -rf "$workdir"' EXIT
+rm -rf WraithSample
 
-go build -o "$workdir/wraith" ./cmd/main
-mkdir -p "$workdir/vault"
-cd "$workdir/vault"
-wraith() { "$workdir/wraith" "$@"; }
+mkdir WraithSample
+cd WraithSample/
 
 echo "== where the money sits: what it arrives in, what it is kept in"
 wraith start > /dev/null
