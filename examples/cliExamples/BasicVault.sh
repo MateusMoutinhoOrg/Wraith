@@ -6,36 +6,36 @@ wraith start
 
 #!/bin/bash
 
-echo "Inicializando o cenário..."
+echo "Initializing the scenario..."
 
-# Criando categorias
-echo "Criando categorias..."
-wraith run AddCategory --category "Salário" --description "Recebimentos de salário" --revenues true --expenses false
-wraith run AddCategory --category "Eletrônicos" --description "Compras de eletrônicos" --revenues false --expenses true
-wraith run AddCategory --category "Alimentação" --description "Gastos com comida" --revenues false --expenses true
-wraith run AddCategory --category "Investimentos" --description "Aportes financeiros" --revenues false --expenses false
+# Creating categories
+echo "Creating categories..."
+wraith run AddCategory --category "Salary" --description "Salary income" --revenues true --expenses false
+wraith run AddCategory --category "Electronics" --description "Electronics purchases" --revenues false --expenses true
+wraith run AddCategory --category "Food" --description "Food expenses" --revenues false --expenses true
+wraith run AddCategory --category "Investments" --description "Financial contributions" --revenues false --expenses false
 
-# Criando contas
-echo "Criando contas..."
-wraith run AddAccount --account "Conta Corrente" --opening 1000
-wraith run AddAccount --account "Corretora" --opening 0
-wraith run AddCreditCard --account "Cartão de Crédito" --limit 5000 --closing_day 10 --due_day 15
+# Creating accounts
+echo "Creating accounts..."
+wraith run AddAccount --account "Checking Account" --opening 1000
+wraith run AddAccount --account "Brokerage" --opening 0
+wraith run AddCreditCard --account "Credit Card" --limit 5000 --closing_day 10 --due_day 15
 
-# Registrando recebimentos
-echo "Registrando recebimento de salário..."
-wraith run AddTransaction --account "Conta Corrente" --category "Salário" --amount 5000 --date "2026-08-05" --description "Salário de Agosto"
+# Recording income
+echo "Recording salary income..."
+wraith run AddTransaction --account "Checking Account" --category "Salary" --amount 5000 --date "2026-08-05" --description "August Salary"
 
-# Registrando investimentos (transferência de Conta Corrente para Corretora)
-echo "Registrando investimentos..."
-wraith run AddTransaction --account "Conta Corrente" --category "Investimentos" --amount -1000 --date "2026-08-10" --description "Aporte Mensal"
-wraith run AddTransaction --account "Corretora" --category "Investimentos" --amount 1000 --date "2026-08-10" --description "Aporte Mensal"
+# Recording investments (transfer from Checking Account to Brokerage)
+echo "Recording investments..."
+wraith run AddTransaction --account "Checking Account" --category "Investments" --amount -1000 --date "2026-08-10" --description "Monthly Contribution"
+wraith run AddTransaction --account "Brokerage" --category "Investments" --amount 1000 --date "2026-08-10" --description "Monthly Contribution"
 
-# Registrando despesas à vista
-echo "Registrando despesas à vista..."
-wraith run AddTransaction --account "Conta Corrente" --category "Alimentação" --amount -150 --date "2026-08-12" --description "Supermercado"
+# Recording cash expenses
+echo "Recording cash expenses..."
+wraith run AddTransaction --account "Checking Account" --category "Food" --amount -150 --date "2026-08-12" --description "Grocery Store"
 
-# Registrando despesa parcelada no cartão de crédito
-echo "Registrando compra parcelada no cartão..."
-wraith run AddTransaction --account "Cartão de Crédito" --category "Eletrônicos" --amount -2400 --date "2026-08-12" --installments 12 --description "Compra de Celular"
+# Recording installment purchase on credit card
+echo "Recording installment purchase on credit card..."
+wraith run AddTransaction --account "Credit Card" --category "Electronics" --amount -2400 --date "2026-08-12" --installments 12 --description "Phone Purchase"
 
-echo "Cenário emulado criado com sucesso!"
+echo "Emulated scenario created successfully!"
