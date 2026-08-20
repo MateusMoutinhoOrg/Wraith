@@ -1,21 +1,6 @@
 package keepdeps
 
-// This package is this library's *copy* of the embedded Keep schema
-// database library's public api. The sandbox may not import the embedded
-// library — that would be a third-party import — so it restates the shape
-// it needs here, field for field. The adapter, which lives outside the
-// sandbox, is what fills these structs from the real library.
-//
-// Copying is cheap precisely because the embedded library exposes structs
-// of function fields instead of interfaces: an adapter assigns the real
-// library's fields straight into the copy. Where a field hands back
-// another api struct — Lib.NewDatabase, KeepDatabase.GetSchema,
-// SchemaInstance.NewItem — the adapter wraps it in a closure that copies
-// the returned struct too, so nothing of the embedded library ever reaches
-// the sandbox.
-
-// Field types, reported by Item.Type. The values mirror the embedded
-// library's constants, so they can be assigned across without mapping.
+// Field types, reported by Item.Type.
 const (
 	// Key is a unique, indexed string field.
 	Key = iota
@@ -25,8 +10,7 @@ const (
 	Database
 )
 
-// Failure causes, reported by Error.Type. The values mirror the embedded
-// library's constants.
+// Failure causes, reported by Error.Type.
 const (
 	KeyConflict = iota
 	NotFound
@@ -35,8 +19,7 @@ const (
 	Internal
 )
 
-// Item mirrors the embedded library's api.Item — one field of a schema.
-// It carries no behavior, so it is plain data on both sides.
+// Item describes one field of a schema.
 type Item struct {
 	// Name is the field's name, as used in the fields map.
 	Name string
@@ -48,8 +31,7 @@ type Item struct {
 	Itens []Item
 }
 
-// Schema mirrors the embedded library's api.Schema — one collection of
-// records and its fields.
+// Schema describes one collection of records and its fields.
 type Schema struct {
 	// Name is the collection's name, as used in KeepDatabase.GetSchema.
 	Name string
@@ -57,8 +39,7 @@ type Schema struct {
 	Itens []Item
 }
 
-// Props mirrors the embedded library's api.Props — the declarative
-// description a database is created from.
+// Props is the declarative description of a database.
 type Props struct {
 	// Path is the prefix every key of the database is written under.
 	Path string
@@ -66,8 +47,9 @@ type Props struct {
 	Schemas []Schema
 }
 
-// Error mirrors the embedded library's api.Error — one failure reported
-// by a database operation. A nil *Error means success.
+// Error describes one failure reported by a database operation. It
+// carries no behavior, so callers switch on Type and read Key, KeyValue
+// and Message directly, and a nil *Error means success.
 type Error struct {
 	// Type is one of KeyConflict, NotFound, MissingField, InvalidField,
 	// or Internal.
@@ -80,11 +62,13 @@ type Error struct {
 	Message string
 }
 
-// SchemaItem mirrors the embedded library's api.SchemaItem — one record
-// of a collection. The embedded library's Deps field is deliberately not
-// copied: the sandbox has no business reading the dependencies the
-// embedded library was wired with.
+// SchemaItem is one record of a collection. It is handed back by
+// SchemaInstance.NewItem, FindByKey, ListAll and List, and carries the
+// Deps it was built with, so every field read or write goes through the
+// same injected backend. Its function fields are filled by factories in
+// sandbox/lib/schemaitem.
 type SchemaItem struct {
+
 	// Items are the schema fields this record's collection declares.
 	Items []Item
 	// Prefix is the collection's key prefix.
@@ -110,27 +94,36 @@ type SchemaItem struct {
 	String func() string
 }
 
-// SchemaInstance mirrors the embedded library's api.SchemaInstance — one
-// collection of records.
+// SchemaInstance is one collection of records, handed back by
+// KeepDatabase.GetSchema. Its function fields are filled by factories in
+// sandbox/lib/schemainstance.
 type SchemaInstance struct {
+
 	// Items are the fields each record of the collection can hold.
 	Items []Item
 	// Prefix is the collection's key prefix.
 	Prefix string
 	// NewItem inserts a record, validating the fields against the schema.
 	NewItem func(fields map[string]any) (SchemaItem, *Error)
-	// FindByKey looks a record up through a unique Key field. ok is false
-	// when the field is not an indexed key or no record matches.
+	// FindByKey looks a record up through a unique Key field. ok is
+	// false when the field is not an indexed key or no record matches.
 	FindByKey func(key string, keyValue any) (SchemaItem, bool)
+	// FindById looks a record up through its permanent id — the same
+	// value SchemaItem.Id reports. Storing that id in an Int field of
+	// another collection is how a record points at another record. ok
+	// is false when no live record carries the id.
+	FindById func(id int64) (SchemaItem, bool)
 	// ListAll returns every record of the collection.
 	ListAll func() ([]SchemaItem, *Error)
 	// List returns up to chunk records starting at position (1-based).
 	List func(position int, chunk int) ([]SchemaItem, *Error)
 }
 
-// KeepDatabase mirrors the embedded library's api.KeepDatabase — a
-// database bound to a Props description.
+// KeepDatabase is a database bound to a Props description and to the
+// injected Deps, handed back by Lib.NewDatabase. Its function fields are
+// filled by factories in sandbox/lib/database.
 type KeepDatabase struct {
+
 	// Props is the description the database was created from.
 	Props Props
 	// GetSchema returns the collection with the given name. ok is false
@@ -138,9 +131,16 @@ type KeepDatabase struct {
 	GetSchema func(name string) (SchemaInstance, bool)
 }
 
-// Lib mirrors the embedded Keep library's api.Lib — a schema database
-// over an injected single-key storage backend.
+// Lib is the entry point handed back by lib.New. Its function fields are
+// filled by factories in sandbox/lib/publicfunctions.
 type Lib struct {
+
+	// Version returns the library's own version — the release the
+	// consumer linked against. It is held as a constant in
+	// sandbox/config, so a release bump is a one-line edit touching no
+	// logic, and it is exposed as a field like every other behavior so a
+	// consumer can report it without importing anything but this api.
+	Version func() string
 	// NewDatabase creates a database from a Props description.
 	NewDatabase func(props Props) KeepDatabase
 }

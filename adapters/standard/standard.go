@@ -227,6 +227,14 @@ func fromKeepSchemaInstance(instance keepapi.SchemaInstance) keepdeps.SchemaInst
 			item, err := instance.NewItem(fields)
 			return fromKeepSchemaItem(item), fromKeepError(err)
 		},
+
+		FindById: func(id int64) (keepdeps.SchemaItem, bool) {
+			item, found := instance.FindById(id)
+			if !found {
+				return keepdeps.SchemaItem{}, false
+			}
+			return fromKeepSchemaItem(item), true
+		},
 		FindByKey: func(key string, keyValue any) (keepdeps.SchemaItem, bool) {
 			item, found := instance.FindByKey(key, keyValue)
 			if !found {
