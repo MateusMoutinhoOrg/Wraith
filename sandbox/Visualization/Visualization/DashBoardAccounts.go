@@ -78,10 +78,9 @@ func accountKind(account ledger.Account) string {
 func accountPosition(p *page, state ledger.State, account ledger.Account) {
 	p.heading(2, "1. Where it stands today")
 	p.table("Indicator", ">Value", "Where it comes from")
-	p.row("Opening balance", money(account.Opening), "what the account was declared at")
 	if account.IsCard() {
 		owed := state.Owed(account)
-		p.row("Outstanding", "**"+money(owed)+"**", "opening + purchases − payments")
+		p.row("Outstanding", "**"+money(owed)+"**", "every purchase − every bill payment")
 		p.row("Limit", money(account.Limit), "what the card was declared with")
 		p.row("Available", money(account.Limit-owed), "limit − outstanding")
 		p.row("Closes", utils.PrettyDate(utils.DateIn(state.OpenMonth(), account.ClosingDay)),
@@ -90,7 +89,7 @@ func accountPosition(p *page, state ledger.State, account ledger.Account) {
 			"day "+strconv.FormatInt(account.DueDay, 10)+" of the month")
 	} else {
 		p.row("Balance", "**"+money(state.Balance(account))+"**",
-			"opening + every settled movement")
+			"every settled movement on this account")
 	}
 	p.row("Pending settlement", signed(state.PendingOf(account)),
 		"movements with a payment date still ahead")
