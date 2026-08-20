@@ -128,10 +128,10 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 			utils.PrettyDate(state.Horizon()))
 	p.blank()
 
-	if len(state.PlainAccounts()) > 0 {
+	if len(state.Accounts) > 0 {
 		p.table("Account", ">Balance", "Share of the money you hold")
 		held := state.Held()
-		for _, account := range state.PlainAccounts() {
+		for _, account := range state.Accounts {
 			balance := state.Balance(account)
 			p.row("["+account.Name+"]("+accountPath(account)+")", money(balance),
 				"`"+utils.Bar(balance, held)+"` "+utils.Percent(balance, held))
