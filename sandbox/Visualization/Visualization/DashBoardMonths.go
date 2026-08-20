@@ -136,9 +136,9 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 		if flow.Count == 0 {
 			continue
 		}
-		p.row("["+account.Name+"](../../"+accountPath(account)+")", signed(flow.Net()),
+		p.row("["+account.Name+"](Accounts/"+slug(account.Name)+".md)", signed(flow.Net()),
 			money(state.BalanceOn(account, utils.DateIn(month, 31))),
-			"[this month](Accounts/"+slug(account.Name)+".md)")
+			"[all time](../../"+accountPath(account)+")")
 	}
 	p.blank()
 	p.rule()
