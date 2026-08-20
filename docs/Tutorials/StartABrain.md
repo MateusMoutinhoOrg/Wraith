@@ -35,7 +35,7 @@ ls
 
 | Folder | Written by | What it holds |
 |--------|-----------|---------------|
-| `DashBoard/` | the `DashBoard` visualization | Your position, one page per account and card, one folder per month, and the forecast on the month index |
+| `DashBoard/` | the `DashBoard` visualization | Your position, one page per account, one folder per month, and the forecast on the month index |
 | `Tasks/` | the `Task-List` visualization | One reference page per action the binary carries |
 | `Help/` | the `Help` visualization | The command reference, the task guide, the visualization guide |
 

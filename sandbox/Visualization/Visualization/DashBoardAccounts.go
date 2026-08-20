@@ -1,13 +1,12 @@
 package visualizations
 
-// The account tree of the DashBoard visualization: one page per account and
-// one per credit card, each carrying the menu of every month that account has
-// moved in and where the open month stands on it.
+// The account tree of the DashBoard visualization: one page per account, each
+// carrying the menu of every month that account has moved in and where the
+// open month stands on it.
 //
-// Everything here is read through payment dates. An account is a record of
-// what actually moved, so a movement belongs to the month its money changes
-// hands in — the month it counts in is the month tree's question, not this
-// one's.
+// An account is a record of what moved, and a movement moves on the day it is
+// dated — so the month it counts in and the month it moved in are the same
+// month.
 //
 // There is no index page above them. The dashboard already lists every account
 // with what it holds, and every one of those rows is a link — an index would
@@ -40,26 +39,6 @@ func accountPathOf(state ledger.State, name string) string {
 	return accountPath(account)
 }
 
-// settlement renders when a movement actually reaches the balance — the day it
-// is dated on, unless it carries a payment date of its own.
-func settlement(transaction ledger.Transaction) string {
-	if transaction.PaymentDate == transaction.Date {
-		return "on the date"
-	}
-	return utils.PrettyDate(transaction.PaymentDate)
-}
-
-// recorded renders the date a movement counts on, as an account page shows it:
-// an account is ordered by when the money moved, so the date the movement
-// belongs to is the second column there rather than the first, and it is left
-// out entirely when the two are the same day.
-func recorded(transaction ledger.Transaction) string {
-	if transaction.PaymentDate == transaction.Date {
-		return "on the day"
-	}
-	return utils.PrettyDate(transaction.Date)
-}
-
 // accountPage writes Accounts/<account>.md: where one account stands today,
 // how the open month is going on it, and the menu of every month it has moved
 // in. The months carrying a page of their own are the ones in `rendered`; the
@@ -68,7 +47,8 @@ func recorded(transaction ledger.Transaction) string {
 func accountPage(state ledger.State, account ledger.Account, rendered []int64) api.VisualizationRender {
 	p := &page{}
 	p.heading(1, account.Name)
-	p.line("> " + accountKind(account) + " · **Updated:** " + utils.PrettyDate(state.Today))
+	p.line("> **Account** — the balance on it is money you hold · **Updated:** " +
+		utils.PrettyDate(state.Today))
 	p.blank()
 	p.line(navigationAt("../"))
 	p.blank()
@@ -80,46 +60,17 @@ func accountPage(state ledger.State, account ledger.Account, rendered []int64) a
 	return p.render(accountPath(account))
 }
 
-// accountKind renders in words what the account is, so a page never has to be
-// read twice to know whether the balance on it is money held or money owed.
-func accountKind(account ledger.Account) string {
-	if account.IsCard() {
-		return "**Credit card** — the balance on it is what you owe"
-	}
-	return "**Account** — the balance on it is money you hold"
-}
-
-// accountPosition writes section 1: what the account holds today, and what it
-// is still waiting on.
+// accountPosition writes section 1: what the account holds today.
 func accountPosition(p *page, state ledger.State, account ledger.Account) {
 	p.heading(2, "1. Where it stands today")
 	p.table("Indicator", ">Value", "Where it comes from")
-	if account.IsCard() {
-		owed := state.Owed(account)
-		open := state.OpenBill(account)
-		p.row("Outstanding", "**"+money(owed)+"**", "every purchase − every bill payment")
-		p.row("Bills to pay", "**"+money(state.AmountDue(account))+"**",
-			"closed statements that still carry a remainder")
-		p.row("Limit", money(account.Limit), "what the card was declared with")
-		p.row("Available", money(account.Limit-owed), "limit − outstanding")
-		p.row("Closes", utils.PrettyDate(open.Closes),
-			"day "+strconv.FormatInt(ledger.CardClosingDay(account), 10)+" of the month")
-		p.row("Due", utils.PrettyDate(open.Due),
-			"day "+strconv.FormatInt(ledger.CardDueDay(account), 10)+" of the month")
-	} else {
-		p.row("Balance", "**"+money(state.Balance(account))+"**",
-			"every settled movement on this account")
-	}
-	p.row("Pending settlement", signed(state.PendingOf(account)),
-		"movements with a payment date still ahead")
+	p.row("Balance", "**"+money(state.Balance(account))+"**",
+		"every movement on this account dated up to today")
+	p.row("Opening balance", money(account.Opening),
+		"what the account was declared with")
 	p.row("Movements recorded", strconv.Itoa(state.AccountFlow(account.Name, 0).Count),
 		"every movement on this account, all time")
 	p.blank()
-	if account.IsCard() {
-		p.line("Statement by statement — what each cycle charged, what answered it, and " +
-			"what is left on it: [" + account.Name + " bills](../" + billsPath(account) + ")")
-		p.blank()
-	}
 	p.rule()
 }
 
@@ -139,7 +90,7 @@ func accountOpenMonth(p *page, state ledger.State, account ledger.Account) {
 	p.row("Movements", strconv.Itoa(flow.Count))
 	p.blank()
 
-	movements := ledger.OfAccount(state.SettledIn(open), account.Name)
+	movements := ledger.OfAccount(state.In(open), account.Name)
 	if len(movements) == 0 {
 		p.line("Nothing has moved on this account this month yet.")
 		p.blank()
@@ -152,25 +103,19 @@ func accountOpenMonth(p *page, state ledger.State, account ledger.Account) {
 
 // accountMovements writes one account's movements as a table with a running
 // balance, starting from what it carried in.
-//
-// The table is ordered and dated by settlement, because that is what an
-// account is: money that arrives on the 5th moved on the 5th, whatever month
-// the purchase behind it counts in. The `Dated` column carries that month, so
-// the line can still be found on the statement it belongs to.
 func accountMovements(p *page, movements []ledger.Transaction, opening int64) {
-	p.table("Settled", ">Id", "Category", "Description", ">Amount", ">Balance", "Dated")
+	p.table("Date", ">Id", "Category", "Description", ">Amount", ">Balance")
 	running := opening
 	for _, transaction := range movements {
 		running += transaction.Amount
-		p.row(utils.PrettyDate(transaction.PaymentDate), idText(transaction.Id),
+		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
 			transaction.Category, dash(transaction.Description),
-			signed(transaction.Amount), money(running), recorded(transaction))
+			signed(transaction.Amount), money(running))
 	}
 	p.blank()
 	p.line("The `Id` column is what a `ModifyTransaction` or `RemoveTransaction` task addresses " +
 		"a line by. Rows are in the order the money moved, so the running balance agrees with " +
-		"the account's balance on every line — a movement dated in another month appears here " +
-		"on the day it settles, with the date it counts on in the last column.")
+		"the account's balance on every line.")
 	p.blank()
 }
 
@@ -195,11 +140,9 @@ func accountMenu(p *page, state ledger.State, account ledger.Account, rendered [
 			monthPageLink(account, month, rendered))
 	}
 	p.blank()
-	p.line("A month is listed as soon as a movement on this account settles inside it — " +
-		"future months included. A purchase dated in another month is counted in the month it " +
-		"is paid in, because that is the month this account moved. A month older than the " +
-		"`prev-months` the dashboard was asked for keeps its figures here but has no page of " +
-		"its own to open.")
+	p.line("A month is listed as soon as a movement on this account is dated inside it — " +
+		"future months included. A month older than the `prev-months` the dashboard was asked " +
+		"for keeps its figures here but has no page of its own to open.")
 }
 
 // monthPageLink renders the menu's link to one month's page for one account,

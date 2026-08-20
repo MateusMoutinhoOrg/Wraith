@@ -87,11 +87,13 @@ func taskGuide() api.VisualizationRender {
 	p.line("- Rendered pages are **generated**. A hand edit is overwritten on the next tick, so " +
 		"everything you want to keep goes into a task.")
 	p.line("- One category and one account per transaction — there are no splits.")
+	p.line("- Every movement settles on the day it is dated, in full. There is nothing to " +
+		"record as owed and nothing to pay later.")
 	p.line("- A positive amount needs a category with `revenues: true`; a negative one needs " +
 		"`expenses: true`. A transfer category — both `false` — accepts either, because it " +
 		"counts as neither.")
 	p.line("- Moving money between your own accounts is two transactions sharing a transfer " +
-		"category. They net to zero, so paying a card bill never shows up as an expense.")
+		"category. They net to zero, so a transfer never shows up as an expense.")
 	p.line("- A recurrence describes the future and moves nothing. Nothing is recorded until " +
 		"you record it.")
 	return p.render("Task.md")

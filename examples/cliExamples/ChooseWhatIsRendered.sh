@@ -36,7 +36,7 @@ ls Tasks | head -5
 echo
 echo "== an arg given here overrides the config for this invocation only"
 wraith render DashBoard --future-months 24
-grep '^## 4' DashBoard/README.md
+grep '^## 3' DashBoard/README.md
 grep 'future-months' Visualization.yaml
 
 echo

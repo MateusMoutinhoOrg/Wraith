@@ -1,7 +1,7 @@
 package ledger
 
-// Every figure the vault shows, derived from the five registries and nothing
-// else. If a number cannot be computed from accounts, cards, categories,
+// Every figure the vault shows, derived from the four registries and nothing
+// else. If a number cannot be computed from accounts, categories,
 // transactions and recurrences, it does not belong on a page — so this
 // package is where the arithmetic lives, and the visualizations next door are
 // only about layout.
@@ -27,7 +27,7 @@ import (
 type State struct {
 	// Today is the date the render happens on, taken from Deps.Now.
 	Today int64
-	// Accounts is every account and card, ordered by name.
+	// Accounts is every account, ordered by name.
 	Accounts []Account
 	// Categories is every category, ordered by name.
 	Categories []Category
@@ -52,41 +52,17 @@ func Load(d deps.Deps, database keepdeps.KeepDatabase) State {
 // writing into.
 func (s State) OpenMonth() int64 { return utils.MonthOf(s.Today) }
 
-// Cards returns every credit card of the registry.
-func (s State) Cards() []Account {
-	cards := []Account{}
-	for _, account := range s.Accounts {
-		if account.IsCard() {
-			cards = append(cards, account)
-		}
-	}
-	return cards
-}
-
-// PlainAccounts returns every account that is not a credit card — the ones
-// money actually sits in.
-func (s State) PlainAccounts() []Account {
-	accounts := []Account{}
-	for _, account := range s.Accounts {
-		if !account.IsCard() {
-			accounts = append(accounts, account)
-		}
-	}
-	return accounts
-}
-
 // BalanceOn returns what an account holds on a given date: what it opened
-// with, plus every movement that has actually settled by then. A transaction
-// whose payment_date is still ahead counts in its month's result but not yet
-// in the balance, which is exactly the difference between what a month cost
-// and what has left the account.
+// with, plus every movement dated on or before then. A movement settles on
+// the day it is dated, so there is never a gap between what a month cost and
+// what has left the account.
 func (s State) BalanceOn(account Account, date int64) int64 {
 	balance := account.Opening
 	for _, transaction := range s.Transactions {
 		if transaction.Account != account.Name {
 			continue
 		}
-		if transaction.PaymentDate > date {
+		if transaction.Date > date {
 			continue
 		}
 		balance += transaction.Amount
@@ -99,107 +75,17 @@ func (s State) Balance(account Account) int64 {
 	return s.BalanceOn(account, s.Today)
 }
 
-// OwedOn returns what is outstanding on a credit card on a given date, as a
-// positive figure — a card's balance is negative when money is owed on it.
-func (s State) OwedOn(card Account, date int64) int64 {
-	balance := s.BalanceOn(card, date)
-	if balance > 0 {
-		return 0
-	}
-	return -balance
-}
-
-// Owed returns what is outstanding on a credit card today.
-func (s State) Owed(card Account) int64 { return s.OwedOn(card, s.Today) }
-
-// HeldOn is the total of every plain account on a given date.
+// HeldOn is the total of every account on a given date.
 func (s State) HeldOn(date int64) int64 {
 	total := int64(0)
-	for _, account := range s.PlainAccounts() {
+	for _, account := range s.Accounts {
 		total += s.BalanceOn(account, date)
 	}
 	return total
 }
 
-// Held is the total of every plain account — the money you actually hold.
+// Held is the total of every account — the money you actually hold.
 func (s State) Held() int64 { return s.HeldOn(s.Today) }
-
-// TotalOwedOn is the total outstanding across every credit card on a date.
-func (s State) TotalOwedOn(date int64) int64 {
-	total := int64(0)
-	for _, card := range s.Cards() {
-		total += s.OwedOn(card, date)
-	}
-	return total
-}
-
-// TotalOwed is the total outstanding across every credit card today.
-func (s State) TotalOwed() int64 { return s.TotalOwedOn(s.Today) }
-
-// NetOn is what you hold minus what you owe on a given date.
-func (s State) NetOn(date int64) int64 { return s.HeldOn(date) - s.TotalOwedOn(date) }
-
-// Net is what you hold minus what you owe.
-func (s State) Net() int64 { return s.NetOn(s.Today) }
-
-// Horizon is the last date the registry settles anything on: the payment date
-// of the furthest movement already recorded, or today when nothing is dated
-// ahead. It is where a purchase in 12x stops costing you.
-func (s State) Horizon() int64 {
-	horizon := s.Today
-	for _, transaction := range s.Transactions {
-		if transaction.PaymentDate > horizon {
-			horizon = transaction.PaymentDate
-		}
-	}
-	return horizon
-}
-
-// NetWorth is everything you have minus everything you owe, once every
-// movement already recorded has settled — the last future entry included. It
-// differs from Net by exactly what is still pending: Net is where you stand
-// today, NetWorth is where what you have already committed to leaves you.
-//
-// Recurrences are left out of it on purpose. A recurrence is a rule, not a
-// movement: it is the forecast that projects it, and this figure only counts
-// what the ledger already holds.
-func (s State) NetWorth() int64 { return s.NetOn(s.Horizon()) }
-
-// Pending is the sum of movements recorded but not yet settled — everything
-// whose payment_date is still ahead of today.
-func (s State) Pending() int64 {
-	total := int64(0)
-	for _, transaction := range s.Transactions {
-		if transaction.PaymentDate > s.Today {
-			total += transaction.Amount
-		}
-	}
-	return total
-}
-
-// PendingIncome is the sum of positive movements not yet settled — money you
-// are still waiting to receive.
-func (s State) PendingIncome() int64 {
-	total := int64(0)
-	for _, transaction := range s.Transactions {
-		if transaction.PaymentDate > s.Today && transaction.Amount > 0 {
-			total += transaction.Amount
-		}
-	}
-	return total
-}
-
-// PendingExpenses is the sum of negative movements not yet settled — money
-// you are still going to pay. The figure is kept negative.
-func (s State) PendingExpenses() int64 {
-	total := int64(0)
-	for _, transaction := range s.Transactions {
-		if transaction.PaymentDate > s.Today && transaction.Amount < 0 {
-			total += transaction.Amount
-		}
-	}
-	return total
-}
 
 // Result is what one month came to: what came in, what went out, the two
 // added together, and how many movements it holds.
@@ -234,9 +120,9 @@ func (s State) MonthResult(month int64) Result {
 	return result
 }
 
-// In returns every movement dated in one month — the month view. A movement
-// counts in the month its `date` falls in, whatever day the money actually
-// moves on, because that is what tells you what a month was worth.
+// In returns every movement dated in one month, oldest first. A movement
+// counts in the month its `date` falls in, which is also the month it moves
+// in: every expense is settled in full on its date.
 func (s State) In(month int64) []Transaction {
 	found := []Transaction{}
 	for _, transaction := range s.Transactions {
@@ -244,30 +130,6 @@ func (s State) In(month int64) []Transaction {
 			found = append(found, transaction)
 		}
 	}
-	return found
-}
-
-// SettledIn returns every movement whose payment date falls in one month,
-// soonest first — the account view. It is what In is to a month's result, for
-// an account's balance: a purchase dated in january and paid in march moved
-// nothing in january and moved everything in march, and an account is a
-// record of what moved.
-//
-// The order is the order the money actually moves in, so a running balance
-// built from it agrees with BalanceOn on every line.
-func (s State) SettledIn(month int64) []Transaction {
-	found := []Transaction{}
-	for _, transaction := range s.Transactions {
-		if utils.MonthOf(transaction.PaymentDate) == month {
-			found = append(found, transaction)
-		}
-	}
-	sort.Slice(found, func(i int, j int) bool {
-		if found[i].PaymentDate != found[j].PaymentDate {
-			return found[i].PaymentDate < found[j].PaymentDate
-		}
-		return found[i].Key < found[j].Key
-	})
 	return found
 }
 
@@ -313,26 +175,22 @@ func FlowOf(transactions []Transaction) Flow {
 }
 
 // AccountFlow returns what one account moved in one month, or across the whole
-// ledger when month is zero. The month is read through payment dates: what an
-// account moved in a month is what actually left it and arrived in it that
-// month, which is the figure its balance is built from.
+// ledger when month is zero.
 func (s State) AccountFlow(name string, month int64) Flow {
 	if month == 0 {
 		return FlowOf(OfAccount(s.Transactions, name))
 	}
-	return FlowOf(OfAccount(s.SettledIn(month), name))
+	return FlowOf(OfAccount(s.In(month), name))
 }
 
 // AccountMonths returns every month one account moved in, oldest first. Like
-// Months, a month is never created by hand: it exists as soon as a movement
-// on that account settles inside it. The month is read through the payment
-// date, not the date — a january purchase paid in march belongs to march
-// here, because march is when the account moved.
+// Months, a month is never created by hand: it exists as soon as a movement on
+// that account is dated inside it.
 func (s State) AccountMonths(name string) []int64 {
 	seen := map[int64]bool{}
 	months := []int64{}
 	for _, transaction := range OfAccount(s.Transactions, name) {
-		month := utils.MonthOf(transaction.PaymentDate)
+		month := utils.MonthOf(transaction.Date)
 		if seen[month] {
 			continue
 		}
@@ -341,18 +199,6 @@ func (s State) AccountMonths(name string) []int64 {
 	}
 	sort.Slice(months, func(i int, j int) bool { return months[i] < months[j] })
 	return months
-}
-
-// PendingOf returns what is recorded on one account but has not settled yet —
-// everything on it whose payment_date is still ahead of today.
-func (s State) PendingOf(account Account) int64 {
-	total := int64(0)
-	for _, transaction := range OfAccount(s.Transactions, account.Name) {
-		if transaction.PaymentDate > s.Today {
-			total += transaction.Amount
-		}
-	}
-	return total
 }
 
 // IsTransfer reports whether a movement is a leg of a transfer between your
@@ -384,21 +230,17 @@ func (s State) Account(name string) (Account, bool) {
 
 // Months returns every month holding at least one movement, oldest first. A
 // month is never created by hand: it exists as soon as a transaction carries
-// a date inside it, or settles inside it. Both count, because the two are
-// what a month's folder holds — the result, read through dates, and what the
-// accounts moved, read through payment dates — and a month where only money
-// moved is still a month the vault has something to say about.
+// a date inside it.
 func (s State) Months() []int64 {
 	seen := map[int64]bool{}
 	months := []int64{}
 	for _, transaction := range s.Transactions {
-		for _, month := range []int64{utils.MonthOf(transaction.Date), utils.MonthOf(transaction.PaymentDate)} {
-			if seen[month] {
-				continue
-			}
-			seen[month] = true
-			months = append(months, month)
+		month := utils.MonthOf(transaction.Date)
+		if seen[month] {
+			continue
 		}
+		seen[month] = true
+		months = append(months, month)
 	}
 	sort.Slice(months, func(i int, j int) bool { return months[i] < months[j] })
 	return months
@@ -407,7 +249,7 @@ func (s State) Months() []int64 {
 // RenderedMonths returns the months a dashboard writes a folder for: the
 // months holding movements, from `prev-months` before the open one onwards.
 // Months holding nothing are skipped, and months ahead of the open one are
-// kept — a purchase in 12x opens the next eleven.
+// kept — a movement may be dated forward.
 func (s State) RenderedMonths(previous int) []int64 {
 	if previous < 0 {
 		previous = 0

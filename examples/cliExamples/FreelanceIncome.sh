@@ -31,10 +31,6 @@ wraith run AddTransaction --account Bank --category "Client Acme" --amount 3200 
 wraith run AddTransaction --account Bank --category "Client Wayne" --amount 5400 --date 2026-08-14 --description "Project milestone"
 
 echo
-echo "== an invoice sent but not yet paid: it counts in august, it settles in september"
-wraith run AddTransaction --account Bank --category "Client Wayne" --amount 2100 --date 2026-08-18 --payment_date 2026-09-10 --description "Milestone 2, net 15"
-
-echo
 echo "== the cost of working"
 wraith run AddTransaction --account Bank --category Tools --amount -49.90 --date 2026-08-07 --description "Design tool"
 
@@ -44,7 +40,7 @@ wraith run AddTransaction --account Bank --category Transfers --amount -2580 --d
 wraith run AddTransaction --account "Tax Reserve" --category Transfers --amount 2580 --date 2026-08-17 --description "Tax set aside"
 
 echo
-echo "== what each account holds, and what is still owed to you"
+echo "== what each account holds"
 sed -n '/## 1. Position/,/## 2./p' DashBoard/README.md
 
 echo

@@ -30,11 +30,8 @@ package tasks
 // word names a key in Task.yaml, a `--flag` on the command line, and a column
 // of a rendered page — so it is spelled once.
 const (
-	// AccountField names an account or a credit card.
+	// AccountField names an account.
 	AccountField = "account"
-	// CardField names a credit card, when a task also names the account
-	// paying it.
-	CardField = "card"
 	// ToAccountField names the destination account of a recurring transfer.
 	ToAccountField = "to_account"
 	// CategoryField names a category.
@@ -47,20 +44,10 @@ const (
 	AmountField = "amount"
 	// DateField is the date a transaction counts on.
 	DateField = "date"
-	// PaymentDateField is the date the money actually moves.
-	PaymentDateField = "payment_date"
-	// InstallmentsField splits one purchase into monthly parts.
-	InstallmentsField = "installments"
 	// IdField addresses an existing transaction.
 	IdField = "id"
 	// OpeningField is the balance an account starts at.
 	OpeningField = "opening"
-	// LimitField is a credit card's total limit.
-	LimitField = "limit"
-	// ClosingDayField is the day of the month a card's bill closes.
-	ClosingDayField = "closing_day"
-	// DueDayField is the day of the month a card's bill is due.
-	DueDayField = "due_day"
 	// RevenuesField marks a category as accepting income.
 	RevenuesField = "revenues"
 	// ExpensesField marks a category as accepting expenses.

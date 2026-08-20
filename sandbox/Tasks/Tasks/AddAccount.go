@@ -46,7 +46,6 @@ func addAccountAction(args api.HandleActionArgs) error {
 	}
 	_, failure := accounts.NewItem(map[string]any{
 		config.NameField:    accountName,
-		config.KindField:    int64(config.KindAccount),
 		config.OpeningField: amount,
 	})
 	if failure == nil {
@@ -60,8 +59,7 @@ func addAccountAction(args api.HandleActionArgs) error {
 
 // AddAccount returns the task that adds an account to the registry — a bank,
 // a wallet, a savings pot. An account is where money sits; every transaction
-// names one. A credit card is added with AddCreditCard instead, because it
-// carries a limit and a billing cycle an account does not.
+// names one.
 func AddAccount() api.Task {
 	return api.Task{
 		Name:         "AddAccount",

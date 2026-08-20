@@ -32,7 +32,7 @@ Two ideas carry the whole project:
 - **Tasks** are what can happen. One file each, under [`/sandbox/Tasks/Tasks/`](/sandbox/Tasks/Tasks/), declared in one array.
 - **Visualizations** are what you get to see. One file each, under [`/sandbox/Visualization/Visualization/`](/sandbox/Visualization/Visualization/), declared in one array.
 
-Both are meant to be replaced. The financial brain in this repository — accounts, categories, transactions, recurrences, credit cards — is a **worked example of the shape**, not the point of it. Fork the repo, swap the tasks for yours, and you have a brain for something else entirely. That path is [Brain-Config](/docs/Index/Brain-Config.md).
+Both are meant to be replaced. The financial brain in this repository — accounts, categories, transactions, recurrences — is a **worked example of the shape**, not the point of it. Fork the repo, swap the tasks for yours, and you have a brain for something else entirely. That path is [Brain-Config](/docs/Index/Brain-Config.md).
 
 ### Where the code lives
 

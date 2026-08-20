@@ -24,7 +24,7 @@ A brain is a folder holding two files. `Task.yaml` decides what changes; `Visual
 - [ChooseVisualizations.md](/docs/Tutorials/ChooseVisualizations.md)
   - **description:** Decide which pages your brain writes, and where each one goes
 - [TrackTransactions.md](/docs/Tutorials/TrackTransactions.md)
-  - **description:** A worked month in the financial brain: accounts, cards, installments, forecast
+  - **description:** A worked month in the financial brain: accounts, categories, months, forecast
 - [RunCliSample.md](/docs/Tutorials/RunCliSample.md)
   - **description:** Run one of the shipped shell examples from the source tree
   - [Run CLI Examples](/docs/Tutorials/RunCliSample.md#run-cli-examples)

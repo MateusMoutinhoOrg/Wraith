@@ -48,14 +48,14 @@ func Summary() api.Visualizer {
 			p := &page{}
 			p.heading(1, "Summary")
 			p.table("Account", ">Balance")
-			for index, account := range state.PlainAccounts() {
+			for index, account := range state.Accounts {
 				if index >= wholeArg(args.Entries, "top", 5) {
 					break
 				}
 				p.row(account.Name, money(state.Balance(account)))
 			}
 			p.blank()
-			p.line("**Net position:** " + money(state.Net()) + " · " +
+			p.line("**Money held:** " + money(state.Held()) + " · " +
 				strconv.Itoa(len(state.Transactions)) + " movements")
 			return []api.VisualizationRender{p.render("")}, nil
 		},

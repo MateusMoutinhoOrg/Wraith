@@ -87,7 +87,7 @@ func Number(values map[string]any, key string) (float64, error) {
 }
 
 // Whole reads a value as a whole number, refusing one that carries a
-// fraction — a day of the month and a count of installments are counts, not
+// fraction — a day of the month and a record's id are counts, not
 // measurements.
 func Whole(values map[string]any, key string) (int64, error) {
 	number, err := Number(values, key)

@@ -45,14 +45,14 @@ func summaryPage(state ledger.State, top int) api.VisualizationRender {
 	p := &page{}
 	p.heading(1, "Summary")
 	p.table("Account", ">Balance")
-	for index, account := range state.PlainAccounts() {
+	for index, account := range state.Accounts {
 		if index >= top {
 			break
 		}
 		p.row(account.Name, money(state.Balance(account)))
 	}
 	p.blank()
-	p.line("**Net position:** " + money(state.Net()))
+	p.line("**Money held:** " + money(state.Held()))
 
 	// An empty path: a file visualization is written at its dest.
 	return p.render("")

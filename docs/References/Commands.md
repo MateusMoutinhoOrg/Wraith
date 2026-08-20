@@ -85,7 +85,7 @@ The three path flags point the same binary at another vault without moving a fil
 
 | Kind | Written as | Examples |
 | --- | --- | --- |
-| Text | Bare, or quoted when it carries a space | `Bank`, `"Nubank Card"` |
+| Text | Bare, or quoted when it carries a space | `Bank`, `"Checking Account"` |
 | Number | Decimal, negative for money going out | `3000`, `-32.90` |
 | Switch | `true` or `false` | `--revenues true` |
 | Date | `YYYY-MM-DD` | `2026-08-18` |

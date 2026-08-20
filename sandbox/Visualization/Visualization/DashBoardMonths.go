@@ -4,14 +4,10 @@ package visualizations
 // closed, open and projected — and the three pages each recorded one gets.
 //
 // A month is never created by hand. It appears as soon as a transaction
-// carries a date inside it, or settles inside it — which is why a purchase
-// split into twelve parts opens the next eleven months by itself.
+// carries a date inside it.
 //
-// The month reads the ledger through both dates, and the pages keep the two
-// apart. The result, the statement and the categories are read through the
-// `date` a movement counts on: they are what the month was worth. The
-// accounts section and the per-account pages are read through `payment_date`:
-// they are what actually moved.
+// One date is all a movement has: what the month was worth and what its
+// accounts moved are the same set of lines, read two ways.
 
 import (
 	"strconv"
@@ -55,11 +51,11 @@ func monthsIndex(state ledger.State, months []int64, ahead int) api.Visualizatio
 
 	p.heading(2, "3. The next "+strconv.Itoa(ahead)+" months")
 	projections := state.Forecast(ahead)
-	p.table("Month", ">Income", ">Expenses", ">Card bills", ">Held", ">Net position", "Pages")
+	p.table("Month", ">Income", ">Expenses", ">Held", "Pages")
 	for _, projection := range projections {
 		p.row(utils.PrettyMonth(projection.Month), signed(projection.Income),
-			signed(projection.Expenses), money(projection.Bills), money(projection.Held),
-			money(projection.Net()), monthPages(months, projection.Month))
+			signed(projection.Expenses), money(projection.Held),
+			monthPages(months, projection.Month))
 	}
 	horizon := open
 	if len(projections) > 0 {
@@ -71,14 +67,13 @@ func monthsIndex(state ledger.State, months []int64, ahead int) api.Visualizatio
 		}
 		result := state.MonthResult(month)
 		p.row(utils.PrettyMonth(month), signed(result.Income), signed(result.Expenses),
-			"—", "—", "—", monthPages(months, month))
+			"—", monthPages(months, month))
 	}
 	p.blank()
-	p.line("Every figure above is something you declared: a recurrence, a transaction already " +
-		"dated ahead, or a card bill derived from what the card owes when its cycle closes. " +
-		"Nothing here is an average of your past. A month ahead only carries pages once a " +
-		"movement is dated inside it — an installment does that by itself, and the months it " +
-		"opens past the horizon are listed with their recorded lines alone.")
+	p.line("Every figure above is something you declared: a recurrence, or a transaction " +
+		"already dated ahead. Nothing here is an average of your past. A month ahead only " +
+		"carries pages once a movement is dated inside it, and the months past the horizon " +
+		"are listed with their recorded lines alone.")
 	p.blank()
 	p.rule()
 
@@ -160,8 +155,7 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	p.rule()
 
 	p.heading(2, "2. Accounts")
-	p.line("What each account actually moved this month — read through payment dates, " +
-		"so the figures agree with the balances.")
+	p.line("What each account moved this month.")
 	p.blank()
 	p.table("Account", ">Moved this month", ">Balance at month end", "Movements")
 	for _, account := range state.Accounts {
@@ -219,14 +213,14 @@ func statementPage(state ledger.State, month int64) api.VisualizationRender {
 		p.line("No movement is dated in this month.")
 		return p.render("Months/" + folder + "/Statement.md")
 	}
-	p.table("Date", ">Id", "Account", "Category", "Description", ">Amount", "Settles")
+	p.table("Date", ">Id", "Account", "Category", "Description", ">Amount")
 	running := int64(0)
 	for _, transaction := range movements {
 		running += transaction.Amount
 		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
 			"["+transaction.Account+"](../../"+accountPathOf(state, transaction.Account)+")",
 			transaction.Category, dash(transaction.Description),
-			signed(transaction.Amount), settlement(transaction))
+			signed(transaction.Amount))
 	}
 	p.blank()
 	p.line("**Movements:** " + strconv.Itoa(len(movements)) + " · **Net movement:** " +
@@ -248,14 +242,10 @@ func accountMonthPage(state ledger.State, month int64, account ledger.Account) a
 	p.blank()
 	p.rule()
 
-	movements := ledger.OfAccount(state.SettledIn(month), account.Name)
+	movements := ledger.OfAccount(state.In(month), account.Name)
 	opening := state.BalanceOn(account, utils.DateIn(utils.AddMonths(month, -1), 31))
 	p.table("Line", ">Value")
 	p.row("Balance carried in", money(opening))
-	if account.IsCard() {
-		p.row("Limit", money(account.Limit))
-		p.row("Outstanding today", money(state.Owed(account)))
-	}
 	p.row("Movements this month", strconv.Itoa(len(movements)))
 	p.blank()
 

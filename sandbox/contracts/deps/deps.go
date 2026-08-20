@@ -57,9 +57,9 @@ type Deps struct {
 	// command word and every `--flag` of the interface is drained from it.
 	VerbLib verbdeps.Lib
 	// KeepLib is the embedded Keep schema-database library, already wired
-	// by the adapter to the storage backend that adapter chose. The five
-	// registries the brain keeps — accounts, categories, transactions,
-	// recurrences and credit cards — live in it.
+	// by the adapter to the storage backend that adapter chose. The four
+	// registries the brain keeps — accounts, categories, transactions and
+	// recurrences — live in it.
 	KeepLib keepdeps.Lib
 	// EmbedDeps is the embedded-asset library, already rooted by the adapter
 	// at the asset directory that adapter chose. It is how the sandbox reads

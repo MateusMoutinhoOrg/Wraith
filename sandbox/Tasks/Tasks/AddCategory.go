@@ -112,8 +112,8 @@ func addCategoryAction(args api.HandleActionArgs) error {
 //	revenues: false, expenses: false  a transfer between your own accounts,
 //	                                  which is neither income nor expense
 //
-// The third combination is what makes paying a card bill invisible in your
-// expenses: the purchases were already counted on the day they happened.
+// The third combination is what keeps money moved between two of your own
+// accounts out of both totals: nothing was earned and nothing was spent.
 func AddCategory() api.Task {
 	return api.Task{
 		Name:         "AddCategory",

@@ -27,8 +27,6 @@ func modifyTransactionFields() []api.Field {
 			Description: "Correct the amount"},
 		{Name: DateField, Type: api.TextField,
 			Description: "Correct the date it counts on, as YYYY-MM-DD"},
-		{Name: PaymentDateField, Type: api.TextField,
-			Description: "Correct when the money actually moves, as YYYY-MM-DD"},
 	}
 }
 
@@ -69,7 +67,6 @@ func modifyTransactionAction(args api.HandleActionArgs) error {
 		Description: utils.Part(detail, config.TransactionParts, config.TransactionDescription),
 		Amount:      modifyTransactionNumber(record, config.AmountField),
 		Date:        modifyTransactionNumber(record, config.DateField),
-		PaymentDate: modifyTransactionNumber(record, config.PaymentDateField),
 	}
 	updated, err := modifyTransactionApply(args, current)
 	if err != nil {
@@ -79,9 +76,8 @@ func modifyTransactionAction(args api.HandleActionArgs) error {
 		config.NameField: key,
 		config.DetailField: utils.Pack(key, updated.Account, updated.Category,
 			updated.Description),
-		config.AmountField:      updated.Amount,
-		config.DateField:        updated.Date,
-		config.PaymentDateField: updated.PaymentDate,
+		config.AmountField: updated.Amount,
+		config.DateField:   updated.Date,
 	}
 	for field, value := range fields {
 		if writeErr := record.Update(field, value); writeErr != nil {
@@ -106,8 +102,6 @@ type modifyTransactionMovement struct {
 	Amount int64
 	// Date is the date it counts on, as yyyymmdd.
 	Date int64
-	// PaymentDate is the date the money actually moves, as yyyymmdd.
-	PaymentDate int64
 }
 
 // modifyTransactionApply overlays the fields the task was given onto the
@@ -185,24 +179,7 @@ func modifyTransactionApply(args api.HandleActionArgs,
 			return updated, errors.New(DateField +
 				" must be a date written as YYYY-MM-DD, not " + dateText)
 		}
-		// A payment date that was never given a life of its own follows the
-		// date it was copied from.
-		if updated.PaymentDate == current.Date {
-			updated.PaymentDate = when
-		}
 		updated.Date = when
-	}
-	if entries.Present(args.Entries, PaymentDateField) {
-		paymentText, err := entries.Text(args.Entries, PaymentDateField)
-		if err != nil {
-			return updated, err
-		}
-		payment, parseErr := utils.ParseDate(paymentText)
-		if parseErr != nil {
-			return updated, errors.New(PaymentDateField +
-				" must be a date written as YYYY-MM-DD, not " + paymentText)
-		}
-		updated.PaymentDate = payment
 	}
 	category, found := categories.FindByKey(config.NameField, updated.Category)
 	if !found {
@@ -257,9 +234,6 @@ func modifyTransactionNumber(record keepdeps.SchemaItem, field string) int64 {
 // ledger. Every field but `id` is optional: what you give is overwritten,
 // what you leave out stays as it is. The id is the one a statement shows
 // beside each line.
-//
-// One part of a split purchase is an ordinary transaction like any other, so
-// this is how a single part is corrected — the other parts are untouched.
 func ModifyTransaction() api.Task {
 	return api.Task{
 		Name:         "ModifyTransaction",

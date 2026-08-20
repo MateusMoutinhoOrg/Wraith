@@ -1,6 +1,6 @@
 package ledger
 
-// The five registries, read back as plain Go values. A task writes records
+// The four registries, read back as plain Go values. A task writes records
 // through the Keep schemas config declares; everything that reads them goes
 // through the views here, so the packing rules are unpacked in exactly one
 // place.
@@ -18,26 +18,13 @@ import (
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
-// Account is one account or credit card of the registry.
+// Account is one account of the registry — somewhere money sits.
 type Account struct {
 	// Name is the account's unique display name.
 	Name string
-	// Kind is config.KindAccount or config.KindCard.
-	Kind int64
-	// Opening is the balance the account started at, in cents. On a card it
-	// is the amount already owed, and therefore negative.
+	// Opening is the balance the account started at, in cents.
 	Opening int64
-	// Limit is a card's total credit limit, in cents. It is zero on a plain
-	// account.
-	Limit int64
-	// ClosingDay is the day of the month a card's bill closes.
-	ClosingDay int64
-	// DueDay is the day of the month a card's bill is due.
-	DueDay int64
 }
-
-// IsCard reports whether the account is a credit card.
-func (a Account) IsCard() bool { return a.Kind == config.KindCard }
 
 // Category is one category of the registry.
 type Category struct {
@@ -74,10 +61,9 @@ type Transaction struct {
 	// Amount is the value in cents — positive for income, negative for an
 	// expense.
 	Amount int64
-	// Date is the date it counts on, as yyyymmdd.
+	// Date is the date it counts on, and the date it settles on, as
+	// yyyymmdd. A movement moves its whole amount that day.
 	Date int64
-	// PaymentDate is the date the money actually moves, as yyyymmdd.
-	PaymentDate int64
 }
 
 // Recurrence is one declared commitment the forecast projects.
@@ -109,17 +95,13 @@ func (r Recurrence) AppliesIn(month int64) bool {
 	return r.End == 0 || month <= r.End
 }
 
-// Accounts returns every account and card of the registry, ordered by name.
+// Accounts returns every account of the registry, ordered by name.
 func Accounts(database keepdeps.KeepDatabase) []Account {
 	accounts := []Account{}
 	for _, record := range all(database, config.AccountSchema) {
 		accounts = append(accounts, Account{
-			Name:       text(record, config.NameField),
-			Kind:       number(record, config.KindField),
-			Opening:    number(record, config.OpeningField),
-			Limit:      number(record, config.LimitField),
-			ClosingDay: number(record, config.ClosingDayField),
-			DueDay:     number(record, config.DueDayField),
+			Name:    text(record, config.NameField),
+			Opening: number(record, config.OpeningField),
 		})
 	}
 	sort.Slice(accounts, func(i int, j int) bool { return accounts[i].Name < accounts[j].Name })
@@ -159,7 +141,6 @@ func Transactions(database keepdeps.KeepDatabase) []Transaction {
 			Description: utils.Part(detail, config.TransactionParts, config.TransactionDescription),
 			Amount:      number(record, config.AmountField),
 			Date:        number(record, config.DateField),
-			PaymentDate: number(record, config.PaymentDateField),
 		})
 	}
 	sort.Slice(transactions, func(i int, j int) bool {

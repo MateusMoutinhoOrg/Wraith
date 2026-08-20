@@ -18,8 +18,8 @@ func removeAccountFields() []api.Field {
 	}
 }
 
-// removeAccountAction refuses a card, refuses an account anything still
-// names, and otherwise deletes the record.
+// removeAccountAction refuses an account anything still names, and otherwise
+// deletes the record.
 func removeAccountAction(args api.HandleActionArgs) error {
 	accountName, err := entries.Text(args.Entries, AccountField)
 	if err != nil {
@@ -35,9 +35,6 @@ func removeAccountAction(args api.HandleActionArgs) error {
 	account, found := accounts.FindByKey(config.NameField, accountName)
 	if !found {
 		return errors.New("account not found: " + accountName)
-	}
-	if removeAccountNumber(account, config.KindField) == config.KindCard {
-		return errors.New(accountName + " is a credit card — remove it with RemoveCreditCard")
 	}
 	// A ledger whose movements point at an account that no longer exists
 	// cannot be rendered, so an account anything still names is refused.
@@ -90,22 +87,6 @@ func removeAccountText(record keepdeps.SchemaItem, field string) string {
 		return ""
 	}
 	return stored
-}
-
-// removeAccountNumber reads a whole-number field of a stored record, as 0
-// when the field is absent or holds something else.
-func removeAccountNumber(record keepdeps.SchemaItem, field string) int64 {
-	value, err := record.Get(field)
-	if err != nil {
-		return 0
-	}
-	switch stored := value.(type) {
-	case int64:
-		return stored
-	case int:
-		return int64(stored)
-	}
-	return 0
 }
 
 // RemoveAccount returns the task that removes an account from the registry.

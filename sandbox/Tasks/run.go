@@ -37,9 +37,6 @@ func TaskArray() []api.Task {
 		tasks.RemoveCategory(),
 		tasks.AddAccount(),
 		tasks.RemoveAccount(),
-		tasks.AddCreditCard(),
-		tasks.PayCreditCardBill(),
-		tasks.RemoveCreditCard(),
 	}
 }
 

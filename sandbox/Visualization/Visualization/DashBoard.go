@@ -29,15 +29,12 @@ const (
 //
 //	DashBoard/
 //	├── README.md          where you stand today
-//	├── Credit-Cards.md    every card, its limit and its bill
-//	├── Pending.md         everything still waiting to be paid
 //	├── Categories.md      every category and what it has cost
-//	├── Accounts/          one page per account and card, with its month menu
-//	├── Bills/             one page per card, statement by statement
+//	├── Accounts/          one page per account, with its month menu
 //	└── Months/            one folder per month that holds a movement,
 //	                       indexed by a page that carries the forecast too
 //
-// Every figure on those pages is computed from the five registries the tasks
+// Every figure on those pages is computed from the four registries the tasks
 // write. Nothing on them is editable: a hand edit is overwritten on the next
 // tick, which is the point — the pages are a view, and the tasks are the
 // truth.
@@ -62,21 +59,16 @@ func DashBoard() api.Visualizer {
 
 			renders := []api.VisualizationRender{
 				overview(state, months, ahead),
-				cardsPage(state),
-				pendingPage(state),
 				categoriesPage(state),
 				monthsIndex(state, months, ahead),
 			}
 			for _, account := range state.Accounts {
 				renders = append(renders, accountPage(state, account, months))
 			}
-			for _, card := range state.Cards() {
-				renders = append(renders, billsPage(state, card))
-			}
 			for _, month := range months {
 				renders = append(renders, monthPage(state, month), statementPage(state, month))
 				for _, account := range state.Accounts {
-					if len(ledger.OfAccount(state.SettledIn(month), account.Name)) == 0 {
+					if len(ledger.OfAccount(state.In(month), account.Name)) == 0 {
 						continue
 					}
 					renders = append(renders, accountMonthPage(state, month, account))
@@ -96,8 +88,7 @@ func navigation() string { return navigationAt("") }
 // navigationAt is that same line, written from a page sitting `prefix` away
 // from the root of the tree — `../` one folder down, `../../` two.
 func navigationAt(prefix string) string {
-	return "[Dashboard](" + prefix + "README.md) · [Credit Cards](" + prefix +
-		"Credit-Cards.md) · [Pending](" + prefix + "Pending.md) · [Categories](" + prefix +
+	return "[Dashboard](" + prefix + "README.md) · [Categories](" + prefix +
 		"Categories.md) · [Months](" + prefix + "Months/README.md)"
 }
 
@@ -107,8 +98,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p := &page{}
 	p.heading(1, "Dashboard")
 	p.line("> **Updated:** " + utils.PrettyDate(state.Today) + " · **Registry:** " +
-		count(len(state.PlainAccounts()), "account", "accounts") + ", " +
-		count(len(state.Cards()), "credit card", "credit cards") + ", " +
+		count(len(state.Accounts), "account", "accounts") + ", " +
 		count(len(state.Categories), "category", "categories") + ", " +
 		count(len(state.Transactions), "transaction", "transactions") + ", " +
 		count(len(state.Recurrences), "recurrence", "recurrences"))
@@ -119,18 +109,10 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 
 	p.heading(2, "1. Position on "+utils.PrettyDate(state.Today))
 	p.table("Indicator", ">Value", "Where it comes from")
-	p.row("Balance in accounts", "**"+money(state.Held())+"**",
-		"opening balances + every settled movement")
-	p.row("Owed on credit cards", money(state.TotalOwed()),
-		"card opening + purchases − payments")
-	p.row("**Net position**", "**"+money(state.Net())+"**", "what you hold − what you owe")
-	p.row("Pending income", signed(state.PendingIncome()),
-		"movements with a payment date still ahead that will come in")
-	p.row("Pending expenses", signed(state.PendingExpenses()),
-		"movements with a payment date still ahead that you will pay")
-	p.row("**Net worth**", "**"+money(state.NetWorth())+"**",
-		"net position once everything recorded has settled, up to "+
-			utils.PrettyDate(state.Horizon()))
+	p.row("**Balance in accounts**", "**"+money(state.Held())+"**",
+		"opening balances + every movement dated up to today")
+	p.row("Movements recorded", strconv.Itoa(len(state.Transactions)),
+		"every line the ledger holds")
 	p.blank()
 
 	if len(state.Accounts) > 0 {
@@ -167,30 +149,15 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	}
 	p.rule()
 
-	p.heading(2, "3. Still to pay")
-	p.table("Line", ">Value", "Where it is broken down")
-	p.row("**Card bills to pay**", "**"+money(state.TotalAmountDue())+"**",
-		"[Pending.md](Pending.md) · [Credit-Cards.md](Credit-Cards.md)")
-	p.row("— of which overdue", money(state.TotalOverdue()), "past their due date")
-	p.row("Statements still open", money(state.TotalOpenBills()),
-		"charged since the cards last closed")
-	p.row("Expenses not settled", signed(state.PendingAccountExpenses()),
-		"movements on your accounts dated ahead")
-	p.row("**Leaving your accounts**", "**"+money(state.DueFromAccounts())+"**",
-		"the bills to pay + the expenses not settled")
-	p.blank()
-	p.line("Everything the vault knows is still waiting: [Pending.md](Pending.md)")
-	p.blank()
-	p.rule()
-
-	p.heading(2, "4. The next "+strconv.Itoa(ahead)+" months")
+	p.heading(2, "3. The next "+strconv.Itoa(ahead)+" months")
 	p.line("Today's position rolled forward through what you declared — " +
 		count(len(state.Recurrences), "recurrence", "recurrences") +
-		" and the card bills derived from them.")
+		" and the movements already dated ahead.")
 	p.blank()
-	p.table("Month", ">Held in accounts", ">Net position")
+	p.table("Month", ">Income", ">Expenses", ">Held in accounts")
 	for _, projection := range state.Forecast(ahead) {
-		p.row(utils.PrettyMonth(projection.Month), money(projection.Held), money(projection.Net()))
+		p.row(utils.PrettyMonth(projection.Month), signed(projection.Income),
+			signed(projection.Expenses), money(projection.Held))
 	}
 	p.blank()
 	p.line("The whole projection, month by month, and the commitments it reads: " +
@@ -206,36 +173,6 @@ func containsMonth(months []int64, month int64) bool {
 		}
 	}
 	return false
-}
-
-// cardsPage writes Credit-Cards.md: every card, what is outstanding on it,
-// and how much of its limit is still available.
-func cardsPage(state ledger.State) api.VisualizationRender {
-	p := &page{}
-	p.heading(1, "Credit Cards")
-	p.line(navigation())
-	p.blank()
-	p.rule()
-	if len(state.Cards()) == 0 {
-		p.line("No credit card yet. Add one with the `AddCreditCard` task.")
-		return p.render("Credit-Cards.md")
-	}
-	p.table("Card", ">Limit", ">Outstanding", ">Available", "Closes", "Due",
-		">Bills to pay", ">Statement open", "Statements")
-	for _, card := range state.Cards() {
-		owed := state.Owed(card)
-		open := state.OpenBill(card)
-		p.row("["+card.Name+"]("+accountPath(card)+")", money(card.Limit), money(owed),
-			money(card.Limit-owed), utils.PrettyDate(open.Closes),
-			utils.PrettyDate(open.Due), "**"+money(state.AmountDue(card))+"**",
-			money(open.Remaining()), "[bills]("+billsPath(card)+")")
-	}
-	p.blank()
-	p.line("A purchase counts on the day it happens. The money leaves your account when you " +
-		"record the bill payment with the `PayCreditCardBill` task. The `bills` link of a " +
-		"card opens its statements one cycle at a time; everything still waiting to be paid, " +
-		"cards and accounts alike, is on [Pending.md](Pending.md).")
-	return p.render("Credit-Cards.md")
 }
 
 // categoriesPage writes Categories.md: what each category classifies, what it

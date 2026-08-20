@@ -33,7 +33,7 @@ wraith run AddRecurrence --description "Streaming" --account Bank --category Sub
 
 echo
 echo "== the forecast: every month the commitments above reach"
-sed -n '/## 3. The next/,/an installment does that by itself/p' DashBoard/Months/README.md
+sed -n '/## 3. The next/,/Nothing here is an average/p' DashBoard/Months/README.md
 
 echo
 echo "== a longer horizon, rendered on its own without touching the config"

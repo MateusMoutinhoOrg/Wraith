@@ -18,7 +18,7 @@ wraith run AddCategory --category "Leisure" --description "Entertainment and hob
 wraith run AddCategory --category "Income" --description "Salary and other income" --revenues true --expenses false
 
 echo
-echo "== where the money sits: a bank account, a physical wallet, and a credit card"
+echo "== where the money sits: a bank account and a physical wallet"
 wraith run AddAccount --account "Bank Account" --opening 0
 wraith run AddAccount --account "Wallet" --opening 0
 

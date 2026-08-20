@@ -3,7 +3,7 @@
 ## Description
 Index of the documentation for people **building** a brain: forking this repository into one of their own, renaming it, and replacing its actions and pages with theirs. Driving a brain that already exists is indexed by [Brain-Usage.md](/docs/Index/Brain-Usage.md); contributing to this repository itself is indexed by [Development.md](/docs/Index/Development.md).
 
-This repository is a template meant to be forked. The financial brain inside it — accounts, categories, transactions, recurrences, credit cards — is a worked example of the shape, not the point of it: swap the tasks and the visualizations and you have a brain for something else entirely.
+This repository is a template meant to be forked. The financial brain inside it — accounts, categories, transactions, recurrences — is a worked example of the shape, not the point of it: swap the tasks and the visualizations and you have a brain for something else entirely.
 
 ---
 

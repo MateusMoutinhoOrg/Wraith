@@ -1,6 +1,6 @@
 package config
 
-// The shape of the brain's database, as compile-time constants: the five
+// The shape of the brain's database, as compile-time constants: the four
 // registries every task writes and every visualization reads, the fields each
 // one carries, and the Props the injected Keep library is handed to open
 // them.
@@ -30,8 +30,7 @@ import (
 
 // The registries the brain keeps, one Keep schema each.
 const (
-	// AccountSchema holds accounts and credit cards alike — a card is an
-	// account whose KindField is KindCard.
+	// AccountSchema holds the accounts money sits in.
 	AccountSchema = "account"
 	// CategorySchema holds the categories transactions are classified under.
 	CategorySchema = "category"
@@ -48,16 +47,8 @@ const (
 	NameField = "name"
 	// DetailField is the packed key carrying a record's free text.
 	DetailField = "detail"
-	// KindField is an account's kind, KindAccount or KindCard.
-	KindField = "kind"
 	// OpeningField is an account's opening balance, in cents.
 	OpeningField = "opening"
-	// LimitField is a credit card's total limit, in cents.
-	LimitField = "limit"
-	// ClosingDayField is the day of the month a card's bill closes.
-	ClosingDayField = "closingDay"
-	// DueDayField is the day of the month a card's bill is due.
-	DueDayField = "dueDay"
 	// RevenuesField is 1 when a category accepts positive amounts.
 	RevenuesField = "revenues"
 	// ExpensesField is 1 when a category accepts negative amounts.
@@ -66,8 +57,6 @@ const (
 	AmountField = "amount"
 	// DateField is a date as yyyymmdd.
 	DateField = "date"
-	// PaymentDateField is the date the money actually moves, as yyyymmdd.
-	PaymentDateField = "paymentDate"
 	// DayField is the day of the month a recurrence falls on.
 	DayField = "day"
 	// StartField is the first month a recurrence applies, as yyyymm.
@@ -75,14 +64,6 @@ const (
 	// EndField is the last month a recurrence applies, as yyyymm, or 0 for
 	// open-ended.
 	EndField = "end"
-)
-
-// Account kinds, held in KindField.
-const (
-	// KindAccount is a plain account — cash, a bank, a savings pot.
-	KindAccount = 0
-	// KindCard is a credit card, which carries a limit and a billing cycle.
-	KindCard = 1
 )
 
 // The parts a packed DetailField is composed of, one pair per registry: how
@@ -128,11 +109,7 @@ func DatabaseProps(path string) keepdeps.Props {
 				Name: AccountSchema,
 				Itens: []keepdeps.Item{
 					{Name: NameField, Type: keepdeps.Key, Required: true},
-					{Name: KindField, Type: keepdeps.Int, Required: true},
 					{Name: OpeningField, Type: keepdeps.Int, Required: true},
-					{Name: LimitField, Type: keepdeps.Int},
-					{Name: ClosingDayField, Type: keepdeps.Int},
-					{Name: DueDayField, Type: keepdeps.Int},
 				},
 			},
 			{
@@ -151,7 +128,6 @@ func DatabaseProps(path string) keepdeps.Props {
 					{Name: DetailField, Type: keepdeps.Key, Required: true},
 					{Name: AmountField, Type: keepdeps.Int, Required: true},
 					{Name: DateField, Type: keepdeps.Int, Required: true},
-					{Name: PaymentDateField, Type: keepdeps.Int, Required: true},
 				},
 			},
 			{
