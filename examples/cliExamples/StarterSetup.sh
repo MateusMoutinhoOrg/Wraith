@@ -19,9 +19,8 @@ wraith run AddCategory --category "Income" --description "Salary and other incom
 
 echo
 echo "== where the money sits: a bank account, a physical wallet, and a credit card"
-wraith run AddAccount --account "Bank Account" --opening 2000
-wraith run AddAccount --account "Wallet" --opening 100
-wraith run AddCreditCard --account "Credit Card" --limit 3000 --closing_day 5 --due_day 10
+wraith run AddAccount --account "Bank Account" --opening 0
+wraith run AddAccount --account "Wallet" --opening 0
 
 echo
 echo "== the vault those accounts drew"
