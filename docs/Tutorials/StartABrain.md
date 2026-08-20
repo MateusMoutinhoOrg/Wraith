@@ -44,7 +44,7 @@ Every one of those folders exists because a line in `Visualization.yaml` asked f
 4. Record something, so the pages have something to show.
 
 ```bash
-wraith run AddAccount --account Bank --opening 3000
+wraith run AddAccount --account Bank
 ```
 
 5. Open `DashBoard/README.md`. Your account is on it, and the row that names it opens `DashBoard/Accounts/Bank.md` — that account's own page.

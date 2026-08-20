@@ -38,7 +38,6 @@ func main() {
 	// 4. Run a task. The entries map is the same one a Task.yaml decodes to.
 	if err := l.PerformTask("AddAccount", map[string]any{
 		"account": "Bank",
-		"opening": 3000,
 	}); err != nil {
 		panic(err)
 	}

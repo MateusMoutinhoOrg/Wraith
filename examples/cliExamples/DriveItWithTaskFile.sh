@@ -25,7 +25,6 @@ echo "== write an action into it and arm it"
 cat > Task.yaml <<'YAML'
 name: AddAccount
 account: Bank
-opening: 1200
 apply: true
 YAML
 wraith tick

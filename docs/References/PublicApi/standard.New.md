@@ -42,7 +42,7 @@ func main() {
 	d := wraithadapter.New("my-brain")
 	l := wraithlib.New(d, "data")
 
-	l.PerformTask("AddAccount", map[string]any{"account": "Bank", "opening": 3000})
+	l.PerformTask("AddAccount", map[string]any{"account": "Bank"})
 
 	// Still there on the next run — the registries are on disk.
 	fmt.Println(l.PerformFullTick())

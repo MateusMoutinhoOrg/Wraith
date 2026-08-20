@@ -5,5 +5,4 @@
 # ready. A tick runs it once and sets apply back to false.
 name: AddAccount
 account: Bank
-opening: 0
 apply: false

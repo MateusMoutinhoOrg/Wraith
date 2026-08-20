@@ -90,7 +90,7 @@ func usageDocument(path string) api.VisualizationRender {
 	p.line("wraith start                       # create Task.yaml and Visualization.yaml")
 	p.line("wraith tick                        # apply Task.yaml, render everything")
 	p.line("wraith watch --time 1s             # keep watching, and just save the file")
-	p.line("wraith run AddAccount --account Bank --opening 1200")
+	p.line("wraith run AddAccount --account Bank")
 	p.line("wraith render DashBoard --future-months 24")
 	p.line("wraith tick --database vaults/home --task Inbox/Task.yaml")
 	p.line("```")

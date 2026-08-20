@@ -52,12 +52,13 @@ func Load(d deps.Deps, database keepdeps.KeepDatabase) State {
 // writing into.
 func (s State) OpenMonth() int64 { return utils.MonthOf(s.Today) }
 
-// BalanceOn returns what an account holds on a given date: what it opened
-// with, plus every movement dated on or before then. A movement settles on
-// the day it is dated, so there is never a gap between what a month cost and
-// what has left the account.
+// BalanceOn returns what an account holds on a given date: every movement
+// dated on or before then, added together. An account starts at nothing, so
+// the money it already held is a movement like any other. A movement settles
+// on the day it is dated, so there is never a gap between what a month cost
+// and what has left the account.
 func (s State) BalanceOn(account Account, date int64) int64 {
-	balance := account.Opening
+	balance := int64(0)
 	for _, transaction := range s.Transactions {
 		if transaction.Account != account.Name {
 			continue

@@ -68,7 +68,7 @@ func main() {
 
 	l := wraithlib.New(d, "data")
 
-	l.PerformTask("AddAccount", map[string]any{"account": "Bank", "opening": 3000})
+	l.PerformTask("AddAccount", map[string]any{"account": "Bank"})
 
 	// Every page renders against the frozen clock, so "today" is 1-jan-1970
 	// however long the test takes.

@@ -19,7 +19,7 @@ wraith() { "$workdir/wraith" "$@"; }
 
 echo "== what the commands below show"
 wraith start
-wraith run AddAccount --account Bank --opening 3000
+wraith run AddAccount --account Bank
 
 echo
 echo "== what the next commands show"

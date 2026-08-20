@@ -13,10 +13,15 @@ cd WraithSample/
 
 echo "== the account the month runs through, and what its lines are classified under"
 wraith start > /dev/null
-wraith run AddAccount --account Bank --opening 2500
+wraith run AddAccount --account Bank
 wraith run AddCategory --category Salary --description "Monthly pay" --revenues true --expenses false
 wraith run AddCategory --category Housing --description "Rent and utilities" --revenues false --expenses true
 wraith run AddCategory --category Subscriptions --description "Recurring services" --revenues false --expenses true
+wraith run AddCategory --category "Opening balance" --description "What an account already held when it was added" --revenues false --expenses false
+
+echo
+echo "== an account starts empty, so what it already held goes in as a movement"
+wraith run AddTransaction --account Bank --category "Opening balance" --amount 2500 --date 2026-08-01 --description "Balance when the vault started"
 
 echo
 echo "== what comes in every month, open-ended because there is no end date to it"

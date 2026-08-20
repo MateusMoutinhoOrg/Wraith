@@ -13,11 +13,11 @@ Records a real month in the financial brain shipped with this repository: accoun
 
 ## Workflow
 
-1. Create the places money sits.
+1. Create the places money sits. An account is born empty — what it already holds goes in as a transaction in step 3.
 
 ```bash
-wraith run AddAccount --account Bank --opening 3000
-wraith run AddAccount --account Cash --opening 120
+wraith run AddAccount --account Bank
+wraith run AddAccount --account Cash
 ```
 
 2. Create the categories transactions are classified under.
@@ -29,11 +29,23 @@ wraith run AddCategory --category Food --description "Groceries and eating out" 
   --revenues false --expenses true
 wraith run AddCategory --category Savings --description "Moving money to the pot" \
   --revenues false --expenses false
+wraith run AddCategory --category "Opening balance" \
+  --description "What an account already held when it was added" \
+  --revenues false --expenses false
 ```
 
-The third one is the transfer category. It accepts a positive amount and a negative one, because it is neither income nor expense.
+The last two are transfer categories. A transfer category accepts a positive amount and a negative one, because it is neither income nor expense — which is also what makes it the right classification for money an account already held.
 
-3. Record what came in and what went out.
+3. Put in what each account already holds, dated the day you start counting from.
+
+```bash
+wraith run AddTransaction --account Bank --category "Opening balance" \
+  --amount 3000 --date 2026-08-01 --description "Balance when the vault started"
+wraith run AddTransaction --account Cash --category "Opening balance" \
+  --amount 120 --date 2026-08-01 --description "Cash in hand when the vault started"
+```
+
+4. Record what came in and what went out.
 
 ```bash
 wraith run AddTransaction --account Bank --category Salary \
@@ -42,7 +54,7 @@ wraith run AddTransaction --account Bank --category Food \
   --amount -32.90 --date 2026-08-18 --description Market
 ```
 
-4. Move money between two of your own accounts. It is two transactions sharing the transfer category — one account down, the other up — so they net to zero and neither total moves.
+5. Move money between two of your own accounts. It is two transactions sharing the transfer category — one account down, the other up — so they net to zero and neither total moves.
 
 ```bash
 wraith run AddTransaction --account Bank --category Savings \
@@ -51,20 +63,20 @@ wraith run AddTransaction --account Cash --category Savings \
   --amount 500 --date 2026-08-20 --description "Set aside"
 ```
 
-5. Declare what repeats. A recurrence moves no money and writes no transaction: it is a rule the forecast reads.
+6. Declare what repeats. A recurrence moves no money and writes no transaction: it is a rule the forecast reads.
 
 ```bash
 wraith run AddRecurrence --description Rent --account Bank --category Food \
   --amount -1200 --day 10 --start 2026-08
 ```
 
-6. Correct a line you got wrong. The `Id` is the one the statement shows.
+7. Correct a line you got wrong. The `Id` is the one the statement shows.
 
 ```bash
-wraith run ModifyTransaction --id 2 --amount -40 --description "Market, corrected"
+wraith run ModifyTransaction --id 4 --amount -40 --description "Market, corrected"
 ```
 
-7. Read the result:
+8. Read the result:
 
 | Page | What it answers |
 |------|-----------------|

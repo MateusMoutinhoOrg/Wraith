@@ -66,8 +66,6 @@ func accountPosition(p *page, state ledger.State, account ledger.Account) {
 	p.table("Indicator", ">Value", "Where it comes from")
 	p.row("Balance", "**"+money(state.Balance(account))+"**",
 		"every movement on this account dated up to today")
-	p.row("Opening balance", money(account.Opening),
-		"what the account was declared with")
 	p.row("Movements recorded", strconv.Itoa(state.AccountFlow(account.Name, 0).Count),
 		"every movement on this account, all time")
 	p.blank()

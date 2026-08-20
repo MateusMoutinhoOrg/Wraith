@@ -47,8 +47,6 @@ const (
 	NameField = "name"
 	// DetailField is the packed key carrying a record's free text.
 	DetailField = "detail"
-	// OpeningField is an account's opening balance, in cents.
-	OpeningField = "opening"
 	// RevenuesField is 1 when a category accepts positive amounts.
 	RevenuesField = "revenues"
 	// ExpensesField is 1 when a category accepts negative amounts.
@@ -109,7 +107,6 @@ func DatabaseProps(path string) keepdeps.Props {
 				Name: AccountSchema,
 				Itens: []keepdeps.Item{
 					{Name: NameField, Type: keepdeps.Key, Required: true},
-					{Name: OpeningField, Type: keepdeps.Int, Required: true},
 				},
 			},
 			{

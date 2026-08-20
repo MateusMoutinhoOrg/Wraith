@@ -15,11 +15,16 @@ wraith run AddCategory --category "Salary" --description "Salary income" --reven
 wraith run AddCategory --category "Electronics" --description "Electronics purchases" --revenues false --expenses true
 wraith run AddCategory --category "Food" --description "Food expenses" --revenues false --expenses true
 wraith run AddCategory --category "Investments" --description "Financial contributions" --revenues true --expenses true
+wraith run AddCategory --category "Opening balance" --description "What an account already held when it was added" --revenues false --expenses false
 
 echo
 echo "== where the money sits"
-wraith run AddAccount --account "Checking Account" --opening 1000
-wraith run AddAccount --account "Brokerage" --opening 0
+wraith run AddAccount --account "Checking Account"
+wraith run AddAccount --account "Brokerage"
+
+echo
+echo "== an account is born empty, so what it already held is recorded as a movement"
+wraith run AddTransaction --account "Checking Account" --category "Opening balance" --amount 1000 --date "2026-08-01" --description "Balance when the vault started"
 
 echo
 echo "== what came in"

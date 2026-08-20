@@ -19,8 +19,10 @@ wraith visualizations
 echo
 echo "== a vault with something in it to look at"
 wraith start > /dev/null
-wraith run AddAccount --account Bank --opening 3000 --quiet
+wraith run AddAccount --account Bank --quiet
 wraith run AddCategory --category Food --description "Groceries" --revenues false --expenses true --quiet
+wraith run AddCategory --category "Opening balance" --description "What an account already held when it was added" --revenues false --expenses false --quiet
+wraith run AddTransaction --account Bank --category "Opening balance" --amount 3000 --date 2026-08-01 --description "Balance when the vault started" --quiet
 wraith run AddTransaction --account Bank --category Food --amount -76.40 --date 2026-08-12 --description "Supermarket" --quiet
 ls
 

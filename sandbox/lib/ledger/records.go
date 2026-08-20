@@ -18,12 +18,12 @@ import (
 	"github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 )
 
-// Account is one account of the registry — somewhere money sits.
+// Account is one account of the registry — somewhere money sits. It carries
+// nothing but its name: what it holds is the sum of the movements dated on
+// it, and nothing else.
 type Account struct {
 	// Name is the account's unique display name.
 	Name string
-	// Opening is the balance the account started at, in cents.
-	Opening int64
 }
 
 // Category is one category of the registry.
@@ -100,8 +100,7 @@ func Accounts(database keepdeps.KeepDatabase) []Account {
 	accounts := []Account{}
 	for _, record := range all(database, config.AccountSchema) {
 		accounts = append(accounts, Account{
-			Name:    text(record, config.NameField),
-			Opening: number(record, config.OpeningField),
+			Name: text(record, config.NameField),
 		})
 	}
 	sort.Slice(accounts, func(i int, j int) bool { return accounts[i].Name < accounts[j].Name })

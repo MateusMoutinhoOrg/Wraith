@@ -37,7 +37,6 @@ func main() {
 	//    so anything the file can say, this call can say too.
 	if err := l.PerformTask("AddAccount", map[string]any{
 		"account": "Bank",
-		"opening": 3000,
 	}); err != nil {
 		panic(err)
 	}

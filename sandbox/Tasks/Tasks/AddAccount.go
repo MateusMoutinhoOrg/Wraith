@@ -16,13 +16,13 @@ func addAccountFields() []api.Field {
 	return []api.Field{
 		{Name: AccountField, Type: api.TextField, Required: true,
 			Description: "Display name, e.g. Vacation savings"},
-		{Name: OpeningField, Type: api.NumberField, Required: true,
-			Description: "Opening balance, the amount the account holds today"},
 	}
 }
 
-// addAccountAction reads the two fields, then writes one record into the
-// account registry of the database it was handed.
+// addAccountAction reads the name, then writes one record into the account
+// registry of the database it was handed. An account is born empty: whatever
+// it already holds is put there by an AddTransaction, so the money it carries
+// is a dated line of the ledger like every other movement.
 func addAccountAction(args api.HandleActionArgs) error {
 	accountName, err := entries.Text(args.Entries, AccountField)
 	if err != nil {
@@ -36,17 +36,12 @@ func addAccountAction(args api.HandleActionArgs) error {
 	if strings.Contains(accountName, utils.Separator) {
 		return errors.New(AccountField + " may not contain " + utils.Separator)
 	}
-	amount, err := entries.Amount(args.Entries, OpeningField)
-	if err != nil {
-		return err
-	}
 	accounts, reachable := args.DataBase.GetSchema(config.AccountSchema)
 	if !reachable {
 		return errors.New("the " + config.AccountSchema + " registry is unreachable")
 	}
 	_, failure := accounts.NewItem(map[string]any{
-		config.NameField:    accountName,
-		config.OpeningField: amount,
+		config.NameField: accountName,
 	})
 	if failure == nil {
 		return nil
@@ -59,7 +54,8 @@ func addAccountAction(args api.HandleActionArgs) error {
 
 // AddAccount returns the task that adds an account to the registry — a bank,
 // a wallet, a savings pot. An account is where money sits; every transaction
-// names one.
+// names one. It starts at zero, so put what it already holds in with a
+// transaction.
 func AddAccount() api.Task {
 	return api.Task{
 		Name:         "AddAccount",

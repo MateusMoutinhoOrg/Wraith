@@ -110,7 +110,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.heading(2, "1. Position on "+utils.PrettyDate(state.Today))
 	p.table("Indicator", ">Value", "Where it comes from")
 	p.row("**Balance in accounts**", "**"+money(state.Held())+"**",
-		"opening balances + every movement dated up to today")
+		"every movement dated up to today")
 	p.row("Movements recorded", strconv.Itoa(len(state.Transactions)),
 		"every line the ledger holds")
 	p.blank()

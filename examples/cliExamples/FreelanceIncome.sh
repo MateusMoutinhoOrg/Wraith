@@ -14,8 +14,8 @@ cd WraithSample/
 
 echo "== where the money sits: what it arrives in, what it is kept in"
 wraith start > /dev/null
-wraith run AddAccount --account Bank --opening 800
-wraith run AddAccount --account "Tax Reserve" --opening 0
+wraith run AddAccount --account Bank
+wraith run AddAccount --account "Tax Reserve"
 
 echo
 echo "== a category tree: one parent, one child per source of work"
@@ -24,6 +24,11 @@ wraith run AddCategory --category "Client Acme" --description "Retainer work" --
 wraith run AddCategory --category "Client Wayne" --description "Project work" --revenues true --expenses false --parent Clients
 wraith run AddCategory --category Transfers --description "Money moving between my own accounts" --revenues true --expenses true
 wraith run AddCategory --category Tools --description "Software and hardware for the work" --revenues false --expenses true
+wraith run AddCategory --category "Opening balance" --description "What an account already held when it was added" --revenues false --expenses false
+
+echo
+echo "== what the bank already held, put in as the movement it is"
+wraith run AddTransaction --account Bank --category "Opening balance" --amount 800 --date 2026-08-01 --description "Balance when the vault started"
 
 echo
 echo "== invoices land when they land — no two months alike"

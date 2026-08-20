@@ -46,8 +46,6 @@ const (
 	DateField = "date"
 	// IdField addresses an existing transaction.
 	IdField = "id"
-	// OpeningField is the balance an account starts at.
-	OpeningField = "opening"
 	// RevenuesField marks a category as accepting income.
 	RevenuesField = "revenues"
 	// ExpensesField marks a category as accepting expenses.

@@ -44,7 +44,6 @@ func main() {
 
 	if err := l.PerformTask("AddAccount", map[string]any{
 		"account": "Bank",
-		"opening": 3000,
 	}); err != nil {
 		panic(err)
 	}

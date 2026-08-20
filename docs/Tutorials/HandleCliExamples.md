@@ -58,7 +58,7 @@ Covers creating and running shell scripts in [examples/cliExamples/](/examples/c
    ```bash
    echo "== record what came in and what went out"
    wraith start > /dev/null
-   wraith run AddAccount --account Bank --opening 3000
+   wraith run AddAccount --account Bank
    ```
 5. Make it executable and run it:
    ```bash

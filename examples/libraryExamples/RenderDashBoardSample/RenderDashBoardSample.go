@@ -32,7 +32,26 @@ func main() {
 
 	if err := l.PerformTask("AddAccount", map[string]any{
 		"account": "Emergency Savings",
-		"opening": 2500,
+	}); err != nil {
+		panic(err)
+	}
+
+	// An account is born empty: what it already held is a movement like any
+	// other, so it needs a category and a date of its own.
+	if err := l.PerformTask("AddCategory", map[string]any{
+		"category":    "Opening balance",
+		"description": "What an account already held when it was added",
+		"revenues":    false,
+		"expenses":    false,
+	}); err != nil {
+		panic(err)
+	}
+	if err := l.PerformTask("AddTransaction", map[string]any{
+		"account":     "Emergency Savings",
+		"category":    "Opening balance",
+		"amount":      2500,
+		"date":        "2026-08-01",
+		"description": "Balance when the vault started",
 	}); err != nil {
 		panic(err)
 	}
