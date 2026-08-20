@@ -18,6 +18,12 @@ package ledger
 // every statement a card has issued sits as a credit on the one it is
 // currently charging to.
 //
+// A charge is charged to the cycle its `date` falls in — a statement is the
+// window you bought in. A payment lands on the day its `payment_date` falls
+// on, because a payment is money arriving on the card, and money arrives when
+// it arrives. That keeps a statement from reading as paid while the card it
+// belongs to still shows the debt outstanding.
+//
 // The balance a card was declared with — what it already owed before it had a
 // statement here — is counted into its earliest cycle, so the remainders of a
 // card's statements always add back up to what the card owes once everything
@@ -193,14 +199,15 @@ func CardCycle(card Account, date int64) int64 {
 func (s State) OpenCycle(card Account) int64 { return CardCycle(card, s.Today) }
 
 // CardCycles returns every cycle a card has a statement for, oldest first:
-// the cycle of every movement on it, and the one being charged to today. A
-// cycle is never created by hand — it exists because something on the card is
-// dated inside it, which is why a purchase split into twelve parts opens the
-// next eleven statements.
+// the cycle every movement on it is dated in, the cycle every movement on it
+// settles in, and the one being charged to today. A cycle is never created by
+// hand — it exists because something on the card falls inside it, which is
+// why a purchase split into twelve parts opens the next eleven statements.
 func (s State) CardCycles(card Account) []int64 {
 	seen := map[int64]bool{s.OpenCycle(card): true}
 	for _, transaction := range OfAccount(s.Transactions, card.Name) {
 		seen[CardCycle(card, transaction.Date)] = true
+		seen[CardCycle(card, transaction.PaymentDate)] = true
 	}
 	cycles := []int64{}
 	for cycle := range seen {
@@ -269,23 +276,25 @@ func (s State) allBills(card Account) []Bill {
 // applyPayments runs the money that arrived on a card through its statements,
 // oldest first: each payment fills what the oldest statement still asks for,
 // and what is left of it runs on to the next one. A statement whose cycle had
-// not begun on the day of the payment is stepped over, and anything left once
-// every statement is full sits as a credit on the last one — so the
+// not begun on the day the money arrived is stepped over, and anything left
+// once every statement is full sits as a credit on the last one — so the
 // remainders always add back up to what the card owes.
+//
+// The payments are taken in the order their money reaches the card, and each
+// is placed by its payment date, so a payment recorded ahead of when it
+// actually leaves the paying account does not settle a bill before the card
+// has the money.
 func applyPayments(bills []Bill, movements []Transaction) []Bill {
 	if len(bills) == 0 {
 		return bills
 	}
-	for _, payment := range movements {
-		if payment.Amount <= 0 {
-			continue
-		}
+	for _, payment := range paymentsBySettlement(movements) {
 		left := payment.Amount
 		for index := range bills {
 			if left == 0 {
 				break
 			}
-			if payment.Date <= bills[index].After {
+			if payment.PaymentDate <= bills[index].After {
 				break
 			}
 			room := bills[index].Remaining()
@@ -308,6 +317,26 @@ func applyPayments(bills []Bill, movements []Transaction) []Bill {
 			Settlement{Transaction: payment, Applied: left})
 	}
 	return bills
+}
+
+// paymentsBySettlement narrows a card's movements down to the money that
+// arrived on it, in the order it arrived — payment date first, ties broken by
+// the storage key so the order never depends on how the records came back.
+func paymentsBySettlement(movements []Transaction) []Transaction {
+	payments := []Transaction{}
+	for _, movement := range movements {
+		if movement.Amount <= 0 {
+			continue
+		}
+		payments = append(payments, movement)
+	}
+	sort.Slice(payments, func(i int, j int) bool {
+		if payments[i].PaymentDate != payments[j].PaymentDate {
+			return payments[i].PaymentDate < payments[j].PaymentDate
+		}
+		return payments[i].Key < payments[j].Key
+	})
+	return payments
 }
 
 // emptyBill is one cycle of a card with its dates filled in and nothing on it

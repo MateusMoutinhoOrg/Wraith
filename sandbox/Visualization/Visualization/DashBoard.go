@@ -77,7 +77,7 @@ func DashBoard() api.Visualizer {
 			for _, month := range months {
 				renders = append(renders, monthPage(state, month), statementPage(state, month))
 				for _, account := range state.Accounts {
-					if len(ledger.OfAccount(state.In(month), account.Name)) == 0 {
+					if len(ledger.OfAccount(state.SettledIn(month), account.Name)) == 0 {
 						continue
 					}
 					renders = append(renders, accountMonthPage(state, month, account))

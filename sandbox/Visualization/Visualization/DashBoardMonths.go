@@ -4,8 +4,14 @@ package visualizations
 // that holds a movement, and the three pages each one gets.
 //
 // A month is never created by hand. It appears as soon as a transaction
-// carries a date inside it — which is why a purchase split into twelve parts
-// opens the next eleven months by itself.
+// carries a date inside it, or settles inside it — which is why a purchase
+// split into twelve parts opens the next eleven months by itself.
+//
+// The month reads the ledger through both dates, and the pages keep the two
+// apart. The result, the statement and the categories are read through the
+// `date` a movement counts on: they are what the month was worth. The
+// accounts section and the per-account pages are read through `payment_date`:
+// they are what actually moved.
 
 import (
 	"strconv"
@@ -61,6 +67,9 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	p.rule()
 
 	p.heading(2, "2. Accounts")
+	p.line("What each account actually moved this month — read through payment dates, " +
+		"so the figures agree with the balances.")
+	p.blank()
 	p.table("Account", ">Moved this month", ">Balance at month end", "Movements")
 	for _, account := range state.Accounts {
 		flow := state.AccountFlow(account.Name, month)
@@ -146,7 +155,7 @@ func accountMonthPage(state ledger.State, month int64, account ledger.Account) a
 	p.blank()
 	p.rule()
 
-	movements := ledger.OfAccount(state.In(month), account.Name)
+	movements := ledger.OfAccount(state.SettledIn(month), account.Name)
 	opening := state.BalanceOn(account, utils.DateIn(utils.AddMonths(month, -1), 31))
 	p.table("Line", ">Value")
 	p.row("Balance carried in", money(opening))
@@ -158,7 +167,7 @@ func accountMonthPage(state ledger.State, month int64, account ledger.Account) a
 	p.blank()
 
 	if len(movements) == 0 {
-		p.line("No movement on this account in this month.")
+		p.line("Nothing moved on this account in this month.")
 		return p.render("Months/" + folder + "/Accounts/" + slug(account.Name) + ".md")
 	}
 	accountMovements(p, movements, opening)

@@ -4,6 +4,11 @@ package visualizations
 // one per credit card, each carrying the menu of every month that account has
 // moved in and where the open month stands on it.
 //
+// Everything here is read through payment dates. An account is a record of
+// what actually moved, so a movement belongs to the month its money changes
+// hands in — the month it counts in is the month tree's question, not this
+// one's.
+//
 // There is no index page above them. The dashboard already lists every account
 // with what it holds, and every one of those rows is a link — an index would
 // have been a second copy of the same table, kept in step by hand.
@@ -42,6 +47,17 @@ func settlement(transaction ledger.Transaction) string {
 		return "on the date"
 	}
 	return utils.PrettyDate(transaction.PaymentDate)
+}
+
+// recorded renders the date a movement counts on, as an account page shows it:
+// an account is ordered by when the money moved, so the date the movement
+// belongs to is the second column there rather than the first, and it is left
+// out entirely when the two are the same day.
+func recorded(transaction ledger.Transaction) string {
+	if transaction.PaymentDate == transaction.Date {
+		return "on the day"
+	}
+	return utils.PrettyDate(transaction.Date)
 }
 
 // accountPage writes Accounts/<account>.md: where one account stands today,
@@ -123,7 +139,7 @@ func accountOpenMonth(p *page, state ledger.State, account ledger.Account) {
 	p.row("Movements", strconv.Itoa(flow.Count))
 	p.blank()
 
-	movements := ledger.OfAccount(state.In(open), account.Name)
+	movements := ledger.OfAccount(state.SettledIn(open), account.Name)
 	if len(movements) == 0 {
 		p.line("Nothing has moved on this account this month yet.")
 		p.blank()
@@ -136,19 +152,25 @@ func accountOpenMonth(p *page, state ledger.State, account ledger.Account) {
 
 // accountMovements writes one account's movements as a table with a running
 // balance, starting from what it carried in.
+//
+// The table is ordered and dated by settlement, because that is what an
+// account is: money that arrives on the 5th moved on the 5th, whatever month
+// the purchase behind it counts in. The `Dated` column carries that month, so
+// the line can still be found on the statement it belongs to.
 func accountMovements(p *page, movements []ledger.Transaction, opening int64) {
-	p.table("Date", ">Id", "Category", "Description", ">Amount", ">Balance", "Settles")
+	p.table("Settled", ">Id", "Category", "Description", ">Amount", ">Balance", "Dated")
 	running := opening
 	for _, transaction := range movements {
 		running += transaction.Amount
-		p.row(utils.PrettyDate(transaction.Date), idText(transaction.Id),
+		p.row(utils.PrettyDate(transaction.PaymentDate), idText(transaction.Id),
 			transaction.Category, dash(transaction.Description),
-			signed(transaction.Amount), money(running), settlement(transaction))
+			signed(transaction.Amount), money(running), recorded(transaction))
 	}
 	p.blank()
 	p.line("The `Id` column is what a `ModifyTransaction` or `RemoveTransaction` task addresses " +
-		"a line by. A row that has not settled yet is already in the running balance above but " +
-		"not in the account's balance — that is the difference between the two.")
+		"a line by. Rows are in the order the money moved, so the running balance agrees with " +
+		"the account's balance on every line — a movement dated in another month appears here " +
+		"on the day it settles, with the date it counts on in the last column.")
 	p.blank()
 }
 
@@ -173,9 +195,11 @@ func accountMenu(p *page, state ledger.State, account ledger.Account, rendered [
 			monthPageLink(account, month, rendered))
 	}
 	p.blank()
-	p.line("A month is listed as soon as a movement on this account carries a date inside it — " +
-		"future months included. A month older than the `prev-months` the dashboard was asked " +
-		"for keeps its figures here but has no page of its own to open.")
+	p.line("A month is listed as soon as a movement on this account settles inside it — " +
+		"future months included. A purchase dated in another month is counted in the month it " +
+		"is paid in, because that is the month this account moved. A month older than the " +
+		"`prev-months` the dashboard was asked for keeps its figures here but has no page of " +
+		"its own to open.")
 }
 
 // monthPageLink renders the menu's link to one month's page for one account,

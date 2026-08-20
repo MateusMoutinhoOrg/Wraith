@@ -234,7 +234,9 @@ func (s State) MonthResult(month int64) Result {
 	return result
 }
 
-// In returns every movement dated in one month.
+// In returns every movement dated in one month — the month view. A movement
+// counts in the month its `date` falls in, whatever day the money actually
+// moves on, because that is what tells you what a month was worth.
 func (s State) In(month int64) []Transaction {
 	found := []Transaction{}
 	for _, transaction := range s.Transactions {
@@ -242,6 +244,30 @@ func (s State) In(month int64) []Transaction {
 			found = append(found, transaction)
 		}
 	}
+	return found
+}
+
+// SettledIn returns every movement whose payment date falls in one month,
+// soonest first — the account view. It is what In is to a month's result, for
+// an account's balance: a purchase dated in january and paid in march moved
+// nothing in january and moved everything in march, and an account is a
+// record of what moved.
+//
+// The order is the order the money actually moves in, so a running balance
+// built from it agrees with BalanceOn on every line.
+func (s State) SettledIn(month int64) []Transaction {
+	found := []Transaction{}
+	for _, transaction := range s.Transactions {
+		if utils.MonthOf(transaction.PaymentDate) == month {
+			found = append(found, transaction)
+		}
+	}
+	sort.Slice(found, func(i int, j int) bool {
+		if found[i].PaymentDate != found[j].PaymentDate {
+			return found[i].PaymentDate < found[j].PaymentDate
+		}
+		return found[i].Key < found[j].Key
+	})
 	return found
 }
 
@@ -287,22 +313,26 @@ func FlowOf(transactions []Transaction) Flow {
 }
 
 // AccountFlow returns what one account moved in one month, or across the whole
-// ledger when month is zero.
+// ledger when month is zero. The month is read through payment dates: what an
+// account moved in a month is what actually left it and arrived in it that
+// month, which is the figure its balance is built from.
 func (s State) AccountFlow(name string, month int64) Flow {
 	if month == 0 {
 		return FlowOf(OfAccount(s.Transactions, name))
 	}
-	return FlowOf(OfAccount(s.In(month), name))
+	return FlowOf(OfAccount(s.SettledIn(month), name))
 }
 
-// AccountMonths returns every month holding at least one movement on one
-// account, oldest first. Like Months, a month is never created by hand: it
-// exists as soon as a movement on that account carries a date inside it.
+// AccountMonths returns every month one account moved in, oldest first. Like
+// Months, a month is never created by hand: it exists as soon as a movement
+// on that account settles inside it. The month is read through the payment
+// date, not the date — a january purchase paid in march belongs to march
+// here, because march is when the account moved.
 func (s State) AccountMonths(name string) []int64 {
 	seen := map[int64]bool{}
 	months := []int64{}
 	for _, transaction := range OfAccount(s.Transactions, name) {
-		month := utils.MonthOf(transaction.Date)
+		month := utils.MonthOf(transaction.PaymentDate)
 		if seen[month] {
 			continue
 		}
@@ -354,17 +384,21 @@ func (s State) Account(name string) (Account, bool) {
 
 // Months returns every month holding at least one movement, oldest first. A
 // month is never created by hand: it exists as soon as a transaction carries
-// a date inside it.
+// a date inside it, or settles inside it. Both count, because the two are
+// what a month's folder holds — the result, read through dates, and what the
+// accounts moved, read through payment dates — and a month where only money
+// moved is still a month the vault has something to say about.
 func (s State) Months() []int64 {
 	seen := map[int64]bool{}
 	months := []int64{}
 	for _, transaction := range s.Transactions {
-		month := utils.MonthOf(transaction.Date)
-		if seen[month] {
-			continue
+		for _, month := range []int64{utils.MonthOf(transaction.Date), utils.MonthOf(transaction.PaymentDate)} {
+			if seen[month] {
+				continue
+			}
+			seen[month] = true
+			months = append(months, month)
 		}
-		seen[month] = true
-		months = append(months, month)
 	}
 	sort.Slice(months, func(i int, j int) bool { return months[i] < months[j] })
 	return months

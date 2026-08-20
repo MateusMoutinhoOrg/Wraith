@@ -7,6 +7,8 @@ Records a real month in the financial brain shipped with this repository: accoun
 - A positive `amount` needs a category with `revenues: true`; a negative one needs `expenses: true`.
 - A category with **both** false is a **transfer category** — it counts as neither income nor expense, and is how money moving between your own accounts is recorded.
 - A card purchase counts on its `date`. The money leaves your bank when you record the bill payment.
+- A movement carries two dates, and the pages read them apart. `date` is the month it **counts** in: the month's result, its statement and every category total are built from it. `payment_date` is the day the money actually **moves**: every balance, every account page and the account figures of a month are built from it. Left out, `payment_date` is the `date` and the two questions have the same answer.
+- An invoice dated in august and paid in september is therefore august income on `Months/2026-08/DashBoard.md`, and a september movement on `Accounts/Bank.md`.
 
 ---
 
@@ -86,8 +88,9 @@ wraith run ModifyTransaction --id 2 --amount -40 --description "Market, correcte
 | Page | What it answers |
 |------|-----------------|
 | `DashBoard/README.md` | Where you stand today |
-| `DashBoard/Accounts/Bank.md` | One account: what it holds, how the open month is going on it, and the menu of every month it has moved in |
+| `DashBoard/Accounts/Bank.md` | One account: what it holds, how the open month is going on it, and the menu of every month it has moved in — all of it in payment dates |
 | `DashBoard/Months/2026-08/Statement.md` | Every movement dated in August, with its id |
+| `DashBoard/Months/2026-08/Accounts/Bank.md` | What that account moved in August, in the order the money moved |
 | `DashBoard/Credit-Cards.md` | What is outstanding, how much limit is left, and what each card is asking for |
 | `DashBoard/Bills/Nubank-Card.md` | One card statement by statement: what each cycle charged, what has been paid against it, and what is left |
 | `DashBoard/Pending.md` | Everything still waiting to be paid — the bills to pay, the statements still open, and the movements dated ahead |
