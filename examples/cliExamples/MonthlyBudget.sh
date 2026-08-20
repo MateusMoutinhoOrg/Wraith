@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # MonthlyBudget.sh — declares the commitments that repeat every month and reads
-# the forecast they produce for the months ahead.
+# the forecast they produce on the month index.
 #
 # Run it from the project root:
 #   bash ./examples/cliExamples/MonthlyBudget.sh
@@ -33,14 +33,15 @@ wraith run AddRecurrence --description "Streaming" --account Bank --category Sub
 
 echo
 echo "== the forecast: every month the commitments above reach"
-sed -n '1,40p' DashBoard/Forecast.md
+sed -n '/## 3. The next/,/an installment does that by itself/p' DashBoard/Months/README.md
 
 echo
 echo "== a longer horizon, rendered on its own without touching the config"
 wraith render DashBoard --future-months 18 > /dev/null
-grep -c '^| ' DashBoard/Forecast.md | sed 's/^/forecast rows now: /'
+sed -n '/## 3. The next/,/^---$/p' DashBoard/Months/README.md | grep -c '^| ' |
+	sed 's/^/forecast rows now: /'
 
 echo
 echo "== stopping one is naming it back — it leaves the commitments and the forecast"
 wraith run RemoveRecurrence --recurrence "Streaming"
-sed -n '/## 2. The commitments/,/A recurrence never/p' DashBoard/Forecast.md
+sed -n '/## 4. The commitments/,/A recurrence never/p' DashBoard/Months/README.md

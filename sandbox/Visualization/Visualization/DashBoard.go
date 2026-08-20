@@ -32,10 +32,10 @@ const (
 //	├── Credit-Cards.md    every card, its limit and its bill
 //	├── Pending.md         everything still waiting to be paid
 //	├── Categories.md      every category and what it has cost
-//	├── Forecast.md        what the declared commitments add up to
 //	├── Accounts/          one page per account and card, with its month menu
 //	├── Bills/             one page per card, statement by statement
-//	└── Months/            one folder per month that holds a movement
+//	└── Months/            one folder per month that holds a movement,
+//	                       indexed by a page that carries the forecast too
 //
 // Every figure on those pages is computed from the five registries the tasks
 // write. Nothing on them is editable: a hand edit is overwritten on the next
@@ -65,8 +65,7 @@ func DashBoard() api.Visualizer {
 				cardsPage(state),
 				pendingPage(state),
 				categoriesPage(state),
-				forecastPage(state, ahead),
-				monthsIndex(state, months),
+				monthsIndex(state, months, ahead),
 			}
 			for _, account := range state.Accounts {
 				renders = append(renders, accountPage(state, account, months))
@@ -99,8 +98,7 @@ func navigation() string { return navigationAt("") }
 func navigationAt(prefix string) string {
 	return "[Dashboard](" + prefix + "README.md) · [Credit Cards](" + prefix +
 		"Credit-Cards.md) · [Pending](" + prefix + "Pending.md) · [Categories](" + prefix +
-		"Categories.md) · [Months](" + prefix + "Months/README.md) · [Forecast](" + prefix +
-		"Forecast.md)"
+		"Categories.md) · [Months](" + prefix + "Months/README.md)"
 }
 
 // overview writes README.md: where you stand today, how the open month is
@@ -195,7 +193,8 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 		p.row(utils.PrettyMonth(projection.Month), money(projection.Held), money(projection.Net()))
 	}
 	p.blank()
-	p.line("The whole projection, month by month: [Forecast.md](Forecast.md)")
+	p.line("The whole projection, month by month, and the commitments it reads: " +
+		"[Months/README.md](Months/README.md)")
 	return p.render("README.md")
 }
 
@@ -280,53 +279,4 @@ func accepts(category ledger.Category) string {
 		return "income"
 	}
 	return "expenses"
-}
-
-// forecastPage writes Forecast.md: the declared commitments, and the position
-// they roll today's balances forward to.
-func forecastPage(state ledger.State, ahead int) api.VisualizationRender {
-	p := &page{}
-	p.heading(1, "Forecast")
-	p.line(navigation())
-	p.blank()
-	p.rule()
-
-	p.heading(2, "1. The next "+strconv.Itoa(ahead)+" months")
-	p.table("Month", ">Income", ">Expenses", ">Card bills", ">Held", ">Net position")
-	for _, projection := range state.Forecast(ahead) {
-		p.row(utils.PrettyMonth(projection.Month), signed(projection.Income),
-			signed(projection.Expenses), money(projection.Bills),
-			money(projection.Held), money(projection.Net()))
-	}
-	p.blank()
-	p.line("Every figure above is something you declared: a recurrence, a transaction already " +
-		"dated ahead, or a card bill derived from what the card owes when its cycle closes. " +
-		"Nothing here is an average of your past.")
-	p.blank()
-	p.rule()
-
-	p.heading(2, "2. The commitments it reads")
-	if len(state.Recurrences) == 0 {
-		p.line("No recurrence declared. Add one with the `AddRecurrence` task and this page " +
-			"starts projecting it.")
-		return p.render("Forecast.md")
-	}
-	p.table("Recurrence", "Account", "Category", ">Amount", "Day", "From", "Until")
-	for _, recurrence := range state.Recurrences {
-		destination := recurrence.Account
-		if recurrence.ToAccount != "" {
-			destination = recurrence.Account + " → " + recurrence.ToAccount
-		}
-		until := "open-ended"
-		if recurrence.End != 0 {
-			until = utils.MonthText(recurrence.End)
-		}
-		p.row(recurrence.Description, destination, recurrence.Category,
-			signed(recurrence.Amount), strconv.FormatInt(recurrence.Day, 10),
-			utils.MonthText(recurrence.Start), until)
-	}
-	p.blank()
-	p.line("A recurrence never becomes a transaction on its own. When the day arrives you " +
-		"record what actually happened with `AddTransaction`.")
-	return p.render("Forecast.md")
 }

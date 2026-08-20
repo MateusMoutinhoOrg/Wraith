@@ -321,7 +321,7 @@ func pendingCommitments(p *page, state ledger.State) {
 	}
 	if len(ahead) == 0 {
 		p.line("Nothing else is declared for " + utils.PrettyMonth(open) + ". " +
-			"The whole projection is on [Forecast.md](Forecast.md).")
+			"The whole projection is on [Months/README.md](Months/README.md).")
 		return
 	}
 	p.table("Date", "Commitment", "Account", ">Amount")
@@ -333,5 +333,5 @@ func pendingCommitments(p *page, state ledger.State) {
 	p.blank()
 	p.line("A recurrence moves no money on its own. When the day arrives you record what " +
 		"actually happened with `AddTransaction` — the whole projection is on " +
-		"[Forecast.md](Forecast.md).")
+		"[Months/README.md](Months/README.md).")
 }

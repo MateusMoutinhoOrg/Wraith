@@ -94,4 +94,4 @@ wraith run ModifyTransaction --id 2 --amount -40 --description "Market, correcte
 | `DashBoard/Credit-Cards.md` | What is outstanding, how much limit is left, and what each card is asking for |
 | `DashBoard/Bills/Nubank-Card.md` | One card statement by statement: what each cycle charged, what has been paid against it, and what is left |
 | `DashBoard/Pending.md` | Everything still waiting to be paid — the bills to pay, the statements still open, and the movements dated ahead |
-| `DashBoard/Forecast.md` | What the declared commitments add up to |
+| `DashBoard/Months/README.md` | Every month in three tables — the ones before this one, the open one, and the ones ahead the declared commitments add up to |
