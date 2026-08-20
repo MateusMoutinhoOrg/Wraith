@@ -1,7 +1,7 @@
 # Track Transactions
 
 ## Description
-Records a real month in the financial brain shipped with this repository: accounts, categories, what came in, what went out, and the commitments the forecast reads. Creating the vault first is [StartABrain.md](/docs/Tutorials/StartABrain.md); the mechanics of running any task at all are [RunTasks.md](/docs/Tutorials/RunTasks.md).
+Records a real month in the financial brain shipped with this repository: accounts, categories, what came in, and what went out. Creating the vault first is [StartABrain.md](/docs/Tutorials/StartABrain.md); the mechanics of running any task at all are [RunTasks.md](/docs/Tutorials/RunTasks.md).
 
 ### Rules
 - A positive `amount` needs a category with `revenues: true`; a negative one needs `expenses: true`.
@@ -63,20 +63,13 @@ wraith run AddTransaction --account Cash --category Savings \
   --amount 500 --date 2026-08-20 --description "Set aside"
 ```
 
-6. Declare what repeats. A recurrence moves no money and writes no transaction: it is a rule the forecast reads.
-
-```bash
-wraith run AddRecurrence --description Rent --account Bank --category Food \
-  --amount -1200 --day 10 --start 2026-08
-```
-
-7. Correct a line you got wrong. The `Id` is the one the statement shows.
+6. Correct a line you got wrong. The `Id` is the one the statement shows.
 
 ```bash
 wraith run ModifyTransaction --id 4 --amount -40 --description "Market, corrected"
 ```
 
-8. Read the result:
+7. Read the result:
 
 | Page | What it answers |
 |------|-----------------|
@@ -85,4 +78,4 @@ wraith run ModifyTransaction --id 4 --amount -40 --description "Market, correcte
 | `DashBoard/Accounts/Bank.md` | One account: what it holds, how the open month is going on it, and the menu of every month it has moved in |
 | `DashBoard/Months/2026-08/Statement.md` | Every movement dated in August, with its id |
 | `DashBoard/Months/2026-08/Accounts/Bank.md` | What that account moved in August, in the order the money moved |
-| `DashBoard/Months/README.md` | Every month in three tables — the ones before this one, the open one, and the ones ahead the declared commitments add up to |
+| `DashBoard/Months/README.md` | Every month in three tables — the ones before this one, the open one, and the ones ahead the movements dated forward add up to |

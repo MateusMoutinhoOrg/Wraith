@@ -45,15 +45,6 @@ func removeAccountAction(args api.HandleActionArgs) error {
 				"remove them before removing the account")
 		}
 	}
-	for _, recurrence := range removeAccountRecords(args, config.RecurrenceSchema) {
-		detail := removeAccountText(recurrence, config.DetailField)
-		named := utils.Part(detail, config.RecurrenceParts, config.RecurrenceAccount) == accountName ||
-			utils.Part(detail, config.RecurrenceParts, config.RecurrenceToAccount) == accountName
-		if named {
-			return errors.New(accountName + " is still named by the recurrence " +
-				removeAccountText(recurrence, config.NameField) + " — remove it first")
-		}
-	}
 	if failure := account.Remove(); failure != nil {
 		return errors.New("account could not be removed: " + failure.Message)
 	}

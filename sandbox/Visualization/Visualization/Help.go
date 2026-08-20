@@ -94,8 +94,6 @@ func taskGuide() api.VisualizationRender {
 		"counts as neither.")
 	p.line("- Moving money between your own accounts is two transactions sharing a transfer " +
 		"category. They net to zero, so a transfer never shows up as an expense.")
-	p.line("- A recurrence describes the future and moves nothing. Nothing is recorded until " +
-		"you record it.")
 	return p.render("Task.md")
 }
 

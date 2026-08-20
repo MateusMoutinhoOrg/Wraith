@@ -1,8 +1,8 @@
 package ledger
 
-// Every figure the vault shows, derived from the four registries and nothing
-// else. If a number cannot be computed from accounts, categories,
-// transactions and recurrences, it does not belong on a page — so this
+// Every figure the vault shows, derived from the three registries and nothing
+// else. If a number cannot be computed from accounts, categories and
+// transactions, it does not belong on a page — so this
 // package is where the arithmetic lives, and the visualizations next door are
 // only about layout.
 //
@@ -33,8 +33,6 @@ type State struct {
 	Categories []Category
 	// Transactions is every recorded movement, oldest first.
 	Transactions []Transaction
-	// Recurrences is every declared commitment, ordered by description.
-	Recurrences []Recurrence
 }
 
 // Load reads the whole registry into a State.
@@ -44,7 +42,6 @@ func Load(d deps.Deps, database keepdeps.KeepDatabase) State {
 		Accounts:     Accounts(database),
 		Categories:   Categories(database),
 		Transactions: Transactions(database),
-		Recurrences:  Recurrences(database),
 	}
 }
 

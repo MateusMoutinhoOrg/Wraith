@@ -19,8 +19,7 @@ import (
 
 // monthsIndex writes Months/README.md: the calendar of the vault, in three
 // tables — the months already closed, the month still open, and the months
-// ahead the declared commitments reach — followed by the commitments those
-// projections read.
+// ahead the movements dated forward reach.
 //
 // The third table runs past the forecast horizon when a movement is already
 // dated further out, so a month that owns a folder always owns a row here
@@ -70,36 +69,10 @@ func monthsIndex(state ledger.State, months []int64, ahead int) api.Visualizatio
 			"—", monthPages(months, month))
 	}
 	p.blank()
-	p.line("Every figure above is something you declared: a recurrence, or a transaction " +
-		"already dated ahead. Nothing here is an average of your past. A month ahead only " +
-		"carries pages once a movement is dated inside it, and the months past the horizon " +
-		"are listed with their recorded lines alone.")
-	p.blank()
-	p.rule()
-
-	p.heading(2, "4. The commitments the projection reads")
-	if len(state.Recurrences) == 0 {
-		p.line("No recurrence declared. Add one with the `AddRecurrence` task and the months " +
-			"ahead start projecting it.")
-		return p.render("Months/README.md")
-	}
-	p.table("Recurrence", "Account", "Category", ">Amount", "Day", "From", "Until")
-	for _, recurrence := range state.Recurrences {
-		destination := recurrence.Account
-		if recurrence.ToAccount != "" {
-			destination = recurrence.Account + " → " + recurrence.ToAccount
-		}
-		until := "open-ended"
-		if recurrence.End != 0 {
-			until = utils.MonthText(recurrence.End)
-		}
-		p.row(recurrence.Description, destination, recurrence.Category,
-			signed(recurrence.Amount), strconv.FormatInt(recurrence.Day, 10),
-			utils.MonthText(recurrence.Start), until)
-	}
-	p.blank()
-	p.line("A recurrence never becomes a transaction on its own. When the day arrives you " +
-		"record what actually happened with `AddTransaction`.")
+	p.line("Every figure above is a transaction you already dated ahead of today. Nothing " +
+		"here is an average of your past, and nothing is projected on your behalf. A month " +
+		"ahead only carries pages once a movement is dated inside it, and the months past " +
+		"the horizon are listed with their recorded lines alone.")
 	return p.render("Months/README.md")
 }
 
@@ -134,8 +107,8 @@ func monthPages(months []int64, month int64) string {
 	return "[month](" + folder + "/DashBoard.md) · [statement](" + folder + "/Statement.md)"
 }
 
-// monthPage writes Months/<month>/DashBoard.md: what the month came to, where
-// it landed, and what it is still waiting on.
+// monthPage writes Months/<month>/DashBoard.md: what the month came to, and
+// where it landed.
 func monthPage(state ledger.State, month int64) api.VisualizationRender {
 	p := &page{}
 	folder := utils.MonthText(month)
@@ -179,23 +152,6 @@ func monthPage(state ledger.State, month int64) api.VisualizationRender {
 		}
 		p.row(category.Name, signed(total))
 	}
-	p.blank()
-	p.rule()
-
-	p.heading(2, "4. Commitments dated in this month")
-	due := state.DueIn(month)
-	if len(due) == 0 {
-		p.line("Nothing declared for this month.")
-		return p.render("Months/" + folder + "/DashBoard.md")
-	}
-	p.table("Date", "Commitment", "Account", ">Amount")
-	for _, entry := range due {
-		p.row(utils.PrettyDate(entry.Date), entry.Description, entry.Account,
-			signed(entry.Amount))
-	}
-	p.blank()
-	p.line("These are declared commitments, not recorded movements — they change no balance " +
-		"until you record what actually happened.")
 	return p.render("Months/" + folder + "/DashBoard.md")
 }
 

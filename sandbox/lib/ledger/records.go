@@ -1,6 +1,6 @@
 package ledger
 
-// The four registries, read back as plain Go values. A task writes records
+// The three registries, read back as plain Go values. A task writes records
 // through the Keep schemas config declares; everything that reads them goes
 // through the views here, so the packing rules are unpacked in exactly one
 // place.
@@ -66,35 +66,6 @@ type Transaction struct {
 	Date int64
 }
 
-// Recurrence is one declared commitment the forecast projects.
-type Recurrence struct {
-	// Description identifies the recurrence, and is how RemoveRecurrence
-	// addresses it.
-	Description string
-	// Account is the account the money leaves from or arrives in.
-	Account string
-	// ToAccount is the destination account of a recurring transfer, or "".
-	ToAccount string
-	// Category is the category it is classified under.
-	Category string
-	// Amount is the value per occurrence, in cents.
-	Amount int64
-	// Day is the day of the month it falls on.
-	Day int64
-	// Start is the first month it applies, as yyyymm.
-	Start int64
-	// End is the last month it applies, as yyyymm, or 0 when open-ended.
-	End int64
-}
-
-// AppliesIn reports whether the recurrence is in force in the given month.
-func (r Recurrence) AppliesIn(month int64) bool {
-	if month < r.Start {
-		return false
-	}
-	return r.End == 0 || month <= r.End
-}
-
 // Accounts returns every account of the registry, ordered by name.
 func Accounts(database keepdeps.KeepDatabase) []Account {
 	accounts := []Account{}
@@ -149,29 +120,6 @@ func Transactions(database keepdeps.KeepDatabase) []Transaction {
 		return transactions[i].Key < transactions[j].Key
 	})
 	return transactions
-}
-
-// Recurrences returns every declared commitment, ordered by description. Its
-// packed detail is `description|account|toAccount|category`.
-func Recurrences(database keepdeps.KeepDatabase) []Recurrence {
-	recurrences := []Recurrence{}
-	for _, record := range all(database, config.RecurrenceSchema) {
-		detail := text(record, config.DetailField)
-		recurrences = append(recurrences, Recurrence{
-			Description: text(record, config.NameField),
-			Account:     utils.Part(detail, config.RecurrenceParts, config.RecurrenceAccount),
-			ToAccount:   utils.Part(detail, config.RecurrenceParts, config.RecurrenceToAccount),
-			Category:    utils.Part(detail, config.RecurrenceParts, config.RecurrenceCategory),
-			Amount:      number(record, config.AmountField),
-			Day:         number(record, config.DayField),
-			Start:       number(record, config.StartField),
-			End:         number(record, config.EndField),
-		})
-	}
-	sort.Slice(recurrences, func(i int, j int) bool {
-		return recurrences[i].Description < recurrences[j].Description
-	})
-	return recurrences
 }
 
 // all returns every record of one registry, or an empty slice when the

@@ -30,7 +30,7 @@ There are **no Go tests** in this repository. Behavior is exercised through the 
 
 ## Architecture
 
-Wraith is a state machine over a folder ("a vault"): a task is written into `Task.yaml`, `wraith tick` applies it to the Keep database under `data/` and re-renders every visualization declared in `Visualization.yaml`. The financial brain shipped here (accounts, categories, transactions, recurrences) is a worked example of the shape, meant to be replaced.
+Wraith is a state machine over a folder ("a vault"): a task is written into `Task.yaml`, `wraith tick` applies it to the Keep database under `data/` and re-renders every visualization declared in `Visualization.yaml`. The financial brain shipped here (accounts, categories, transactions) is a worked example of the shape, meant to be replaced.
 
 ### The sandbox wall
 

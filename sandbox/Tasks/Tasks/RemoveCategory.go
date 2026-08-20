@@ -28,21 +28,14 @@ func removeCategoryAction(args api.HandleActionArgs) error {
 	if categoryName == "" {
 		return errors.New(CategoryField + " is required")
 	}
-	// A category still classifying transactions, still named by a recurrence,
-	// or still standing as another category's parent would leave a rendered
-	// page pointing at something that is no longer there.
+	// A category still classifying transactions, or still standing as another
+	// category's parent, would leave a rendered page pointing at something
+	// that is no longer there.
 	for _, transaction := range removeCategoryRecords(args, config.TransactionSchema) {
 		detail := removeCategoryText(transaction, config.DetailField)
 		if utils.Part(detail, config.TransactionParts, config.TransactionCategory) == categoryName {
 			return errors.New(categoryName + " still classifies transactions — " +
 				"move them to another category first")
-		}
-	}
-	for _, recurrence := range removeCategoryRecords(args, config.RecurrenceSchema) {
-		detail := removeCategoryText(recurrence, config.DetailField)
-		if utils.Part(detail, config.RecurrenceParts, config.RecurrenceCategory) == categoryName {
-			return errors.New(categoryName + " is still named by the recurrence " +
-				removeCategoryText(recurrence, config.NameField) + " — remove it first")
 		}
 	}
 	for _, category := range removeCategoryRecords(args, config.CategorySchema) {
@@ -96,9 +89,9 @@ func removeCategoryText(record keepdeps.SchemaItem, field string) string {
 }
 
 // RemoveCategory returns the task that removes a category from the registry.
-// A category still classifying transactions, still named by a recurrence, or
-// still standing as another category's parent is refused: every one of those
-// would leave a rendered page pointing at something that is no longer there.
+// A category still classifying transactions, or still standing as another
+// category's parent, is refused: either one would leave a rendered page
+// pointing at something that is no longer there.
 func RemoveCategory() api.Task {
 	return api.Task{
 		Name:         "RemoveCategory",

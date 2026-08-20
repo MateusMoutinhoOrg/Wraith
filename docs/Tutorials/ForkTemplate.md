@@ -21,7 +21,7 @@ Covers using this repository as a GitHub template to build a **brain of your own
 4. Leave every **[Copy](/docs/References/TemplateFileActions.md#copy)** file untouched — they describe the structure, not the brain.
 
 ### Phase 2 — Decide what your brain holds
-5. Rewrite the registries in [sandbox/config/database.go](/sandbox/config/database.go): one schema per kind of record your brain keeps, replacing accounts, categories, transactions and recurrences. Remember what the injected database offers — unique string keys and whole numbers — so amounts go in scaled to integers, dates go in as `20260818`, and free text travels packed into one key with `utils.Pack`.
+5. Rewrite the registries in [sandbox/config/database.go](/sandbox/config/database.go): one schema per kind of record your brain keeps, replacing accounts, categories and transactions. Remember what the injected database offers — unique string keys and whole numbers — so amounts go in scaled to integers, dates go in as `20260818`, and free text travels packed into one key with `utils.Pack`.
 6. Rewrite the derived figures in [sandbox/lib/ledger/](/sandbox/lib/ledger/), or delete the package if your brain has no arithmetic. Everything a page shows is computed here, so a visualization stays about layout.
 
 ### Phase 3 — Write the actions and the pages

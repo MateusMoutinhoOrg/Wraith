@@ -1,6 +1,6 @@
 package config
 
-// The shape of the brain's database, as compile-time constants: the four
+// The shape of the brain's database, as compile-time constants: the three
 // registries every task writes and every visualization reads, the fields each
 // one carries, and the Props the injected Keep library is handed to open
 // them.
@@ -36,8 +36,6 @@ const (
 	CategorySchema = "category"
 	// TransactionSchema holds every recorded movement.
 	TransactionSchema = "transaction"
-	// RecurrenceSchema holds the commitments the forecast projects.
-	RecurrenceSchema = "recurrence"
 )
 
 // The fields the registries carry. A field named Detail is a packed key; see
@@ -55,13 +53,6 @@ const (
 	AmountField = "amount"
 	// DateField is a date as yyyymmdd.
 	DateField = "date"
-	// DayField is the day of the month a recurrence falls on.
-	DayField = "day"
-	// StartField is the first month a recurrence applies, as yyyymm.
-	StartField = "start"
-	// EndField is the last month a recurrence applies, as yyyymm, or 0 for
-	// open-ended.
-	EndField = "end"
 )
 
 // The parts a packed DetailField is composed of, one pair per registry: how
@@ -84,15 +75,6 @@ const (
 	TransactionCategory = 2
 	// TransactionDescription is the position of a movement's description.
 	TransactionDescription = 3
-
-	// RecurrenceParts is `description|account|toAccount|category`.
-	RecurrenceParts = 4
-	// RecurrenceAccount is the position of a commitment's account.
-	RecurrenceAccount = 1
-	// RecurrenceToAccount is the position of a commitment's destination.
-	RecurrenceToAccount = 2
-	// RecurrenceCategory is the position of a commitment's category.
-	RecurrenceCategory = 3
 )
 
 // DatabaseProps describes the brain's database. path is the folder the
@@ -125,17 +107,6 @@ func DatabaseProps(path string) keepdeps.Props {
 					{Name: DetailField, Type: keepdeps.Key, Required: true},
 					{Name: AmountField, Type: keepdeps.Int, Required: true},
 					{Name: DateField, Type: keepdeps.Int, Required: true},
-				},
-			},
-			{
-				Name: RecurrenceSchema,
-				Itens: []keepdeps.Item{
-					{Name: NameField, Type: keepdeps.Key, Required: true},
-					{Name: DetailField, Type: keepdeps.Key, Required: true},
-					{Name: AmountField, Type: keepdeps.Int, Required: true},
-					{Name: DayField, Type: keepdeps.Int, Required: true},
-					{Name: StartField, Type: keepdeps.Int, Required: true},
-					{Name: EndField, Type: keepdeps.Int, Required: true},
 				},
 			},
 		},

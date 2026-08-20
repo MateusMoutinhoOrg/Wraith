@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# MonthlyBudget.sh — declares the commitments that repeat every month and reads
-# the forecast they produce on the month index.
+# MonthlyBudget.sh — dates a month's fixed lines forward and reads the forecast
+# they produce on the month index. The forecast has one ingredient and only
+# one: transactions already dated ahead of today.
 #
 # Run it from the project root:
 #   bash ./examples/cliExamples/MonthlyBudget.sh
@@ -20,33 +21,37 @@ wraith run AddCategory --category Subscriptions --description "Recurring service
 wraith run AddCategory --category "Opening balance" --description "What an account already held when it was added" --revenues false --expenses false
 
 echo
-echo "== an account starts empty, so what it already held goes in as a movement"
+echo "== what the account already holds"
 wraith run AddTransaction --account Bank --category "Opening balance" --amount 2500 --date 2026-08-01 --description "Balance when the vault started"
 
 echo
-echo "== what comes in every month, open-ended because there is no end date to it"
-wraith run AddRecurrence --description "Salary" --account Bank --category Salary --amount 5200 --day 5 --start 2026-08
+echo "== this month's fixed lines, as they already happened"
+wraith run AddTransaction --account Bank --category Salary --amount 5200 --date 2026-08-05 --description "August pay"
+wraith run AddTransaction --account Bank --category Housing --amount -1800 --date 2026-08-10 --description "August rent"
 
 echo
-echo "== what goes out every month, on the day it falls on"
-wraith run AddRecurrence --description "Rent" --account Bank --category Housing --amount -1800 --day 10 --start 2026-08
-wraith run AddRecurrence --description "Electricity" --account Bank --category Housing --amount -160 --day 20 --start 2026-08
+echo "== next month's, dated forward — that is what the forecast reads"
+wraith run AddTransaction --account Bank --category Salary --amount 5200 --date 2026-09-05 --description "September pay"
+wraith run AddTransaction --account Bank --category Housing --amount -1800 --date 2026-09-10 --description "September rent"
+wraith run AddTransaction --account Bank --category Housing --amount -160 --date 2026-09-20 --description "September electricity"
+wraith run AddTransaction --account Bank --category Subscriptions --amount -39.90 --date 2026-09-03 --description "September streaming"
 
 echo
-echo "== a commitment that ends: a subscription paid up to december only"
-wraith run AddRecurrence --description "Streaming" --account Bank --category Subscriptions --amount -39.90 --day 3 --start 2026-08 --end 2026-12
+echo "== and the month after that"
+wraith run AddTransaction --account Bank --category Salary --amount 5200 --date 2026-10-05 --description "October pay"
+wraith run AddTransaction --account Bank --category Housing --amount -1800 --date 2026-10-10 --description "October rent"
 
 echo
-echo "== the forecast: every month the commitments above reach"
+echo "== the forecast: every month a movement is dated into"
 sed -n '/## 3. The next/,/Nothing here is an average/p' DashBoard/Months/README.md
 
 echo
 echo "== a longer horizon, rendered on its own without touching the config"
 wraith render DashBoard --future-months 18 > /dev/null
-sed -n '/## 3. The next/,/^---$/p' DashBoard/Months/README.md | grep -c '^| ' |
+sed -n '/## 3. The next/,/^Every figure above/p' DashBoard/Months/README.md | grep -c '^| ' |
 	sed 's/^/forecast rows now: /'
 
 echo
-echo "== stopping one is naming it back — it leaves the commitments and the forecast"
-wraith run RemoveRecurrence --recurrence "Streaming"
-sed -n '/## 4. The commitments/,/A recurrence never/p' DashBoard/Months/README.md
+echo "== a line you no longer expect is removed like any other — it was never a rule"
+wraith run RemoveTransaction --id 9
+sed -n '/## 3. The next/,/Nothing here is an average/p' DashBoard/Months/README.md

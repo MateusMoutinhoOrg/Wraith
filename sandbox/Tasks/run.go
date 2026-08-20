@@ -19,8 +19,7 @@ import (
 )
 
 // TaskArray is every task the binary carries, in the order the guides list
-// them: the day-to-day ledger first, then what is coming, then the registries
-// they lean on.
+// them: the day-to-day ledger first, then the registries it leans on.
 //
 // This is the one place a task is registered. Adding a file to
 // sandbox/Tasks/Tasks and a line here is the whole of adding an action —
@@ -31,8 +30,6 @@ func TaskArray() []api.Task {
 		tasks.AddTransaction(),
 		tasks.ModifyTransaction(),
 		tasks.RemoveTransaction(),
-		tasks.AddRecurrence(),
-		tasks.RemoveRecurrence(),
 		tasks.AddCategory(),
 		tasks.RemoveCategory(),
 		tasks.AddAccount(),

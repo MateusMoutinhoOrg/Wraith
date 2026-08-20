@@ -32,12 +32,8 @@ package tasks
 const (
 	// AccountField names an account.
 	AccountField = "account"
-	// ToAccountField names the destination account of a recurring transfer.
-	ToAccountField = "to_account"
 	// CategoryField names a category.
 	CategoryField = "category"
-	// RecurrenceField names a recurrence, by its description.
-	RecurrenceField = "recurrence"
 	// DescriptionField is free text describing the record.
 	DescriptionField = "description"
 	// AmountField is a value, positive for income and negative for expense.
@@ -52,10 +48,4 @@ const (
 	ExpensesField = "expenses"
 	// ParentField hangs a category under another one.
 	ParentField = "parent"
-	// DayField is the day of the month a recurrence falls on.
-	DayField = "day"
-	// StartField is the first month a recurrence applies.
-	StartField = "start"
-	// EndField is the last month a recurrence applies.
-	EndField = "end"
 )

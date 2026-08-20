@@ -151,7 +151,7 @@ The registries read back as typed values, and every figure the vault shows deriv
 |------|-------------|------|
 | `records.go` | One typed view per registry, and the ordered listings that read them off the injected database | |
 | `ledger.go` | The `State` read once per render, and the balances, month results and totals over it | |
-| `forecast.go` | Today's position rolled forward through the declared commitments | |
+| `forecast.go` | Today's position rolled forward through the movements already dated ahead of it | |
 
 #### `/sandbox/lib/vault/`
 The outside of a tick: reading the task file, disarming it, reading and validating the visualization config, writing rendered bytes under a `dest`, and reporting a failure in `Error.md`. Every path is reached through `deps.Deps.IoLib`. Declares no factories.

@@ -1,15 +1,15 @@
 package ledger
 
-// The forecast: today's position rolled forward through the commitments you
-// declared. It is the only thing in the vault that talks about money that has
-// not happened, and it is allowed exactly two ingredients:
+// The forecast: today's position rolled forward through the movements already
+// dated ahead of it. It is the only thing in the vault that talks about money
+// that has not happened, and it is allowed exactly one ingredient:
+// transactions dated after today, which are scheduled facts.
 //
-//   - recurrences, which are rules you wrote down,
-//   - transactions already dated ahead of today, which are scheduled facts.
-//
-// Nothing else is projected. There is no bill to derive and nothing waiting
-// to be settled: every movement moves its whole amount on the day it is
-// dated, so a month ahead is only what you declared for it.
+// Nothing else is projected. Nothing is inferred from your past and no rule
+// is projected on your behalf: a month ahead is worth exactly the movements
+// you dated into it. There is no bill to derive and nothing waiting to be
+// settled either — every movement moves its whole amount on the day it is
+// dated.
 
 import "github.com/MateusMoutinhoOrg/Wraith/sandbox/lib/utils"
 
@@ -46,22 +46,6 @@ func (s State) Forecast(months int) []Projection {
 			record(&projection, transaction.Amount, s.IsTransfer(transaction))
 		}
 
-		// Then the commitments in force this month.
-		for _, recurrence := range s.Recurrences {
-			if !recurrence.AppliesIn(month) {
-				continue
-			}
-			held += recurrence.Amount
-			if recurrence.ToAccount != "" {
-				held -= recurrence.Amount
-			}
-			transfer := recurrence.ToAccount != ""
-			if category, found := s.Category(recurrence.Category); found && category.IsTransfer() {
-				transfer = true
-			}
-			record(&projection, recurrence.Amount, transfer)
-		}
-
 		projection.Held = held
 		projections = append(projections, projection)
 	}
@@ -79,40 +63,4 @@ func record(projection *Projection, amount int64, transfer bool) {
 		return
 	}
 	projection.Expenses += amount
-}
-
-// DueIn returns the commitments falling in one month, as the dated lines a
-// month page lists.
-type Due struct {
-	// Date is the day it falls on, as yyyymmdd.
-	Date int64
-	// Description identifies it.
-	Description string
-	// Account is where it lands.
-	Account string
-	// Amount is what it is worth, in cents.
-	Amount int64
-}
-
-// DueIn returns every recurrence falling in one month, as dated lines, oldest
-// first.
-func (s State) DueIn(month int64) []Due {
-	due := []Due{}
-	for _, recurrence := range s.Recurrences {
-		if !recurrence.AppliesIn(month) {
-			continue
-		}
-		due = append(due, Due{
-			Date:        utils.DateIn(month, recurrence.Day),
-			Description: recurrence.Description,
-			Account:     recurrence.Account,
-			Amount:      recurrence.Amount,
-		})
-	}
-	for index := 1; index < len(due); index++ {
-		for back := index; back > 0 && due[back].Date < due[back-1].Date; back-- {
-			due[back], due[back-1] = due[back-1], due[back]
-		}
-	}
-	return due
 }

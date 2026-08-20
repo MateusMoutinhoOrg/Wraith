@@ -100,8 +100,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.line("> **Updated:** " + utils.PrettyDate(state.Today) + " · **Registry:** " +
 		count(len(state.Accounts), "account", "accounts") + ", " +
 		count(len(state.Categories), "category", "categories") + ", " +
-		count(len(state.Transactions), "transaction", "transactions") + ", " +
-		count(len(state.Recurrences), "recurrence", "recurrences"))
+		count(len(state.Transactions), "transaction", "transactions"))
 	p.blank()
 	p.line(navigation())
 	p.blank()
@@ -150,9 +149,8 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.rule()
 
 	p.heading(2, "3. The next "+strconv.Itoa(ahead)+" months")
-	p.line("Today's position rolled forward through what you declared — " +
-		count(len(state.Recurrences), "recurrence", "recurrences") +
-		" and the movements already dated ahead.")
+	p.line("Today's position rolled forward through the movements already dated ahead of " +
+		"today. Nothing else is projected.")
 	p.blank()
 	p.table("Month", ">Income", ">Expenses", ">Held in accounts")
 	for _, projection := range state.Forecast(ahead) {
@@ -160,8 +158,7 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 			signed(projection.Expenses), money(projection.Held))
 	}
 	p.blank()
-	p.line("The whole projection, month by month, and the commitments it reads: " +
-		"[Months/README.md](Months/README.md)")
+	p.line("The whole projection, month by month: [Months/README.md](Months/README.md)")
 	return p.render("README.md")
 }
 
