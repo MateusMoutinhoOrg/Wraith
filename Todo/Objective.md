@@ -1,3 +1,3 @@
 
 ## OBjetivo:
-Implementar a mecanica de data de pagamento e data e transacao
+Implementar a mecanica de data de pagamento,data de transacao, e data de vencimento.
