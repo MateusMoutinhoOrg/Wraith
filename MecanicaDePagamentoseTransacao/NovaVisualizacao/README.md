@@ -22,7 +22,11 @@
 
 ---
 
-## 2. aug-2026 so far
+## 2. aug-2026 
+
+
+### Done Overwiew
+Compreends Transactions That were made in these month (Not considering payment date)
 
 | Line | This month | Previous month | Change |
 | --- | ---: | ---: | ---: |
@@ -31,7 +35,32 @@
 | **Result** | **+R$ 3,200** | +R$ 940.10 | +R$ 2,259.90 |
 | Transactions | 1 | 6 | -5 |
 
+
+
+### Payed Overwiew:
+Compreends transactions that were payed in these month, (not considering done date)
+
+| Line | This month | Previous month | Change |
+| --- | ---: | ---: | ---: |
+| Income | +R$ 3,200 | +R$ 5,100 | -R$ 1,900 |
+| Expenses | R$ 0 | -R$ 4,159.90 | +R$ 4,159.90 |
+| **Result** | **+R$ 3,200** | +R$ 940.10 | +R$ 2,259.90 |
+| Transactions | 1 | 6 | -5 |
+
+
+## Due 
+Compreends transactions that needs to be payed in these month 
+
+| Id | 
+
+
+
+
+
 Full month: [`Months/2026-08/DashBoard.md`](Months/2026-08/DashBoard.md) · ledger: [`Months/2026-08/Statement.md`](Months/2026-08/Statement.md)
+
+
+
 
 ---
 
