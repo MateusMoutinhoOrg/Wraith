@@ -123,12 +123,18 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 	p.rule()
 
 	futureExpenses := int64(0)
+	futureIncome := int64(0)
 	for _, transaction := range state.Transactions {
-		if transaction.Date > state.Today && transaction.Amount < 0 && !state.IsTransfer(transaction) {
-			futureExpenses += transaction.Amount
+		if transaction.Date > state.Today && !state.IsTransfer(transaction) {
+			if transaction.Amount < 0 {
+				futureExpenses += transaction.Amount
+			} else {
+				futureIncome += transaction.Amount
+			}
 		}
 	}
 	netWorth := state.Held() + futureExpenses
+	projected := state.Held() + futureIncome + futureExpenses
 
 	p.heading(2, "1. Position on "+utils.PrettyDate(state.Today))
 	p.table("Indicator", ">Value", "Where it comes from")
@@ -136,6 +142,8 @@ func overview(state ledger.State, months []int64, ahead int) api.VisualizationRe
 		"every movement dated up to today")
 	p.row("**Net Worth**", "**"+money(netWorth)+"**",
 		"balance minus all future expenses")
+	p.row("**Projected**", "**"+money(projected)+"**",
+		"balance plus all future income and expenses")
 	p.row("Movements recorded", strconv.Itoa(len(state.Transactions)),
 		"every line the ledger holds")
 	p.blank()
