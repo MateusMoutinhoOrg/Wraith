@@ -1,0 +1,1 @@
+Categories must consider only the transaction-date,and ignore the payment-date.
