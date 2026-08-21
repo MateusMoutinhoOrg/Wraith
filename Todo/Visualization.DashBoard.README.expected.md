@@ -28,7 +28,7 @@
 
 Full month: [`Months/2026-08/DashBoard.md`](Months/2026-08/DashBoard.md) · Ledger: [`Months/2026-08/Statement.md`](Months/2026-08/Statement.md)
 
-### Done Overview
+###  aug-2026  Done Overview
 Includes transactions that were made in this month (not considering payment date).
 
 | Line | This month | Previous month | Change |
@@ -38,7 +38,7 @@ Includes transactions that were made in this month (not considering payment date
 | **Result** | **+R$ 3,200.00** | **+R$ 940.10** | **+R$ 2,259.90** |
 | Transactions | 1 | 6 | -5 |
 
-### Paid Overview
+###  aug-2026  Paid Overview
 Includes transactions that were paid in this month (not considering done date).
 
 | Line | This month | Previous month | Change |
@@ -48,10 +48,11 @@ Includes transactions that were paid in this month (not considering done date).
 | **Result** | **+R$ 3,200.00** | **+R$ 940.10** | **+R$ 2,259.90** |
 | Transactions | 1 | 6 | -5 |
 
-### Pendings
+###  Pendings  Transactions
 | Id | Account | Category | Due-Date | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| - | - | - | - | - |
+| Tx-041 | Bank | Groceries | 2026-08-25 | Pending |
+| Tx-042 | Tax Reserve | Taxes | 2026-08-31 | Pending |
 
 ---
 
