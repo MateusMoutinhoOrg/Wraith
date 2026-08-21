@@ -28,23 +28,25 @@
 
 Full month: [`Months/2026-08/DashBoard.md`](Months/2026-08/DashBoard.md) · Ledger: [`Months/2026-08/Statement.md`](Months/2026-08/Statement.md)
 
-###  aug-2026  Done Overview
+### Done Transactions
 Includes transactions that were made in this month (not considering payment date).
 
 | Line | This month | Previous month | Change |
 | :--- | ---: | ---: | ---: |
 | Income | +R$ 3,200.00 | +R$ 5,100.00 | -R$ 1,900.00 |
 | Expenses | R$ 0.00 | -R$ 4,159.90 | +R$ 4,159.90 |
+| Volatile | R$ 0.00 | R$ 0.00 | R$ 0.00 |
 | **Result** | **+R$ 3,200.00** | **+R$ 940.10** | **+R$ 2,259.90** |
 | Transactions | 1 | 6 | -5 |
 
-###  aug-2026  Paid Overview
+### Paid Transactions
 Includes transactions that were paid in this month (not considering done date).
 
 | Line | This month | Previous month | Change |
 | :--- | ---: | ---: | ---: |
 | Income | +R$ 3,200.00 | +R$ 5,100.00 | -R$ 1,900.00 |
 | Expenses | R$ 0.00 | -R$ 4,159.90 | +R$ 4,159.90 |
+| Volatile | R$ 0.00 | R$ 0.00 | R$ 0.00 |
 | **Result** | **+R$ 3,200.00** | **+R$ 940.10** | **+R$ 2,259.90** |
 | Transactions | 1 | 6 | -5 |
 
