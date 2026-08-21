@@ -47,22 +47,16 @@ Compreends transactions that were payed in these month, (not considering done da
 | **Result** | **+R$ 3,200** | +R$ 940.10 | +R$ 2,259.90 |
 | Transactions | 1 | 6 | -5 |
 
-
-## Due 
-Compreends transactions that needs to be payed in these month 
-
-| Id | 
-
-
-
-
-
 Full month: [`Months/2026-08/DashBoard.md`](Months/2026-08/DashBoard.md) · ledger: [`Months/2026-08/Statement.md`](Months/2026-08/Statement.md)
 
 
-
-
 ---
+
+
+### Pendings
+| Id | Account | Category | Due-Date | Status 
+
+
 
 ## 3. The next 4 months
 
